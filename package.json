@@ -75,6 +75,6 @@
     "arrowParens": "avoid"
   },
   "engines": {
-    "node": ">= 12.18.0"
+    "node": ">= 8.17.0"
   }
 }
