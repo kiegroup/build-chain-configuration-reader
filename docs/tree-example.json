@@ -1,0 +1,1282 @@
+[
+  {
+    "project": "kiegroup/lienzo-core",
+    "children": [
+      {
+        "project": "kiegroup/lienzo-tests",
+        "dependencies": [
+          {
+            "project": "kiegroup/lienzo-core"
+          }
+        ],
+        "children": [
+          {
+            "project": "kiegroup/appformer",
+            "dependencies": [
+              {
+                "project": "kiegroup/droolsjbpm-build-bootstrap"
+              },
+              {
+                "project": "kiegroup/lienzo-tests"
+              },
+              {
+                "project": "kiegroup/kie-soup"
+              }
+            ],
+            "children": [
+              {
+                "project": "kiegroup/drools",
+                "dependencies": [
+                  {
+                    "project": "kiegroup/appformer"
+                  },
+                  {
+                    "project": "kiegroup/kie-soup"
+                  }
+                ],
+                "children": [
+                  {
+                    "project": "kiegroup/jbpm",
+                    "dependencies": [
+                      {
+                        "project": "kiegroup/drools"
+                      },
+                      {
+                        "project": "kiegroup/kie-soup"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "project": "kiegroup/optaplanner",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/kie-jpmml-integration",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/droolsjbpm-integration",
+                        "dependencies": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "mapping": {
+                              "source": "master",
+                              "target": "7.x"
+                            }
+                          },
+                          {
+                            "project": "kiegroup/kie-jpmml-integration"
+                          },
+                          {
+                            "project": "kiegroup/jbpm"
+                          },
+                          {
+                            "project": "kiegroup/kie-soup"
+                          }
+                        ],
+                        "children": [
+                          {
+                            "project": "kiegroup/openshift-drools-hacep",
+                            "dependencies": [
+                              {
+                                "project": "kiegroup/droolsjbpm-integration"
+                              }
+                            ],
+                            "children": [
+                              {
+                                "project": "kiegroup/kie-wb-playground",
+                                "dependencies": [
+                                  {
+                                    "project": "kiegroup/openshift-drools-hacep"
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "project": "kiegroup/kie-wb-common",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  },
+                                  {
+                                    "project": "kiegroup/optaplanner-wb",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  },
+                                  {
+                                    "project": "kiegroup/jbpm-work-items",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  }
+                                ],
+                                "parents": [
+                                  {
+                                    "project": "kiegroup/openshift-drools-hacep",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  }
+                                ],
+                                "repo": {
+                                  "group": "kiegroup",
+                                  "name": "kie-wb-playground"
+                                },
+                                "build": {
+                                  "build-command": {
+                                    "current": [
+                                      "mvn clean",
+                                      "mvn install"
+                                    ],
+                                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                    "after": {
+                                      "upstream": "rm -rf ./*"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "project": "kiegroup/jbpm-work-items",
+                                "dependencies": [
+                                  {
+                                    "project": "kiegroup/openshift-drools-hacep"
+                                  },
+                                  {
+                                    "project": "kiegroup/kie-wb-playground"
+                                  }
+                                ],
+                                "children": [
+                                  {
+                                    "project": "kiegroup/jbpm-wb",
+                                    "dependencies": [
+                                      {
+                                        "project": "kiegroup/kie-uberfire-extensions"
+                                      },
+                                      {
+                                        "project": "kiegroup/drools-wb"
+                                      },
+                                      {
+                                        "project": "kiegroup/jbpm-designer"
+                                      },
+                                      {
+                                        "project": "kiegroup/jbpm-work-items"
+                                      }
+                                    ],
+                                    "children": [
+                                      {
+                                        "project": "kiegroup/kie-wb-distributions",
+                                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                      }
+                                    ],
+                                    "parents": [
+                                      {
+                                        "project": "kiegroup/kie-uberfire-extensions",
+                                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                      },
+                                      {
+                                        "project": "kiegroup/drools-wb",
+                                        "dependencies": [
+                                          {
+                                            "project": "kiegroup/kie-wb-common"
+                                          }
+                                        ],
+                                        "children": [
+                                          {
+                                            "project": "kiegroup/optaplanner-wb",
+                                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                          },
+                                          {
+                                            "project": "kiegroup/jbpm-wb",
+                                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                          }
+                                        ],
+                                        "parents": [
+                                          {
+                                            "project": "kiegroup/kie-wb-common",
+                                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                          }
+                                        ],
+                                        "repo": {
+                                          "group": "kiegroup",
+                                          "name": "drools-wb"
+                                        },
+                                        "build": {
+                                          "build-command": {
+                                            "current": [
+                                              "mvn clean",
+                                              "mvn install"
+                                            ],
+                                            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                            "after": {
+                                              "upstream": "rm -rf ./*"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "project": "kiegroup/jbpm-designer",
+                                        "dependencies": [
+                                          {
+                                            "project": "kiegroup/kie-wb-common"
+                                          }
+                                        ],
+                                        "children": [
+                                          {
+                                            "project": "kiegroup/jbpm-wb",
+                                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                          }
+                                        ],
+                                        "parents": [
+                                          {
+                                            "project": "kiegroup/kie-wb-common",
+                                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                          }
+                                        ],
+                                        "repo": {
+                                          "group": "kiegroup",
+                                          "name": "jbpm-designer"
+                                        },
+                                        "build": {
+                                          "build-command": {
+                                            "current": [
+                                              "mvn clean",
+                                              "mvn install"
+                                            ],
+                                            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                            "after": {
+                                              "upstream": "rm -rf ./*"
+                                            }
+                                          }
+                                        }
+                                      },
+                                      {
+                                        "project": "kiegroup/jbpm-work-items",
+                                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                      }
+                                    ],
+                                    "repo": {
+                                      "group": "kiegroup",
+                                      "name": "jbpm-wb"
+                                    },
+                                    "build": {
+                                      "build-command": {
+                                        "current": [
+                                          "mvn clean",
+                                          "mvn install"
+                                        ],
+                                        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                        "after": {
+                                          "upstream": "rm -rf ./*"
+                                        }
+                                      },
+                                      "archive-artifacts": {
+                                        "path": [
+                                          "**/target/jbpm-wb-case-mgmt-showcase*.war",
+                                          "**/target/jbpm-wb-showcase.war"
+                                        ],
+                                        "if-no-files-found": "warn",
+                                        "dependencies": "none",
+                                        "name": "kiegroup/jbpm-wb",
+                                        "paths": [
+                                          {
+                                            "path": "**/target/jbpm-wb-case-mgmt-showcase*.war",
+                                            "on": "success"
+                                          },
+                                          {
+                                            "path": "**/target/jbpm-wb-showcase.war",
+                                            "on": "success"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ],
+                                "parents": [
+                                  {
+                                    "project": "kiegroup/openshift-drools-hacep",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  },
+                                  {
+                                    "project": "kiegroup/kie-wb-playground",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  }
+                                ],
+                                "repo": {
+                                  "group": "kiegroup",
+                                  "name": "jbpm-work-items"
+                                },
+                                "build": {
+                                  "build-command": {
+                                    "current": [
+                                      "mvn clean",
+                                      "mvn install"
+                                    ],
+                                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                    "after": {
+                                      "upstream": "rm -rf ./*"
+                                    }
+                                  }
+                                }
+                              }
+                            ],
+                            "parents": [
+                              {
+                                "project": "kiegroup/droolsjbpm-integration",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              }
+                            ],
+                            "repo": {
+                              "group": "kiegroup",
+                              "name": "openshift-drools-hacep"
+                            },
+                            "build": {
+                              "build-command": {
+                                "current": [
+                                  "mvn clean",
+                                  "mvn install"
+                                ],
+                                "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                "after": {
+                                  "upstream": "rm -rf ./*"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "project": "kiegroup/kie-wb-common",
+                            "dependencies": [
+                              {
+                                "project": "kiegroup/kie-wb-playground"
+                              },
+                              {
+                                "project": "kiegroup/droolsjbpm-integration"
+                              }
+                            ],
+                            "children": [
+                              {
+                                "project": "kiegroup/drools-wb",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/optaplanner-wb",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/jbpm-designer",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              }
+                            ],
+                            "parents": [
+                              {
+                                "project": "kiegroup/kie-wb-playground",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/droolsjbpm-integration",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              }
+                            ],
+                            "repo": {
+                              "group": "kiegroup",
+                              "name": "kie-wb-common"
+                            },
+                            "build": {
+                              "build-command": {
+                                "current": "mvn -e -nsu -Dfull clean install -Prun-code-coverage -Pwildfly -Dcontainer=wildfly -Dcontainer.profile=wildfly -Dintegration-tests=true -Dmaven.test.failure.ignore=true -Dwebdriver.firefox.bin=/opt/tools/firefox-60esr/firefox-bin",
+                                "upstream": "-e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                "after": {
+                                  "upstream": "rm -rf ./*"
+                                }
+                              },
+                              "archive-artifacts": {
+                                "path": [
+                                  "**/target/screenshots/**"
+                                ],
+                                "if-no-files-found": "warn",
+                                "dependencies": "none",
+                                "name": "kiegroup/kie-wb-common",
+                                "paths": [
+                                  {
+                                    "path": "**/target/screenshots/**",
+                                    "on": "success"
+                                  }
+                                ]
+                              }
+                            }
+                          }
+                        ],
+                        "parents": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                          },
+                          {
+                            "project": "kiegroup/kie-jpmml-integration",
+                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                          },
+                          {
+                            "project": "kiegroup/jbpm",
+                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                          },
+                          {
+                            "project": "kiegroup/kie-soup",
+                            "dependencies": [
+                              {
+                                "project": "kiegroup/droolsjbpm-build-bootstrap"
+                              }
+                            ],
+                            "children": [
+                              {
+                                "project": "kiegroup/appformer",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/droolsjbpm-knowledge",
+                                "dependencies": [
+                                  {
+                                    "project": "kiegroup/kie-soup"
+                                  }
+                                ],
+                                "children": [],
+                                "parents": [
+                                  {
+                                    "project": "kiegroup/kie-soup",
+                                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                                  }
+                                ],
+                                "repo": {
+                                  "group": "kiegroup",
+                                  "name": "droolsjbpm-knowledge"
+                                },
+                                "build": {
+                                  "build-command": {
+                                    "current": [
+                                      "mvn clean",
+                                      "mvn install"
+                                    ],
+                                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                    "after": {
+                                      "upstream": "rm -rf ./*"
+                                    }
+                                  }
+                                }
+                              },
+                              {
+                                "project": "kiegroup/drools",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/jbpm",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/droolsjbpm-integration",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/droolsjbpm-tools",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/optaplanner-wb",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              },
+                              {
+                                "project": "kiegroup/kie-wb-distributions",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              }
+                            ],
+                            "parents": [
+                              {
+                                "project": "kiegroup/droolsjbpm-build-bootstrap",
+                                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                              }
+                            ],
+                            "repo": {
+                              "group": "kiegroup",
+                              "name": "kie-soup"
+                            },
+                            "build": {
+                              "build-command": {
+                                "current": [
+                                  "mvn clean",
+                                  "mvn install"
+                                ],
+                                "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                                "after": {
+                                  "upstream": "rm -rf ./*"
+                                }
+                              }
+                            }
+                          }
+                        ],
+                        "repo": {
+                          "group": "kiegroup",
+                          "name": "droolsjbpm-integration"
+                        },
+                        "build": {
+                          "build-command": {
+                            "current": "mvn -e -nsu -Dfull -Pwildfly clean install -Pjenkins-pr-builder -Prun-code-coverage  -Dcontainer.profile=wildfly -Dcontainer=wildfly -Dintegration-tests=true -Dmaven.test.failure.ignore=true",
+                            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                            "after": {
+                              "upstream": "rm -rf ./*"
+                            }
+                          },
+                          "archive-artifacts": {
+                            "path": [
+                              "**/gclog"
+                            ],
+                            "if-no-files-found": "warn",
+                            "dependencies": "none",
+                            "name": "kiegroup/droolsjbpm-integration",
+                            "paths": [
+                              {
+                                "path": "**/gclog",
+                                "on": "success"
+                              }
+                            ]
+                          }
+                        }
+                      },
+                      {
+                        "project": "kiegroup/droolsjbpm-tools",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/kie-wb-distributions",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "parents": [
+                      {
+                        "project": "kiegroup/drools",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/kie-soup",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "repo": {
+                      "group": "kiegroup",
+                      "name": "jbpm"
+                    },
+                    "build": {
+                      "build-command": {
+                        "current": [
+                          "mvn clean",
+                          "mvn install"
+                        ],
+                        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                        "after": {
+                          "upstream": "rm -rf ./*"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "project": "kiegroup/optaplanner",
+                    "dependencies": [
+                      {
+                        "project": "kiegroup/drools",
+                        "mapping": {
+                          "source": "7.x",
+                          "target": "master"
+                        }
+                      },
+                      {
+                        "project": "kiegroup/jbpm",
+                        "mapping": {
+                          "source": "7.x",
+                          "target": "master"
+                        }
+                      }
+                    ],
+                    "children": [
+                      {
+                        "project": "kiegroup/droolsjbpm-integration",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/optaplanner-wb",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/optaweb-employee-rostering",
+                        "dependencies": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "mapping": {
+                              "source": "master",
+                              "target": "7.x"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "parents": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                          }
+                        ],
+                        "repo": {
+                          "group": "kiegroup",
+                          "name": "optaweb-employee-rostering"
+                        },
+                        "build": {
+                          "build-command": {
+                            "current": [
+                              "mvn clean",
+                              "mvn install"
+                            ],
+                            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                            "after": {
+                              "upstream": "rm -rf ./*"
+                            }
+                          },
+                          "archive-artifacts": {
+                            "path": [
+                              "**/cypress/screenshots/**",
+                              "**/cypress/videos/**"
+                            ],
+                            "if-no-files-found": "warn",
+                            "dependencies": "none",
+                            "name": "kiegroup/optaweb-employee-rostering",
+                            "paths": [
+                              {
+                                "path": "**/cypress/screenshots/**",
+                                "on": "success"
+                              },
+                              {
+                                "path": "**/cypress/videos/**",
+                                "on": "success"
+                              }
+                            ]
+                          }
+                        },
+                        "mapping": {
+                          "source": "master",
+                          "target": "7.x"
+                        }
+                      },
+                      {
+                        "project": "kiegroup/optaweb-vehicle-routing",
+                        "dependencies": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "mapping": {
+                              "source": "master",
+                              "target": "7.x"
+                            }
+                          }
+                        ],
+                        "children": [],
+                        "parents": [
+                          {
+                            "project": "kiegroup/optaplanner",
+                            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                          }
+                        ],
+                        "repo": {
+                          "group": "kiegroup",
+                          "name": "optaweb-vehicle-routing"
+                        },
+                        "build": {
+                          "build-command": {
+                            "current": [
+                              "mvn clean",
+                              "mvn install"
+                            ],
+                            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                            "after": {
+                              "upstream": "rm -rf ./*"
+                            }
+                          },
+                          "archive-artifacts": {
+                            "path": [
+                              "**/cypress/screenshots/**",
+                              "**/cypress/videos/**"
+                            ],
+                            "if-no-files-found": "warn",
+                            "dependencies": "none",
+                            "name": "kiegroup/optaweb-vehicle-routing",
+                            "paths": [
+                              {
+                                "path": "**/cypress/screenshots/**",
+                                "on": "success"
+                              },
+                              {
+                                "path": "**/cypress/videos/**",
+                                "on": "success"
+                              }
+                            ]
+                          }
+                        },
+                        "mapping": {
+                          "source": "master",
+                          "target": "7.x"
+                        }
+                      },
+                      {
+                        "project": "kiegroup/kie-wb-distributions",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "parents": [
+                      {
+                        "project": "kiegroup/drools",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/jbpm",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "repo": {
+                      "group": "kiegroup",
+                      "name": "optaplanner"
+                    },
+                    "build": {
+                      "build-command": {
+                        "current": "mvn -e clean install -nsu -Prun-code-coverage,wildfly -Dfull  -Dintegration-tests=true -Dmaven.test.failure.ignore=true",
+                        "upstream": "mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                        "after": {
+                          "upstream": "rm -rf ./*"
+                        }
+                      }
+                    },
+                    "mapping": {
+                      "source": "7.x",
+                      "target": "master"
+                    }
+                  },
+                  {
+                    "project": "kiegroup/kie-jpmml-integration",
+                    "dependencies": [
+                      {
+                        "project": "kiegroup/drools"
+                      },
+                      {
+                        "project": "kiegroup/jbpm"
+                      }
+                    ],
+                    "children": [
+                      {
+                        "project": "kiegroup/droolsjbpm-integration",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "parents": [
+                      {
+                        "project": "kiegroup/drools",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/jbpm",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "repo": {
+                      "group": "kiegroup",
+                      "name": "kie-jpmml-integration"
+                    },
+                    "build": {
+                      "build-command": {
+                        "current": [
+                          "mvn clean",
+                          "mvn install"
+                        ],
+                        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                        "after": {
+                          "upstream": "rm -rf ./*"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "project": "kiegroup/droolsjbpm-tools",
+                    "dependencies": [
+                      {
+                        "project": "kiegroup/jbpm"
+                      },
+                      {
+                        "project": "kiegroup/drools"
+                      },
+                      {
+                        "project": "kiegroup/kie-soup"
+                      }
+                    ],
+                    "children": [],
+                    "parents": [
+                      {
+                        "project": "kiegroup/jbpm",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/drools",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      },
+                      {
+                        "project": "kiegroup/kie-soup",
+                        "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                      }
+                    ],
+                    "repo": {
+                      "group": "kiegroup",
+                      "name": "droolsjbpm-tools"
+                    },
+                    "build": {
+                      "build-command": {
+                        "current": [
+                          "mvn clean",
+                          "mvn install"
+                        ],
+                        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                        "after": {
+                          "upstream": "rm -rf ./*"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "project": "kiegroup/optaplanner-wb",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-distributions",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "parents": [
+                  {
+                    "project": "kiegroup/appformer",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-soup",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "repo": {
+                  "group": "kiegroup",
+                  "name": "drools"
+                },
+                "build": {
+                  "build-command": {
+                    "current": [
+                      "mvn clean",
+                      "mvn install"
+                    ],
+                    "upstream": "mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                    "after": {
+                      "upstream": "rm -rf ./*"
+                    }
+                  }
+                }
+              },
+              {
+                "project": "kiegroup/kie-uberfire-extensions",
+                "dependencies": [
+                  {
+                    "project": "kiegroup/appformer"
+                  }
+                ],
+                "children": [
+                  {
+                    "project": "kiegroup/optaplanner-wb",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/jbpm-wb",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-distributions",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "parents": [
+                  {
+                    "project": "kiegroup/appformer",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "repo": {
+                  "group": "kiegroup",
+                  "name": "kie-uberfire-extensions"
+                },
+                "build": {
+                  "build-command": {
+                    "current": [
+                      "mvn clean",
+                      "mvn install"
+                    ],
+                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                    "after": {
+                      "upstream": "rm -rf ./*"
+                    }
+                  }
+                }
+              },
+              {
+                "project": "kiegroup/optaplanner-wb",
+                "dependencies": [
+                  {
+                    "project": "kiegroup/appformer"
+                  },
+                  {
+                    "project": "kiegroup/kie-uberfire-extensions"
+                  },
+                  {
+                    "project": "kiegroup/drools-wb"
+                  },
+                  {
+                    "project": "kiegroup/drools"
+                  },
+                  {
+                    "project": "kiegroup/optaplanner",
+                    "mapping": {
+                      "source": "master",
+                      "target": "7.x"
+                    }
+                  },
+                  {
+                    "project": "kiegroup/kie-soup"
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-common"
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-playground"
+                  }
+                ],
+                "children": [],
+                "parents": [
+                  {
+                    "project": "kiegroup/appformer",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-uberfire-extensions",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/drools-wb",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/drools",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/optaplanner",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-soup",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-common",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-wb-playground",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "repo": {
+                  "group": "kiegroup",
+                  "name": "optaplanner-wb"
+                },
+                "build": {
+                  "build-command": {
+                    "current": [
+                      "mvn clean",
+                      "mvn install"
+                    ],
+                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                    "after": {
+                      "upstream": "rm -rf ./*"
+                    }
+                  }
+                }
+              },
+              {
+                "project": "kiegroup/kie-wb-distributions",
+                "dependencies": [
+                  {
+                    "project": "kiegroup/appformer"
+                  },
+                  {
+                    "project": "kiegroup/kie-soup"
+                  },
+                  {
+                    "project": "kiegroup/drools"
+                  },
+                  {
+                    "project": "kiegroup/optaplanner",
+                    "mapping": {
+                      "source": "master",
+                      "target": "7.x"
+                    }
+                  },
+                  {
+                    "project": "kiegroup/jbpm"
+                  },
+                  {
+                    "project": "kiegroup/kie-uberfire-extensions"
+                  },
+                  {
+                    "project": "kiegroup/jbpm-wb"
+                  }
+                ],
+                "children": [],
+                "parents": [
+                  {
+                    "project": "kiegroup/appformer",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-soup",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/drools",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/optaplanner",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/jbpm",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/kie-uberfire-extensions",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  },
+                  {
+                    "project": "kiegroup/jbpm-wb",
+                    "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+                  }
+                ],
+                "repo": {
+                  "group": "kiegroup",
+                  "name": "kie-wb-distributions"
+                },
+                "build": {
+                  "build-command": {
+                    "current": [
+                      "mvn -e -nsu clean install -Dfull -Prun-code-coverage -Pwildfly -Dcontainer=wildfly -Dcontainer.profile=wildfly -Dintegration-tests=true -Dmaven.test.failure.ignore=true -Pbusiness-central -Dgwt.compiler.localWorkers=1 -Dwebdriver.firefox.bin=/opt/tools/firefox-60esr/firefox-bin",
+                      "mvn 1",
+                      "mvn 2"
+                    ],
+                    "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                    "after": {
+                      "upstream": "rm -rf ./*"
+                    }
+                  },
+                  "archive-artifacts": {
+                    "path": [
+                      "**/target/screenshots/**",
+                      "**/target/business-monitoring-webapp.war",
+                      "**/target/business-central*eap*.war",
+                      "**/target/business-central*wildfly*.war",
+                      "**/target/jbpm-server*dist*.zip"
+                    ],
+                    "if-no-files-found": "warn",
+                    "dependencies": "none",
+                    "name": "kiegroup/kie-wb-distributions",
+                    "paths": [
+                      {
+                        "path": "**/target/screenshots/**",
+                        "on": "success"
+                      },
+                      {
+                        "path": "**/target/business-monitoring-webapp.war",
+                        "on": "success"
+                      },
+                      {
+                        "path": "**/target/business-central*eap*.war",
+                        "on": "success"
+                      },
+                      {
+                        "path": "**/target/business-central*wildfly*.war",
+                        "on": "success"
+                      },
+                      {
+                        "path": "**/target/jbpm-server*dist*.zip",
+                        "on": "success"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "parents": [
+              {
+                "project": "kiegroup/droolsjbpm-build-bootstrap",
+                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+              },
+              {
+                "project": "kiegroup/lienzo-tests",
+                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+              },
+              {
+                "project": "kiegroup/kie-soup",
+                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+              }
+            ],
+            "repo": {
+              "group": "kiegroup",
+              "name": "appformer"
+            },
+            "build": {
+              "build-command": {
+                "current": [
+                  "mvn clean",
+                  "mvn install"
+                ],
+                "upstream": "mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                "after": {
+                  "upstream": "rm -rf ./*"
+                }
+              },
+              "archive-artifacts": {
+                "path": [
+                  "**/dashbuilder-runtime.war"
+                ],
+                "if-no-files-found": "warn",
+                "dependencies": "none",
+                "name": "kiegroup/appformer",
+                "paths": [
+                  {
+                    "path": "**/dashbuilder-runtime.war",
+                    "on": "success"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "parents": [
+          {
+            "project": "kiegroup/lienzo-core",
+            "children": [
+              {
+                "project": "kiegroup/lienzo-tests",
+                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+              },
+              {
+                "project": "kiegroup/droolsjbpm-build-bootstrap",
+                "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+              }
+            ],
+            "parents": [],
+            "repo": {
+              "group": "kiegroup",
+              "name": "lienzo-core"
+            },
+            "build": {
+              "build-command": {
+                "current": [
+                  "mvn clean",
+                  "mvn install"
+                ],
+                "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+                "after": {
+                  "upstream": "rm -rf ./*"
+                }
+              }
+            }
+          }
+        ],
+        "repo": {
+          "group": "kiegroup",
+          "name": "lienzo-tests"
+        },
+        "build": {
+          "build-command": {
+            "current": [
+              "mvn clean",
+              "mvn install"
+            ],
+            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+            "after": {
+              "upstream": "rm -rf ./*"
+            }
+          }
+        }
+      },
+      {
+        "project": "kiegroup/droolsjbpm-build-bootstrap",
+        "dependencies": [
+          {
+            "project": "kiegroup/lienzo-core"
+          }
+        ],
+        "children": [
+          {
+            "project": "kiegroup/kie-soup",
+            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+          },
+          {
+            "project": "kiegroup/appformer",
+            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+          }
+        ],
+        "parents": [
+          {
+            "project": "kiegroup/lienzo-core",
+            "warning": "rest of the node information removed to avoid circular dependency problem. The node information is already defined in the json."
+          }
+        ],
+        "repo": {
+          "group": "kiegroup",
+          "name": "droolsjbpm-build-bootstrap"
+        },
+        "build": {
+          "build-command": {
+            "current": [
+              "mvn clean",
+              "mvn install"
+            ],
+            "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+            "after": {
+              "upstream": "rm -rf ./*"
+            }
+          }
+        }
+      }
+    ],
+    "parents": [],
+    "repo": {
+      "group": "kiegroup",
+      "name": "lienzo-core"
+    },
+    "build": {
+      "build-command": {
+        "current": [
+          "mvn clean",
+          "mvn install"
+        ],
+        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        "after": {
+          "upstream": "rm -rf ./*"
+        }
+      }
+    }
+  },
+  {
+    "project": "kiegroup/kie-docs",
+    "children": [],
+    "parents": [],
+    "repo": {
+      "group": "kiegroup",
+      "name": "kie-docs"
+    },
+    "build": {
+      "build-command": {
+        "current": "mvn clean install",
+        "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        "after": {
+          "upstream": "rm -rf ./*"
+        }
+      }
+    }
+  }
+]

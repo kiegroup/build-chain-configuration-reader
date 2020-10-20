@@ -1,0 +1,5 @@
+.env
+node_modules/
+*.code-workspace
+locally_execution/**/*
+test/lib/artifacts/_temp/**/*
