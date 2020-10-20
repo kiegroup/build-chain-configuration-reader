@@ -1,3 +1,5 @@
+name: Publish NPM package
+
 on:
   push:
     branches:
@@ -15,4 +17,5 @@ jobs:
       - run: npm test
       - uses: JS-DevTools/npm-publish@v1
         with:
+          access: public
           token: ${{ secrets.NPM_TOKEN }}
