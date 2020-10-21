@@ -25,9 +25,11 @@ async function readDefinitionFile(file, urlPlaceHolders = {}) {
  * @param {Object} urlPlaceHolders the url place holders to replace url
  */
 async function readDefinitionFileFromFile(filePath, urlPlaceHolders) {
-  let defintionFileContent = fs.readFileSync(filePath, "utf8");
+  const defintionFileContent = fs.readFileSync(filePath, "utf8");
+  const definitionYaml = readYaml(defintionFileContent);
+  definitionYaml.sourceFile = filePath;
   return loadYaml(
-    readYaml(defintionFileContent),
+    definitionYaml,
     filePath.substring(0, filePath.lastIndexOf("/")),
     urlPlaceHolders
   );
@@ -54,6 +56,7 @@ async function readDefinitionFileFromUrl(url, urlPlaceHolders) {
     );
     fs.writeFileSync(definitionYaml.dependencies, dependenciesContent);
   }
+  definitionYaml.sourceFile = treatedUrl;
   return loadYaml(definitionYaml, "./", urlPlaceHolders);
 }
 
@@ -80,7 +83,6 @@ async function loadYaml(definitionYaml, definitionFileFolder, urlPlaceHolders) {
     validateDependencies(dependenciesYaml);
     definitionYaml.dependencies = dependenciesYaml.dependencies;
   }
-
   return definitionYaml;
 }
 
