@@ -38,7 +38,12 @@ See example here ![Tree Example](/docs/tree-example.json)
 - project: [group/project]: contains the `group/project` information, where `group` is the repository group and `project` is the project name.
 -
 
-## Usefull API methods
+## Development
+
+### Previous setup
+You will need to run `export NPM_TOKEN=whatever_token` before being able to commit changes.
+
+### Usefull API methods
 
 - getTree: it returns back ![tree object](#tree-node)
 - getTreeForProject: it returns back ![tree object](#tree-node) for a particular project (from this specific tree leaf)
@@ -52,7 +57,7 @@ See example here ![Tree Example](/docs/tree-example.json)
 - Version **<=0.4.0**:
   - _NodeJS_ >= 5.0.0
 
-#### copyright
+### copyright
 
 Looks at all the .js files in the current git repo and adds/updates a
 standard copyright notice to the top. The exact wording of the copyright

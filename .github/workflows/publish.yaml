@@ -13,9 +13,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: npm install
-      - run: npm test
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          access: public
-          token: ${{ secrets.NPM_TOKEN }}
+      - run: |
+        npm publish --access public
+      - env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

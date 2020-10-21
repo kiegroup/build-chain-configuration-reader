@@ -30,7 +30,7 @@
     "prepublish": "npm run lint && npm run test"
   },
   "git-pre-hooks": {
-    "pre-commit": "npm run prettier",
+    "pre-commit": "npm run prettier && git add docs/tree-example.json",
     "pre-push": "npm ci"
   },
   "dependencies": {
