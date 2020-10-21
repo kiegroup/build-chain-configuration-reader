@@ -13,6 +13,10 @@ const path = require("path");
 const fs = require("fs");
 const yaml = require("js-yaml");
 
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
 test("get tree from file", async () => {
   // Arrange
   readDefinitionFileMock.mockResolvedValueOnce(
@@ -92,6 +96,13 @@ test("get tree for project", async () => {
     "kiegroup/jbpm-wb"
   );
 
+  // Assert
+  expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
+  expect(readDefinitionFileMock).toHaveBeenCalledWith(
+    "test/resources/build-config-with-dependencies.yaml",
+    {}
+  );
+
   expect(projectTree.project).toEqual("kiegroup/jbpm-wb");
   checkChildren(projectTree, ["kiegroup/kie-wb-distributions"]);
   checkParents(projectTree, [
@@ -100,6 +111,38 @@ test("get tree for project", async () => {
     "kiegroup/jbpm-designer",
     "kiegroup/jbpm-work-items"
   ]);
+});
+
+test("get tree for project placeholders", async () => {
+  // Arrange
+  const placeholders = { key: "value" };
+
+  readDefinitionFileMock.mockResolvedValueOnce(
+    yaml.safeLoad(
+      fs.readFileSync(
+        path.join(
+          ".",
+          "test",
+          "resources",
+          "build-config-with-dependencies.yaml"
+        ),
+        "utf8"
+      )
+    )
+  );
+  // Act
+  await getTreeForProject(
+    path.join(".", "test", "resources", "build-config-with-dependencies.yaml"),
+    "kiegroup/jbpm-wb",
+    placeholders
+  );
+
+  // Assert
+  expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
+  expect(readDefinitionFileMock).toHaveBeenCalledWith(
+    "test/resources/build-config-with-dependencies.yaml",
+    placeholders
+  );
 });
 
 test("get tree from URL", async () => {
@@ -121,6 +164,11 @@ test("get tree from URL", async () => {
   const definitionTree = await getTree("http://whateverurl.rh/definition.yaml");
 
   // Assert
+  expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
+  expect(readDefinitionFileMock).toHaveBeenCalledWith(
+    "http://whateverurl.rh/definition.yaml",
+    {}
+  );
   expect(definitionTree.length).toEqual(2);
   expect(definitionTree[0].project).toEqual("kiegroup/lienzo-core");
   checkChildren(definitionTree[0], [
@@ -141,6 +189,33 @@ test("get tree from URL", async () => {
   expect(definitionTree[1].project).toEqual("kiegroup/kie-docs");
   checkChildren(definitionTree[1], []);
   checkParents(definitionTree[1], []);
+});
+
+test("get tree with placeholders", async () => {
+  // Arrange
+  const placeholders = { key: "value" };
+  readDefinitionFileMock.mockResolvedValueOnce(
+    yaml.safeLoad(
+      fs.readFileSync(
+        path.join(
+          ".",
+          "test",
+          "resources",
+          "build-config-with-dependencies.yaml"
+        ),
+        "utf8"
+      )
+    )
+  );
+  // Act
+  await getTree("http://whateverurl.rh/definition.yaml", placeholders);
+
+  // Assert
+  expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
+  expect(readDefinitionFileMock).toHaveBeenCalledWith(
+    "http://whateverurl.rh/definition.yaml",
+    placeholders
+  );
 });
 
 test("dependencyListToTree", async () => {
