@@ -17,7 +17,7 @@ jobs:
           node-version: 12
       - name: Publish project
         run: |
-          npm ci
+          npm install
           npm publish --access public
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
