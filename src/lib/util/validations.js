@@ -3,6 +3,10 @@ const assert = require("assert");
 const allowedVersions = ["1.0"];
 
 function validateDefinition(definition) {
+  assert(
+    definition,
+    "definition file is empty or couldn't be loaded, please check 'definition-file' input"
+  );
   validateVersion(definition.version, "definition");
 }
 
