@@ -1,4 +1,4 @@
-name: Publish NPM package
+name: Publish
 
 on:
   push:
@@ -6,18 +6,15 @@ on:
       - main
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Ceckout project
-        uses: actions/checkout@v1
-      - name: Setup NodeJS
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Publish project
-        run: |
-          npm install
-          npm publish --access public
+          registry-url: https://registry.npmjs.org/
+      - run: yarn install
+      - run: npm publish --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
