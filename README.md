@@ -41,6 +41,7 @@ See example here ![Tree Example](/docs/tree-example.json)
 ## Development
 
 ### Previous setup
+
 You will need to run `export NPM_TOKEN=whatever_token` before being able to commit changes.
 
 ### Usefull API methods

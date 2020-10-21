@@ -116,10 +116,7 @@
                                 },
                                 "build": {
                                   "build-command": {
-                                    "current": [
-                                      "mvn clean",
-                                      "mvn install"
-                                    ],
+                                    "current": ["mvn clean", "mvn install"],
                                     "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                     "after": {
                                       "upstream": "rm -rf ./*"
@@ -252,10 +249,7 @@
                                     },
                                     "build": {
                                       "build-command": {
-                                        "current": [
-                                          "mvn clean",
-                                          "mvn install"
-                                        ],
+                                        "current": ["mvn clean", "mvn install"],
                                         "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                         "after": {
                                           "upstream": "rm -rf ./*"
@@ -299,10 +293,7 @@
                                 },
                                 "build": {
                                   "build-command": {
-                                    "current": [
-                                      "mvn clean",
-                                      "mvn install"
-                                    ],
+                                    "current": ["mvn clean", "mvn install"],
                                     "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                     "after": {
                                       "upstream": "rm -rf ./*"
@@ -323,10 +314,7 @@
                             },
                             "build": {
                               "build-command": {
-                                "current": [
-                                  "mvn clean",
-                                  "mvn install"
-                                ],
+                                "current": ["mvn clean", "mvn install"],
                                 "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                 "after": {
                                   "upstream": "rm -rf ./*"
@@ -381,9 +369,7 @@
                                 }
                               },
                               "archive-artifacts": {
-                                "path": [
-                                  "**/target/screenshots/**"
-                                ],
+                                "path": ["**/target/screenshots/**"],
                                 "if-no-files-found": "warn",
                                 "dependencies": "none",
                                 "name": "kiegroup/kie-wb-common",
@@ -442,10 +428,7 @@
                                 },
                                 "build": {
                                   "build-command": {
-                                    "current": [
-                                      "mvn clean",
-                                      "mvn install"
-                                    ],
+                                    "current": ["mvn clean", "mvn install"],
                                     "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                     "after": {
                                       "upstream": "rm -rf ./*"
@@ -490,10 +473,7 @@
                             },
                             "build": {
                               "build-command": {
-                                "current": [
-                                  "mvn clean",
-                                  "mvn install"
-                                ],
+                                "current": ["mvn clean", "mvn install"],
                                 "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                                 "after": {
                                   "upstream": "rm -rf ./*"
@@ -515,9 +495,7 @@
                             }
                           },
                           "archive-artifacts": {
-                            "path": [
-                              "**/gclog"
-                            ],
+                            "path": ["**/gclog"],
                             "if-no-files-found": "warn",
                             "dependencies": "none",
                             "name": "kiegroup/droolsjbpm-integration",
@@ -555,10 +533,7 @@
                     },
                     "build": {
                       "build-command": {
-                        "current": [
-                          "mvn clean",
-                          "mvn install"
-                        ],
+                        "current": ["mvn clean", "mvn install"],
                         "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                         "after": {
                           "upstream": "rm -rf ./*"
@@ -617,10 +592,7 @@
                         },
                         "build": {
                           "build-command": {
-                            "current": [
-                              "mvn clean",
-                              "mvn install"
-                            ],
+                            "current": ["mvn clean", "mvn install"],
                             "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                             "after": {
                               "upstream": "rm -rf ./*"
@@ -675,10 +647,7 @@
                         },
                         "build": {
                           "build-command": {
-                            "current": [
-                              "mvn clean",
-                              "mvn install"
-                            ],
+                            "current": ["mvn clean", "mvn install"],
                             "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                             "after": {
                               "upstream": "rm -rf ./*"
@@ -774,10 +743,7 @@
                     },
                     "build": {
                       "build-command": {
-                        "current": [
-                          "mvn clean",
-                          "mvn install"
-                        ],
+                        "current": ["mvn clean", "mvn install"],
                         "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                         "after": {
                           "upstream": "rm -rf ./*"
@@ -819,10 +785,7 @@
                     },
                     "build": {
                       "build-command": {
-                        "current": [
-                          "mvn clean",
-                          "mvn install"
-                        ],
+                        "current": ["mvn clean", "mvn install"],
                         "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                         "after": {
                           "upstream": "rm -rf ./*"
@@ -855,10 +818,7 @@
                 },
                 "build": {
                   "build-command": {
-                    "current": [
-                      "mvn clean",
-                      "mvn install"
-                    ],
+                    "current": ["mvn clean", "mvn install"],
                     "upstream": "mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                     "after": {
                       "upstream": "rm -rf ./*"
@@ -899,10 +859,7 @@
                 },
                 "build": {
                   "build-command": {
-                    "current": [
-                      "mvn clean",
-                      "mvn install"
-                    ],
+                    "current": ["mvn clean", "mvn install"],
                     "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                     "after": {
                       "upstream": "rm -rf ./*"
@@ -983,10 +940,7 @@
                 },
                 "build": {
                   "build-command": {
-                    "current": [
-                      "mvn clean",
-                      "mvn install"
-                    ],
+                    "current": ["mvn clean", "mvn install"],
                     "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                     "after": {
                       "upstream": "rm -rf ./*"
@@ -1127,19 +1081,14 @@
             },
             "build": {
               "build-command": {
-                "current": [
-                  "mvn clean",
-                  "mvn install"
-                ],
+                "current": ["mvn clean", "mvn install"],
                 "upstream": "mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                 "after": {
                   "upstream": "rm -rf ./*"
                 }
               },
               "archive-artifacts": {
-                "path": [
-                  "**/dashbuilder-runtime.war"
-                ],
+                "path": ["**/dashbuilder-runtime.war"],
                 "if-no-files-found": "warn",
                 "dependencies": "none",
                 "name": "kiegroup/appformer",
@@ -1173,10 +1122,7 @@
             },
             "build": {
               "build-command": {
-                "current": [
-                  "mvn clean",
-                  "mvn install"
-                ],
+                "current": ["mvn clean", "mvn install"],
                 "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
                 "after": {
                   "upstream": "rm -rf ./*"
@@ -1191,10 +1137,7 @@
         },
         "build": {
           "build-command": {
-            "current": [
-              "mvn clean",
-              "mvn install"
-            ],
+            "current": ["mvn clean", "mvn install"],
             "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
             "after": {
               "upstream": "rm -rf ./*"
@@ -1231,10 +1174,7 @@
         },
         "build": {
           "build-command": {
-            "current": [
-              "mvn clean",
-              "mvn install"
-            ],
+            "current": ["mvn clean", "mvn install"],
             "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
             "after": {
               "upstream": "rm -rf ./*"
@@ -1250,10 +1190,7 @@
     },
     "build": {
       "build-command": {
-        "current": [
-          "mvn clean",
-          "mvn install"
-        ],
+        "current": ["mvn clean", "mvn install"],
         "upstream": "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
         "after": {
           "upstream": "rm -rf ./*"

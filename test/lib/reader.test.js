@@ -10,20 +10,24 @@ afterEach(() => {
 
 test("readDefinitionFile with dependencies", async () => {
   // Act
-  const definitionFile = await readDefinitionFile(
+  const result = await readDefinitionFile(
     path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
   );
   // Assert
-  expect(definitionFile.dependencies.length).toEqual(25);
+  expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "test/resources/build-config-with-dependencies.yaml"
+  );
 });
 
 test("readDefinitionFile with external dependencies", async () => {
   // Act
-  const definitionFile = await readDefinitionFile(
+  const result = await readDefinitionFile(
     path.join(".", "test", "resources", "build-config.yaml")
   );
   // Assert
-  expect(definitionFile.dependencies.length).toEqual(25);
+  expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual("test/resources/build-config.yaml");
 });
 
 test("readDefinitionFile with external dependencies as URL", async () => {
@@ -34,11 +38,14 @@ test("readDefinitionFile with external dependencies as URL", async () => {
     )
   );
   // Act
-  const definitionFile = await readDefinitionFile(
+  const result = await readDefinitionFile(
     path.join(".", "test", "resources", "build-config-dependencies-url.yaml")
   );
   // Assert
-  expect(definitionFile.dependencies.length).toEqual(25);
+  expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "test/resources/build-config-dependencies-url.yaml"
+  );
 });
 
 test("readDefinitionFileFromUrl relative embedded dependencies", async () => {
@@ -62,6 +69,9 @@ test("readDefinitionFileFromUrl relative embedded dependencies", async () => {
 
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+  );
 });
 
 test("readDefinitionFileFromUrl relative path dependencies", async () => {
@@ -90,6 +100,9 @@ test("readDefinitionFileFromUrl relative path dependencies", async () => {
 
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+  );
 });
 
 test("readDefinitionFileFromUrl url dependencies", async () => {
@@ -120,6 +133,9 @@ test("readDefinitionFileFromUrl url dependencies", async () => {
 
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+  );
 });
 
 test("readDefinitionFileFromUrl with place holders relative path dependencies", async () => {
@@ -149,6 +165,9 @@ test("readDefinitionFileFromUrl with place holders relative path dependencies", 
 
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "https://raw.githubusercontent.com/groupx/projectx/branchx/test/resources/build-config.yaml"
+  );
 });
 
 test("readDefinitionFileFromUrl url dependencies placeholders", async () => {
@@ -185,4 +204,7 @@ test("readDefinitionFileFromUrl url dependencies placeholders", async () => {
 
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
+  expect(result.sourceFile).toEqual(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+  );
 });
