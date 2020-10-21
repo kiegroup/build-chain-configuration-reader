@@ -1,6 +1,7 @@
 const fs = require("fs");
 
 const { getUrlContent } = require("./util/http");
+const { treatUrl } = require("./util/reader-util");
 const {
   validateDefinition,
   validateDependencies
@@ -26,10 +27,8 @@ async function readDefinitionFile(file, urlPlaceHolders = {}) {
  */
 async function readDefinitionFileFromFile(filePath, urlPlaceHolders) {
   const defintionFileContent = fs.readFileSync(filePath, "utf8");
-  const definitionYaml = readYaml(defintionFileContent);
-  definitionYaml.sourceFile = filePath;
   return loadYaml(
-    definitionYaml,
+    readYaml(defintionFileContent),
     filePath.substring(0, filePath.lastIndexOf("/")),
     urlPlaceHolders
   );
@@ -56,7 +55,6 @@ async function readDefinitionFileFromUrl(url, urlPlaceHolders) {
     );
     fs.writeFileSync(definitionYaml.dependencies, dependenciesContent);
   }
-  definitionYaml.sourceFile = treatedUrl;
   return loadYaml(definitionYaml, "./", urlPlaceHolders);
 }
 
@@ -84,19 +82,6 @@ async function loadYaml(definitionYaml, definitionFileFolder, urlPlaceHolders) {
     definitionYaml.dependencies = dependenciesYaml.dependencies;
   }
   return definitionYaml;
-}
-
-/**
- * it treats the url in case it contains
- * @param {String} url a http(s)://whatever.domain/${GROUP}/${PROJECT_NAME}/${BRANCH}/whateverfile.txt format, where place olders are optional and can be placed anywhere on the string
- * @param {Object} placeHolders the key/values to replace url's place holders
- */
-function treatUrl(url, placeHolders) {
-  let result = url;
-  Object.entries(placeHolders).forEach(
-    ([key, value]) => (result = result.replace(`$\{${key}}`, value))
-  );
-  return result;
 }
 
 module.exports = { readDefinitionFile };

@@ -2,13 +2,15 @@ const {
   readDefinitionFile,
   getTree,
   getTreeForProject,
-  parentChainFromNode
+  parentChainFromNode,
+  treatUrl
 } = require("../index");
 jest.mock("../index");
 readDefinitionFile.mockImplementation(() => "readDefinitionFile");
 getTree.mockImplementation(() => "getTree");
 getTreeForProject.mockImplementation(() => "getTreeForProject");
 parentChainFromNode.mockImplementation(() => "parentChainFromNode");
+treatUrl.mockImplementation(() => "treatUrl");
 
 const path = require("path");
 
@@ -46,4 +48,11 @@ test("parentChainFromNode", async () => {
   );
   // Assert
   expect(result).toBe("parentChainFromNode");
+});
+
+test("treatUrl", async () => {
+  // Act
+  const result = treatUrl("url", {});
+  // Assert
+  expect(result).toBe("treatUrl");
 });
