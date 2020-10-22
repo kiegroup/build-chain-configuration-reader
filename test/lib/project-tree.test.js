@@ -265,7 +265,7 @@ test("dependencyListToTree", async () => {
       path: "**/dashbuilder-runtime.war",
       dependencies: "none",
       "if-no-files-found": "warn",
-      name: "group/12",
+      name: "12",
       paths: [
         {
           on: "success",

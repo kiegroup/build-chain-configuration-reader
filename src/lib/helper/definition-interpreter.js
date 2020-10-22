@@ -75,6 +75,8 @@ function manipulateArchiveArtifacts(build, project) {
       : "none";
     archiveArtifacts.name = archiveArtifacts.name
       ? archiveArtifacts.name
+      : project.includes("/")
+      ? project.split("/")[1]
       : project;
     archiveArtifacts.paths = treatArchiveArtifactsPath(archiveArtifacts.path);
   }
