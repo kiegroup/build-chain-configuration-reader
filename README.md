@@ -48,15 +48,14 @@ You will need to run `export NPM_TOKEN=whatever_token` before being able to comm
 
 - getTree: it returns back ![tree object](#tree-node)
 - getTreeForProject: it returns back ![tree object](#tree-node) for a particular project (from this specific tree leaf)
-- readDefinitionFile:
-- parentChainFromNode:
+- getOrderedListForTree: it returns back a plain list ordered by precedence for the whole tree.
+- getOrderedListForProject: it returns back a plain list ordered by precedence for a specifi project.
+- readDefinitionFile: It will return back the definition file plus dependencies as an object
+- parentChainFromNode: it generates an ordered array of node's parents from top to bottom
 
 ### Restrictions
 
-- Version **>=0.4.1**:
-  - _NodeJS_ >= 7.6.0
-- Version **<=0.4.0**:
-  - _NodeJS_ >= 5.0.0
+- _NodeJS_ >= 10.x
 
 ### copyright
 

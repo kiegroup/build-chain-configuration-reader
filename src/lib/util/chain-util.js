@@ -1,13 +1,28 @@
 /**
- *
- * @param {object} the tree node with its parents and children
- * @param {Set} the set to interate
+ * it generates an ordered array of node's parents from top to bottom
+ * @param {Object} node the node object with its parents and children
+ * @param {Array} nodeList the nodeList to fill
  */
 function parentChainFromNode(node, nodeList = []) {
   if (!nodeList.map(n => n.project).includes(node.project)) {
     node.parents.forEach(parent => parentChainFromNode(parent, nodeList));
     nodeList.push(node);
   }
+  return nodeList;
+}
+
+/**
+ * it generates an ordered array of node's children from top to bottom
+ * @param {Object} node the node object with its parents and children
+ * @param {Array} nodeList the nodeList to fill
+ */
+function childChainFromNode(node, nodeList = []) {
+  const index = nodeList.findIndex(n => n.project === node.project);
+  if (index > -1) {
+    nodeList.splice(index, 1);
+  }
+  nodeList.push(node);
+  node.children.forEach(child => childChainFromNode(child, nodeList));
   return nodeList;
 }
 
@@ -35,4 +50,8 @@ function jsonStringFunction(key, value, cache) {
   }
 }
 
-module.exports = { parentChainFromNode, jsonStringFunction };
+module.exports = {
+  parentChainFromNode,
+  childChainFromNode,
+  jsonStringFunction
+};

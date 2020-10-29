@@ -90,4 +90,8 @@ function dependencyListToTree(dependencyList, buildConfiguration) {
   }, []);
 }
 
-module.exports = { getTree, getTreeForProject, dependencyListToTree };
+module.exports = {
+  getTree,
+  getTreeForProject,
+  dependencyListToTree
+};

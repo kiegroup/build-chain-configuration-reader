@@ -572,11 +572,7 @@
                         "project": "kiegroup/optaweb-employee-rostering",
                         "dependencies": [
                           {
-                            "project": "kiegroup/optaplanner",
-                            "mapping": {
-                              "source": "master",
-                              "target": "7.x"
-                            }
+                            "project": "kiegroup/optaplanner"
                           }
                         ],
                         "children": [],
@@ -617,21 +613,13 @@
                               }
                             ]
                           }
-                        },
-                        "mapping": {
-                          "source": "master",
-                          "target": "7.x"
                         }
                       },
                       {
                         "project": "kiegroup/optaweb-vehicle-routing",
                         "dependencies": [
                           {
-                            "project": "kiegroup/optaplanner",
-                            "mapping": {
-                              "source": "master",
-                              "target": "7.x"
-                            }
+                            "project": "kiegroup/optaplanner"
                           }
                         ],
                         "children": [],
@@ -672,10 +660,6 @@
                               }
                             ]
                           }
-                        },
-                        "mapping": {
-                          "source": "master",
-                          "target": "7.x"
                         }
                       },
                       {
