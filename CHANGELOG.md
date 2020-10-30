@@ -1,6 +1,10 @@
 # Changelog
 
-# V0.0.6
+# V0.0.7
+
+- get full downstream list functionallity
+- get ordered list for tree functionallity
+- get ordered list for project functionallity
 
 ## Bugs:
 

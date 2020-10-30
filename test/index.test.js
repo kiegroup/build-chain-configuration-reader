@@ -1,27 +1,22 @@
 const {
-  readDefinitionFile,
   getTree,
   getTreeForProject,
+  getOrderedListForTree,
+  getOrderedListForProject,
+  readDefinitionFile,
   parentChainFromNode,
   treatUrl
 } = require("../index");
 jest.mock("../index");
-readDefinitionFile.mockImplementation(() => "readDefinitionFile");
 getTree.mockImplementation(() => "getTree");
 getTreeForProject.mockImplementation(() => "getTreeForProject");
+getOrderedListForTree.mockImplementation(() => "getOrderedListForTree");
+getOrderedListForProject.mockImplementation(() => "getOrderedListForProject");
+readDefinitionFile.mockImplementation(() => "readDefinitionFile");
 parentChainFromNode.mockImplementation(() => "parentChainFromNode");
 treatUrl.mockImplementation(() => "treatUrl");
 
 const path = require("path");
-
-test("readDefinitionFile", async () => {
-  // Act
-  const result = await readDefinitionFile(
-    path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
-  );
-  // Assert
-  expect(result).toBe("readDefinitionFile");
-});
 
 test("getTree", async () => {
   // Act
@@ -39,6 +34,33 @@ test("getTreeForProject", async () => {
   );
   // Assert
   expect(result).toBe("getTreeForProject");
+});
+
+test("getOrderedListForTree", async () => {
+  // Act
+  const result = await getOrderedListForTree(
+    path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
+  );
+  // Assert
+  expect(result).toBe("getOrderedListForTree");
+});
+
+test("getOrderedListForProject", async () => {
+  // Act
+  const result = await getOrderedListForProject(
+    path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
+  );
+  // Assert
+  expect(result).toBe("getOrderedListForProject");
+});
+
+test("readDefinitionFile", async () => {
+  // Act
+  const result = await readDefinitionFile(
+    path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
+  );
+  // Assert
+  expect(result).toBe("readDefinitionFile");
 });
 
 test("parentChainFromNode", async () => {

@@ -17,6 +17,42 @@ afterEach(() => {
   jest.clearAllMocks();
 });
 
+test("generate example file", async () => {
+  // Arrange
+  readDefinitionFileMock.mockResolvedValueOnce(
+    yaml.safeLoad(
+      fs.readFileSync(
+        path.join(
+          ".",
+          "test",
+          "resources",
+          "build-config-with-dependencies-for-example.yaml"
+        ),
+        "utf8"
+      )
+    )
+  );
+  // Act
+  const definitionTree = await getTree(
+    path.join(
+      ".",
+      "test",
+      "resources",
+      "build-config-with-dependencies-for-example.yaml"
+    )
+  );
+
+  const cache = [];
+  fs.writeFileSync(
+    path.join(".", "docs", "tree-example.json"),
+    JSON.stringify(
+      definitionTree,
+      (key, value) => jsonStringFunction(key, value, cache),
+      2
+    )
+  );
+});
+
 test("get tree from file", async () => {
   // Arrange
   readDefinitionFileMock.mockResolvedValueOnce(
@@ -35,15 +71,6 @@ test("get tree from file", async () => {
   // Act
   const definitionTree = await getTree(
     path.join(".", "test", "resources", "build-config-with-dependencies.yaml")
-  );
-  const cache = [];
-  fs.writeFileSync(
-    path.join(".", "docs", "tree-example.json"),
-    JSON.stringify(
-      definitionTree,
-      (key, value) => jsonStringFunction(key, value, cache),
-      2
-    )
   );
 
   // Assert
