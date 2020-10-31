@@ -1197,7 +1197,8 @@
         "after": {
           "upstream": "rm -rf ./*"
         }
-      }
+      },
+      "skip": true
     }
   }
 ]
