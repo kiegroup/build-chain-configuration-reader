@@ -1,5 +1,9 @@
 # Changelog
 
+# V0.0.8
+
+- possibility to interpret objects different to string on build configuration. Like skip: Boolean
+
 # V0.0.7
 
 - get full downstream list functionallity

@@ -191,6 +191,7 @@ build:
   - project: kiegroup/kie-docs
     build-command:
       current: mvn clean install
+    skip: true
 
   - project: kiegroup/optaweb-employee-rostering
     archive-artifacts:

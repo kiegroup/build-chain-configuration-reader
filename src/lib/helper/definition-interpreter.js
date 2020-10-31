@@ -49,9 +49,10 @@ function manipulateProperties(properties) {
     if (typeof value === "object" && !Array.isArray(value)) {
       propertiesClone[key] = manipulateProperties(propertiesClone[key]);
     } else {
-      propertiesClone[key] = value.includes("\n")
-        ? value.split("\n").filter(e => e)
-        : value;
+      propertiesClone[key] =
+        typeof value === "string" && value.includes("\n")
+          ? value.split("\n").filter(e => e)
+          : value;
     }
   });
   return propertiesClone;
