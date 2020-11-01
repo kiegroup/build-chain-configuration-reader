@@ -1,5 +1,9 @@
 # Changelog
 
+# V1.1.0
+
+- dependency files extension
+
 # V0.0.8
 
 - possibility to interpret objects different to string on build configuration. Like skip: Boolean
