@@ -1,6 +1,6 @@
 const assert = require("assert");
 
-const allowedVersions = ["1.0"];
+const allowedVersions = ["1.0", "1.1"];
 
 function validateDefinition(definition) {
   assert(

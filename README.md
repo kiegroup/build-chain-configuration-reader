@@ -18,7 +18,103 @@ build: [build information]
 
 ### project dependencies section structure
 
-`dependencies`: it can be a `url`
+```
+dependencies:
+  - project: PROJECT_NAME
+    dependencies:
+      - project: PROJECT_NAME
+        mapping:
+          source: SOURCE_BRANCH
+          target: TARGET_BRANCH
+```
+
+You should define a list of projects like
+
+```
+- project: kiegroup/lienzo-core
+- project: kiegroup/lienzo-tests
+- project: kiegroup/droolsjbpm-build-bootstrap
+- project: kiegroup/drools
+```
+
+and stablish their dependencies with each other
+
+```
+- project: kiegroup/lienzo-core
+- project: kiegroup/lienzo-tests
+  dependencies:
+    - project: kiegroup/lienzo-core
+- project: kiegroup/droolsjbpm-build-bootstrap
+- project: kiegroup/drools
+  dependencies:
+    - project: kiegroup/lienzo-tests
+```
+
+Additional it could be the case where not all the projects use the same target branch, then the mapping should be also specified for those projects. Let's suppose all the projects from the previous example use `main` as target branch but `kiegroup/lienzo-tests` uses `master`.
+
+```
+- project: kiegroup/lienzo-core
+- project: kiegroup/lienzo-tests
+  dependencies:
+    - project: kiegroup/lienzo-core
+      mapping:
+        source: main
+        target: master
+- project: kiegroup/droolsjbpm-build-bootstrap
+- project: kiegroup/drools
+  dependencies:
+    - project: kiegroup/lienzo-tests
+      mapping:
+        source: master
+        target: main
+```
+
+There are two mappings, one for `lienzo-tests - lienzo-core` where the mapping from `main` to `master` is specified. The other one between `drools - lienzo-tests` where the opposite mapping is defined as `master` to `main`.
+
+**Example:**
+
+```
+- project: kiegroup/lienzo-core
+
+- project: kiegroup/lienzo-tests
+  dependencies:
+    - project: kiegroup/lienzo-core
+
+- project: kiegroup/droolsjbpm-build-bootstrap
+
+- project: kiegroup/kie-soup
+  dependencies:
+    - project: kiegroup/droolsjbpm-build-bootstrap
+
+- project: kiegroup/drools
+  dependencies:
+    - project: kiegroup/kie-soup
+
+- project: kiegroup/jbpm
+  dependencies:
+    - project: kiegroup/drools
+    - project: kiegroup/kie-soup
+
+- project: kiegroup/optaplanner
+  dependencies:
+    - project: kiegroup/drools
+      mapping:
+        source: 7.x
+        target: master
+    - project: kiegroup/jbpm
+      mapping:
+        source: 7.x
+        target: master
+
+- project: kiegroup/droolsjbpm-integration
+  dependencies:
+    - project: kiegroup/optaplanner
+      mapping:
+        source: master
+        target: 7.x
+    - project: kiegroup/jbpm
+    - project: kiegroup/kie-soup
+```
 
 #### URL format
 
@@ -30,6 +126,29 @@ The place holders must be wrapped between `${}` expression and you can use any p
 ### default section structure
 
 ### build configuration section structure
+
+```
+build:
+  - project: PROJECT_NAME
+    build-command:
+      before:
+        current: String | List of Strings
+        upstream: String | List of Strings
+        downstream: String | List of Strings
+      current: String | List of Strings
+      upstream: String | List of Strings
+      downstream: String | List of Strings
+      after:
+        current: String | List of Strings
+        upstream: String | List of Strings
+        downstream: String | List of Strings
+    skip: true
+    archive-artifacts:
+      name: String
+      path*: String | List of Strings
+      if-no-files-found (default:warn): warn|ignore|error
+      dependencies (default:none): all|none|list of project names
+```
 
 #### Tree node structure
 

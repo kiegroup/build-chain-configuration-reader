@@ -186,3 +186,17 @@ test("readDefinitionFileFromUrl url dependencies placeholders", async () => {
   expect(Array.isArray(result.dependencies)).toBe(true);
   expect(result.dependencies.length).toEqual(25);
 });
+
+test("readDefinitionFile with external dependencies and extension", async () => {
+  // Act
+  const result = await readDefinitionFile(
+    path.join(
+      ".",
+      "test",
+      "resources",
+      "build-config-from-dependencies-extension.yaml"
+    )
+  );
+  // Assert
+  expect(result.dependencies.length).toEqual(28);
+});
