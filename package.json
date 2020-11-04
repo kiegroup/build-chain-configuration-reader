@@ -1,6 +1,6 @@
 {
   "name": "@kie/build-chain-configuration-reader",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "A library to read build-chain tool configuration files",
   "main": "index.js",
   "repository": {

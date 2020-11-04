@@ -24,8 +24,15 @@ dependencies:
     dependencies:
       - project: PROJECT_NAME
         mapping:
-          source: SOURCE_BRANCH
-          target: TARGET_BRANCH
+          dependencies:
+            default:
+              source: SOURCE_BRANCH_X
+              target: TARGET_BRANCH_X
+          source: SOURCE_BRANCH_Y
+          target: TARGET_BRANCH_Y
+          exclude:
+            - PROJECT_A
+            - PROJECT_B
 ```
 
 You should define a list of projects like
@@ -57,19 +64,20 @@ Additional it could be the case where not all the projects use the same target b
 - project: kiegroup/lienzo-tests
   dependencies:
     - project: kiegroup/lienzo-core
-      mapping:
-        source: main
-        target: master
+  mapping:
+    dependencies:
+      default:
+        source: master
+        target: main
+    source: main
+    target: master
 - project: kiegroup/droolsjbpm-build-bootstrap
 - project: kiegroup/drools
   dependencies:
     - project: kiegroup/lienzo-tests
-      mapping:
-        source: master
-        target: main
 ```
 
-There are two mappings, one for `lienzo-tests - lienzo-core` where the mapping from `main` to `master` is specified. The other one between `drools - lienzo-tests` where the opposite mapping is defined as `master` to `main`.
+Each project should define its mapping. So in this case `kiegroup/lienzo-tests` defines it will map all dependencies from `master` to `main`, and `kiegroup/lienzo-tests` will be mapped from `main` to `master`.
 
 **Example:**
 
@@ -98,22 +106,51 @@ There are two mappings, one for `lienzo-tests - lienzo-core` where the mapping f
 - project: kiegroup/optaplanner
   dependencies:
     - project: kiegroup/drools
-      mapping:
-        source: 7.x
-        target: master
     - project: kiegroup/jbpm
-      mapping:
+  mapping:
+    dependencies:
+      default:
         source: 7.x
         target: master
+    source: master
+    target: 7.x
+    exclude:
+      - kiegroup/optaweb-employee-rostering
+      - kiegroup/optaweb-vehicle-routing
 
 - project: kiegroup/droolsjbpm-integration
   dependencies:
     - project: kiegroup/optaplanner
-      mapping:
-        source: master
-        target: 7.x
     - project: kiegroup/jbpm
     - project: kiegroup/kie-soup
+
+- project: kiegroup/optaweb-employee-rostering
+  dependencies:
+    - project: kiegroup/optaplanner
+  mapping:
+    dependencies:
+      default:
+        source: 7.x
+        target: master
+    source: master
+    target: 7.x
+    exclude:
+      - kiegroup/optaweb-vehicle-routing
+      - kiegroup/optaplanner
+
+- project: kiegroup/optaweb-vehicle-routing
+  dependencies:
+    - project: kiegroup/optaplanner
+  mapping:
+    dependencies:
+      default:
+        source: 7.x
+        target: master
+    source: master
+    target: 7.x
+    exclude:
+      - kiegroup/optaweb-employee-rostering
+      - kiegroup/optaplanner
 ```
 
 #### URL format

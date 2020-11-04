@@ -73,10 +73,26 @@ test("parentChainFromNode optaplanner", async () => {
     { project: "kiegroup/kie-soup", mapping: undefined },
     {
       project: "kiegroup/drools",
-      mapping: { source: "7.x", target: "master" }
+      mapping: undefined
     },
-    { project: "kiegroup/jbpm", mapping: { source: "7.x", target: "master" } },
-    { project: "kiegroup/optaplanner", mapping: undefined }
+    { project: "kiegroup/jbpm", mapping: undefined },
+    {
+      project: "kiegroup/optaplanner",
+      mapping: {
+        dependencies: {
+          default: {
+            source: "7.x",
+            target: "master"
+          }
+        },
+        source: "master",
+        target: "7.x",
+        exclude: [
+          "kiegroup/optaweb-employee-rostering",
+          "kiegroup/optaweb-vehicle-routing"
+        ]
+      }
+    }
   ];
   const definitionTreeNode = await getTreeForProject(
     path.join(".", "test", "resources", "build-config.yaml"),
@@ -102,10 +118,23 @@ test("parentChainFromNode kie-wb-distributions", async () => {
     { project: "kiegroup/kie-soup", mapping: undefined },
     { project: "kiegroup/appformer", mapping: undefined },
     { project: "kiegroup/drools", mapping: undefined },
-    { project: "kiegroup/jbpm", mapping: { source: "7.x", target: "master" } },
+    { project: "kiegroup/jbpm", mapping: undefined },
     {
       project: "kiegroup/optaplanner",
-      mapping: { source: "master", target: "7.x" }
+      mapping: {
+        dependencies: {
+          default: {
+            source: "7.x",
+            target: "master"
+          }
+        },
+        source: "master",
+        target: "7.x",
+        exclude: [
+          "kiegroup/optaweb-employee-rostering",
+          "kiegroup/optaweb-vehicle-routing"
+        ]
+      }
     },
     { project: "kiegroup/kie-uberfire-extensions", mapping: undefined },
     { project: "kiegroup/kie-jpmml-integration", mapping: undefined },
