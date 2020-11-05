@@ -1,5 +1,9 @@
 # Changelog
 
+# V2.0.0
+
+- way of defining mapping totally refactored
+
 # V1.1.0
 
 - dependency files extension

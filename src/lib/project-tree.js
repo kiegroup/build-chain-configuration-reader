@@ -36,9 +36,6 @@ async function getTreeForProject(file, project, urlPlaceHolders = {}) {
 function lookForProject(tree, project) {
   if (tree && tree.length > 0) {
     const leaf = tree.find(leaf => project === leaf.project);
-    if (leaf) {
-      delete leaf.mapping;
-    }
     return leaf
       ? leaf
       : tree
@@ -75,12 +72,10 @@ function dependencyListToTree(dependencyList, buildConfiguration) {
     if (node.dependencies && node.dependencies.length > 0) {
       node.dependencies.forEach(dependency => {
         dependencyList[map[dependency.project].index].children.push({
-          ...map[node.project].node,
-          mapping: dependency.mapping
+          ...map[node.project].node
         });
         node.parents.push({
-          ...map[dependency.project].node,
-          mapping: dependency.mapping
+          ...map[dependency.project].node
         });
       });
     } else {

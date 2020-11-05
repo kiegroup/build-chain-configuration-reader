@@ -302,13 +302,30 @@ test("dependencyListToTree", async () => {
     }
   };
 
+  const group6Mapping = {
+    dependencies: {
+      default: {
+        source: "7.x",
+        target: "master"
+      },
+      "group/7": {
+        source: "7.x",
+        target: "8.x"
+      }
+    },
+    source: "master",
+    target: "7.x",
+    exclude: ["group/12"]
+  };
+
   const dependencyList = [
     {
       project: "group/12"
     },
     {
       project: "group/6",
-      dependencies: [{ project: "group/12" }]
+      dependencies: [{ project: "group/12" }],
+      mapping: group6Mapping
     },
     {
       project: "group/7",
@@ -355,6 +372,8 @@ test("dependencyListToTree", async () => {
   // 12 - 6
   checkChildren(definitionTree[0].children[0], []);
   checkParents(definitionTree[0].children[0], ["group/12"], expected12Build);
+  expect(definitionTree[0].children[0].project).toBe("group/6");
+  expect(definitionTree[0].children[0].mapping).toBe(group6Mapping);
   // 12 - 7
   checkChildren(definitionTree[0].children[1], []);
   checkParents(definitionTree[0].children[1], ["group/12"], expected12Build);

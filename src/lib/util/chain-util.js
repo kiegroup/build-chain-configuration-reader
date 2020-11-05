@@ -3,12 +3,21 @@
  * @param {Object} node the node object with its parents and children
  * @param {Array} nodeList the nodeList to fill
  */
-function parentChainFromNode(node, nodeList = []) {
-  if (!nodeList.map(n => n.project).includes(node.project)) {
-    node.parents.forEach(parent => parentChainFromNode(parent, nodeList));
-    nodeList.push(node);
-  }
-  return nodeList;
+function parentChainFromNode(node) {
+  const result = node.parents
+    .reduce((acc, parent) => {
+      acc.push(
+        ...parentChainFromNode(parent)
+          .filter(e => e && !acc.find(a => a.project === e.project))
+          .map(e => {
+            return { ...e };
+          })
+      );
+      return acc;
+    }, [])
+    .filter(e => e);
+  result.push(node);
+  return result;
 }
 
 /**

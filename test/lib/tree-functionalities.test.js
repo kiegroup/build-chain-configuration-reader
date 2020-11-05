@@ -139,11 +139,24 @@ test("fullDownstreamChain kie-wb-distributions", async () => {
     { project: "kiegroup/drools", mapping: undefined },
     {
       project: "kiegroup/jbpm",
-      mapping: { source: "7.x", target: "master" }
+      mapping: undefined
     },
     {
       project: "kiegroup/optaplanner",
-      mapping: { source: "master", target: "7.x" }
+      mapping: {
+        dependencies: {
+          default: {
+            source: "7.x",
+            target: "master"
+          }
+        },
+        source: "master",
+        target: "7.x",
+        exclude: [
+          "kiegroup/optaweb-employee-rostering",
+          "kiegroup/optaweb-vehicle-routing"
+        ]
+      }
     },
     { project: "kiegroup/kie-uberfire-extensions", mapping: undefined },
     { project: "kiegroup/kie-jpmml-integration", mapping: undefined },
@@ -199,19 +212,42 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
     { project: "kiegroup/appformer", mapping: undefined },
     {
       project: "kiegroup/drools",
-      mapping: { source: "7.x", target: "master" }
+      mapping: undefined
     },
     {
       project: "kiegroup/jbpm",
-      mapping: { source: "7.x", target: "master" }
+      mapping: undefined
     },
     {
       project: "kiegroup/optaplanner",
-      mapping: { source: "master", target: "7.x" }
+      mapping: {
+        dependencies: {
+          default: {
+            source: "7.x",
+            target: "master"
+          }
+        },
+        source: "master",
+        target: "7.x",
+        exclude: [
+          "kiegroup/optaweb-employee-rostering",
+          "kiegroup/optaweb-vehicle-routing"
+        ]
+      }
     },
     {
       project: "kiegroup/optaweb-employee-rostering",
-      mapping: undefined
+      mapping: {
+        dependencies: {
+          default: {
+            source: "7.x",
+            target: "master"
+          }
+        },
+        source: "master",
+        target: "7.x",
+        exclude: ["kiegroup/optaweb-vehicle-routing", "kiegroup/optaplanner"]
+      }
     }
   ];
 
