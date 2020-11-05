@@ -1,5 +1,10 @@
 # Changelog
 
+# V2.0.1
+
+- error with dependencies URLs fixed
+- project precedence workaround
+
 # V2.0.0
 
 - way of defining mapping totally refactored

@@ -69,6 +69,7 @@ function dependencyListToTree(dependencyList, buildConfiguration) {
       },
       ...treatProject(node.project, buildConfiguration)
     };
+
     if (node.dependencies && node.dependencies.length > 0) {
       node.dependencies.forEach(dependency => {
         dependencyList[map[dependency.project].index].children.push({
