@@ -110,6 +110,7 @@ async function loadDependencies(
         ? await getUrlContent(dependenciesFilePath)
         : fs.readFileSync(dependenciesFilePath, "utf8");
       const dependenciesYaml = readYaml(dependenciesFileContent);
+      // console.log(`dependenciesFilePath ${dependenciesFilePath}`, dependenciesYaml, urlPlaceHolders)
       validateDependencies(dependenciesYaml);
       // Once the dependencies are loaded, the `extends` proporty is concatenated to the current dependencies
       return (
