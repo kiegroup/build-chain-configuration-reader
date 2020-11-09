@@ -1,5 +1,9 @@
 # Changelog
 
+# V2.0.2
+
+- error with dependencies loading fixed
+
 # V2.0.1
 
 - error with dependencies URLs fixed
