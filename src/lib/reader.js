@@ -86,6 +86,7 @@ async function loadDependencies(
   containerPath,
   urlPlaceHolders
 ) {
+  let dependenciesFinalPath = dependencies;
   if (dependencies) {
     if (
       containerPath.startsWith("http") &&
@@ -93,12 +94,11 @@ async function loadDependencies(
       !dependencies.startsWith("http")
     ) {
       const treatedUrl = treatUrl(containerPath, urlPlaceHolders);
-      const dependenciesContent = await getUrlContent(
-        `${treatedUrl.substring(
-          0,
-          treatedUrl.lastIndexOf("/")
-        )}/${dependencies}`
-      );
+      dependenciesFinalPath = `${treatedUrl.substring(
+        0,
+        treatedUrl.lastIndexOf("/")
+      )}/${dependencies}`;
+      const dependenciesContent = await getUrlContent(dependenciesFinalPath);
       fs.writeFileSync(dependencies, dependenciesContent);
     }
 
@@ -110,7 +110,6 @@ async function loadDependencies(
         ? await getUrlContent(dependenciesFilePath)
         : fs.readFileSync(dependenciesFilePath, "utf8");
       const dependenciesYaml = readYaml(dependenciesFileContent);
-      // console.log(`dependenciesFilePath ${dependenciesFilePath}`, dependenciesYaml, urlPlaceHolders)
       validateDependencies(dependenciesYaml);
       // Once the dependencies are loaded, the `extends` proporty is concatenated to the current dependencies
       return (
@@ -120,7 +119,7 @@ async function loadDependencies(
             0,
             dependenciesFilePath.lastIndexOf("/")
           ),
-          dependencies,
+          dependenciesFinalPath,
           urlPlaceHolders
         )
       ).concat(dependenciesYaml.dependencies);
