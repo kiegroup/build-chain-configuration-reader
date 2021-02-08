@@ -72,6 +72,11 @@ function dependencyListToTree(dependencyList, buildConfiguration) {
 
     if (node.dependencies && node.dependencies.length > 0) {
       node.dependencies.forEach(dependency => {
+        if ([null, undefined].includes(map[dependency.project])) {
+          const errorMessage = `The project ${dependency.project} does not exist on project list. Please review your project definition file`;
+          console.error(errorMessage);
+          throw new Error(errorMessage);
+        }
         dependencyList[map[dependency.project].index].children.push({
           ...map[node.project].node
         });
