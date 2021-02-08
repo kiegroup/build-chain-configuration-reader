@@ -5,9 +5,9 @@ function read(fileContent) {
   try {
     return yaml.safeLoad(fileContent);
   } catch (e) {
-    throw new ReadYamlException(
-      `error reading yaml file content. Error: ${e.message}`
-    );
+    const errorMessage = `error reading yaml file content. Error: ${e.message}`;
+    console.error(errorMessage);
+    throw new ReadYamlException(errorMessage);
   }
 }
 

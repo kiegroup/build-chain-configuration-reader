@@ -15,7 +15,7 @@ test("getUrlContent HTTPS OK", async () => {
 
 test("getUrlContent HTTP OK", async () => {
   // Act
-  const result = await getUrlContent("http://example.com");
+  const result = await getUrlContent("http://www.redhat.com");
   // Assert
   expect(result).not.toBeUndefined();
 });
