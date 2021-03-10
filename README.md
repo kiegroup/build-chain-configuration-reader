@@ -172,6 +172,7 @@ build:
         current: String | List of Strings
         upstream: String | List of Strings
         downstream: String | List of Strings
+        merge: String[]
       current: String | List of Strings
       upstream: String | List of Strings
       downstream: String | List of Strings
@@ -179,6 +180,8 @@ build:
         current: String | List of Strings
         upstream: String | List of Strings
         downstream: String | List of Strings
+        merge: String[]
+      merge: String[]
     skip: true
     archive-artifacts:
       name: String
@@ -193,6 +196,112 @@ See example here ![Tree Example](/docs/tree-example.json)
 
 - project: [group/project]: contains the `group/project` information, where `group` is the repository group and `project` is the project name.
 -
+
+#### Merge
+
+It is possible to define the `merge` mechanism for every section in the build-configuration. If you define `merge` in any section level, its children will be also merged following the same mechanism, so you can either:
+
+- define `merge` in the upper level, all the children will follow same mechanism.
+- define `merge` in the upper level and every children.
+- define `merge` in any child.
+
+> **Note**: The default `merge` value is [] which means specific project build configuration will overwrite default one.
+
+> **Note**: duplicate commands will be respected.
+
+##### Examples
+
+**Example 1 (single upper level)**
+
+```
+default:
+  build-command:
+    current: mvn clean install
+    after:
+      current: rm -rf ./*
+
+build:
+  - project: kiegroup/kie-wb-common
+    build-command:
+      current: mvn deploy
+      after:
+        current: echo 'TEST1'
+      merge: ['current']
+```
+
+it will produce
+
+```
+- project: kiegroup/kie-wb-common
+    build-command:
+      current: |
+         mvn clean install
+         mvn deploy
+      after:
+        current: echo 'TEST1'
+```
+
+**Example 2 (upper level children propagation)**
+
+```
+default:
+  build-command:
+    current: mvn clean install
+    after:
+      current: rm -rf ./*
+
+build:
+  - project: kiegroup/kie-wb-common
+    build-command:
+      current: mvn deploy
+      after:
+        current: echo 'TEST1'
+      merge: ['after', 'current']
+```
+
+it will produce
+
+```
+- project: kiegroup/kie-wb-common
+    build-command:
+      current: |
+         mvn clean install
+         mvn deploy
+      after:
+        current: |
+           rm -rf ./*
+           echo 'TEST1'
+```
+
+**Example 3 (upper level different children propagation)**
+
+```
+default:
+  build-command:
+    current: mvn clean install
+    after:
+      current: rm -rf ./*
+
+build:
+  - project: kiegroup/kie-wb-common
+    build-command:
+      current: mvn deploy
+      after:
+        current: echo 'TEST1'
+        merge: ['current']
+```
+
+it will produce
+
+```
+- project: kiegroup/kie-wb-common
+    build-command:
+      current: mvn deploy
+      after:
+        current: |
+           rm -rf ./*
+           echo 'TEST1'
+```
 
 ## Development
 

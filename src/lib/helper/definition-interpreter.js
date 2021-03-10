@@ -17,7 +17,7 @@ function getBuild(project, buildConfiguration) {
  * @param {Object} target
  * @param {Object} source
  */
-function overrideProperties(target, source) {
+function overrideProperties(target, source, merge = false) {
   const targetClone = { ...target };
   const sourceClone = { ...source };
   Object.entries(targetClone)
@@ -26,10 +26,14 @@ function overrideProperties(target, source) {
       if (typeof value === "object") {
         targetClone[key] = overrideProperties(
           targetClone[key],
-          sourceClone[key]
+          sourceClone[key],
+          merge || (sourceClone.merge && sourceClone.merge.includes(key))
         );
       } else {
-        targetClone[key] = sourceClone[key];
+        targetClone[key] =
+          merge || (sourceClone.merge && sourceClone.merge.includes(key))
+            ? mergeElements(targetClone[key], sourceClone[key], key)
+            : sourceClone[key];
       }
     });
 
@@ -37,6 +41,14 @@ function overrideProperties(target, source) {
     .filter(key => !targetClone[key])
     .forEach(key => (targetClone[key] = sourceClone[key]));
   return targetClone;
+}
+
+function mergeElements(target, source) {
+  const treatedTarget =
+    typeof target === "string" ? [...target.split("\n")] : [...target];
+  const treatedSource =
+    typeof source === "string" ? [...source.split("\n")] : [...source];
+  return [...treatedTarget, ...treatedSource];
 }
 
 /**
