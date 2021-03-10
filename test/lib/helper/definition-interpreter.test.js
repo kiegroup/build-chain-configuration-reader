@@ -49,6 +49,42 @@ const buildConfiguration = {
         "if-no-files-found": "warn",
         dependencies: "none"
       }
+    },
+    {
+      project: "projectMerge",
+      "build-command": {
+        current: ["mvn upstream1 projectMerge", "mvn upstream2 projectMerge"],
+        before: {
+          upstream: "mvn before upstream projectMerge"
+        },
+        after: {
+          current: "mvn after current projectMerge"
+        },
+        merge: ["current", "before", "after"]
+      },
+      "archive-artifacts": {
+        name: "projectMergeArtifactName",
+        "if-no-files-found": "warn",
+        dependencies: "none"
+      }
+    },
+    {
+      project: "projectMerge2",
+      "build-command": {
+        current: ["mvn upstream1 projectMerge", "mvn upstream2 projectMerge"],
+        before: {
+          upstream: "mvn before upstream projectMerge"
+        },
+        after: {
+          current: "mvn after current projectMerge",
+          merge: ["current"]
+        }
+      },
+      "archive-artifacts": {
+        name: "projectMergeArtifactName",
+        "if-no-files-found": "warn",
+        dependencies: "none"
+      }
     }
   ]
 };
@@ -220,6 +256,97 @@ test("treatProject projectC", async () => {
 
   // Act
   const result = treatProject("projectC", buildConfigurationNoDefault);
+
+  // Assert
+  expect(expected).toEqual(result.build);
+});
+
+test("treatProject projectMerge", async () => {
+  // Arrange
+  const expected = {
+    "build-command": {
+      current: [
+        "mvn current1",
+        "mvn current2",
+        "mvn upstream1 projectMerge",
+        "mvn upstream2 projectMerge"
+      ],
+      upstream: "mvn upstream",
+      before: {
+        current: "mvn before current",
+        upstream: ["mvn before upstream", "mvn before upstream projectMerge"]
+      },
+      after: {
+        current: ["mvn after current", "mvn after current projectMerge"],
+        upstream: ["mvn after upstream1", "mvn after upstream2"]
+      },
+      merge: ["current", "before", "after"]
+    },
+    "archive-artifacts": {
+      path: [
+        "**/dashbuilder-runtime.war@always",
+        "**/dashbuilder-runtime2.war"
+      ],
+      name: "projectMergeArtifactName",
+      "if-no-files-found": "warn",
+      dependencies: "none",
+      paths: [
+        {
+          on: "always",
+          path: "**/dashbuilder-runtime.war"
+        },
+        {
+          on: "success",
+          path: "**/dashbuilder-runtime2.war"
+        }
+      ]
+    }
+  };
+  // Act
+  const result = treatProject("projectMerge", buildConfiguration);
+
+  // Assert
+  expect(expected).toEqual(result.build);
+});
+
+test("treatProject projectMerge2", async () => {
+  // Arrange
+  const expected = {
+    "build-command": {
+      current: ["mvn upstream1 projectMerge", "mvn upstream2 projectMerge"],
+      upstream: "mvn upstream",
+      before: {
+        current: "mvn before current",
+        upstream: "mvn before upstream projectMerge"
+      },
+      after: {
+        current: ["mvn after current", "mvn after current projectMerge"],
+        upstream: ["mvn after upstream1", "mvn after upstream2"],
+        merge: ["current"]
+      }
+    },
+    "archive-artifacts": {
+      path: [
+        "**/dashbuilder-runtime.war@always",
+        "**/dashbuilder-runtime2.war"
+      ],
+      name: "projectMergeArtifactName",
+      "if-no-files-found": "warn",
+      dependencies: "none",
+      paths: [
+        {
+          on: "always",
+          path: "**/dashbuilder-runtime.war"
+        },
+        {
+          on: "success",
+          path: "**/dashbuilder-runtime2.war"
+        }
+      ]
+    }
+  };
+  // Act
+  const result = treatProject("projectMerge2", buildConfiguration);
 
   // Assert
   expect(expected).toEqual(result.build);
