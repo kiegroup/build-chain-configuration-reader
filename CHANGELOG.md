@@ -1,5 +1,13 @@
 # Changelog
 
+# V2.0.3
+
+- `merge` build-commands functionality
+
+# V2.0.3
+
+- error treatment improved
+
 # V2.0.2
 
 - error with dependencies loading fixed
