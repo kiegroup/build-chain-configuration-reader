@@ -1,5 +1,9 @@
 # Changelog
 
+# V2.1.0
+
+- allow to pass token to file reading
+
 # V2.0.3
 
 - `merge` build-commands functionality

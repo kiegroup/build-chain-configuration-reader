@@ -8,8 +8,11 @@ const { validateNode } = require("./util/validations");
  * @param {string} file - The definition file. It can be a URL or a in the filesystem.
  * @param {Object} urlPlaceHolders the url place holders to replace url. This is needed in case either the definition file or the dependencies file are loaded from a URL
  */
-async function getTree(file, urlPlaceHolders = {}) {
-  const definition = await readDefinitionFile(file, urlPlaceHolders);
+async function getTree(
+  file,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
+  const definition = await readDefinitionFile(file, options);
   return dependencyListToTree(definition.dependencies, definition);
 }
 
@@ -20,12 +23,12 @@ async function getTree(file, urlPlaceHolders = {}) {
  * @param {string} project - The project name to look for.
  * @param {Object} urlPlaceHolders the url place holders to replace url. This is needed in case either the definition file or the dependencies file are loaded from a URL
  */
-async function getTreeForProject(file, project, urlPlaceHolders = {}) {
-  return lookForProject(
-    await getTree(file, urlPlaceHolders),
-    project,
-    undefined
-  );
+async function getTreeForProject(
+  file,
+  project,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
+  return lookForProject(await getTree(file, options), project);
 }
 
 /**
