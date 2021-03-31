@@ -127,7 +127,10 @@ test("get tree for project", async () => {
   expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
   expect(readDefinitionFileMock).toHaveBeenCalledWith(
     "test/resources/build-config-with-dependencies.yaml",
-    {}
+    {
+      token: undefined,
+      urlPlaceHolders: {}
+    }
   );
 
   expect(projectTree.project).toEqual("kiegroup/jbpm-wb");
@@ -194,7 +197,10 @@ test("get tree from URL", async () => {
   expect(readDefinitionFileMock).toHaveBeenCalledTimes(1);
   expect(readDefinitionFileMock).toHaveBeenCalledWith(
     "http://whateverurl.rh/definition.yaml",
-    {}
+    {
+      token: undefined,
+      urlPlaceHolders: {}
+    }
   );
   expect(definitionTree.length).toEqual(2);
   expect(definitionTree[0].project).toEqual("kiegroup/lienzo-core");

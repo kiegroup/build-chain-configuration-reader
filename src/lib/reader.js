@@ -14,10 +14,13 @@ const { read: readYaml } = require("./util/yaml");
  * @param {string} file - The definition file. It can be a URL or a in the filesystem.
  * @param {Object} urlPlaceHolders the url place holders to replace url. This is needed in case either the definition file or the dependencies file are loaded from a URL
  */
-async function readDefinitionFile(file, urlPlaceHolders = {}) {
+async function readDefinitionFile(
+  file,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
   return file.startsWith("http")
-    ? readDefinitionFileFromUrl(file, urlPlaceHolders)
-    : readDefinitionFileFromFile(file, urlPlaceHolders);
+    ? readDefinitionFileFromUrl(file, options)
+    : readDefinitionFileFromFile(file, options.urlPlaceHolders);
 }
 
 /**
@@ -25,13 +28,16 @@ async function readDefinitionFile(file, urlPlaceHolders = {}) {
  * @param {String} filePath the definition file path
  * @param {Object} urlPlaceHolders the url place holders to replace url
  */
-async function readDefinitionFileFromFile(filePath, urlPlaceHolders) {
+async function readDefinitionFileFromFile(
+  filePath,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
   const defintionFileContent = fs.readFileSync(filePath, "utf8");
   return loadYaml(
     readYaml(defintionFileContent),
     filePath.substring(0, filePath.lastIndexOf("/")),
     defintionFileContent,
-    urlPlaceHolders
+    options
   );
 }
 
@@ -40,13 +46,16 @@ async function readDefinitionFileFromFile(filePath, urlPlaceHolders) {
  * @param {String} url the url to the definition file
  * @param {Object} urlPlaceHolders the url place holders to replace url
  */
-async function readDefinitionFileFromUrl(url, urlPlaceHolders) {
-  const treatedUrl = treatUrl(url, urlPlaceHolders);
+async function readDefinitionFileFromUrl(
+  url,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
+  const treatedUrl = treatUrl(url, options.urlPlaceHolders);
   return loadYaml(
-    readYaml(await getUrlContent(treatedUrl)),
+    readYaml(await getUrlContent(treatedUrl, options.token)),
     "./",
     url,
-    urlPlaceHolders
+    options
   );
 }
 
@@ -61,14 +70,14 @@ async function loadYaml(
   definitionYaml,
   definitionFileFolder,
   containerPath,
-  urlPlaceHolders
+  options = { urlPlaceHolders: {}, token: undefined }
 ) {
   validateDefinition(definitionYaml);
   definitionYaml.dependencies = await loadDependencies(
     definitionYaml.dependencies,
     definitionFileFolder,
     containerPath,
-    urlPlaceHolders
+    options
   );
   return definitionYaml;
 }
@@ -84,7 +93,7 @@ async function loadDependencies(
   dependencies,
   definitionFileFolder,
   containerPath,
-  urlPlaceHolders
+  options = { urlPlaceHolders: {}, token: undefined }
 ) {
   let dependenciesFinalPath = dependencies;
   if (dependencies) {
@@ -93,24 +102,26 @@ async function loadDependencies(
       !Array.isArray(dependencies) &&
       !dependencies.startsWith("http")
     ) {
-      const treatedUrl = treatUrl(containerPath, urlPlaceHolders);
+      const treatedUrl = treatUrl(containerPath, options.urlPlaceHolders);
       dependenciesFinalPath = `${treatedUrl.substring(
         0,
         treatedUrl.lastIndexOf("/")
       )}/${dependencies}`;
-      const dependenciesContent = await getUrlContent(dependenciesFinalPath);
+      const dependenciesContent = await getUrlContent(
+        dependenciesFinalPath,
+        options.token
+      );
       fs.writeFileSync(dependencies, dependenciesContent);
     }
 
     if (!Array.isArray(dependencies)) {
       const dependenciesFilePath = dependencies.startsWith("http")
-        ? treatUrl(dependencies, urlPlaceHolders)
+        ? treatUrl(dependencies, options.urlPlaceHolders)
         : `${definitionFileFolder}/${dependencies}`;
       const dependenciesFileContent = dependencies.startsWith("http")
-        ? await getUrlContent(dependenciesFilePath)
+        ? await getUrlContent(dependenciesFilePath, options.token)
         : fs.readFileSync(dependenciesFilePath, "utf8");
       const dependenciesYaml = readYaml(dependenciesFileContent);
-      // console.log(`dependenciesFilePath ${dependenciesFilePath}`, dependenciesYaml, urlPlaceHolders)
       validateDependencies(dependenciesYaml);
       // Once the dependencies are loaded, the `extends` proporty is concatenated to the current dependencies
       return (
@@ -121,7 +132,7 @@ async function loadDependencies(
             dependenciesFilePath.lastIndexOf("/")
           ),
           dependenciesFinalPath,
-          urlPlaceHolders
+          options
         )
       ).concat(dependenciesYaml.dependencies);
     } else {

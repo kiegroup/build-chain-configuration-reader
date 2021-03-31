@@ -57,7 +57,8 @@ test("readDefinitionFileFromUrl relative embedded dependencies", async () => {
   // Assert
   expect(getUrlContentMock).toHaveBeenCalledTimes(1);
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
+    undefined
   );
 
   expect(Array.isArray(result.dependencies)).toBe(true);
@@ -82,10 +83,12 @@ test("readDefinitionFileFromUrl relative path dependencies", async () => {
 
   // Assert
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
+    undefined
   );
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/./project-dependencies.yaml"
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/./project-dependencies.yaml",
+    undefined
   );
 
   expect(Array.isArray(result.dependencies)).toBe(true);
@@ -112,10 +115,12 @@ test("readDefinitionFileFromUrl url dependencies", async () => {
 
   // Assert
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
+    undefined
   );
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "http://whateverurl.rh/dependencies.yaml"
+    "http://whateverurl.rh/dependencies.yaml",
+    undefined
   );
 
   expect(Array.isArray(result.dependencies)).toBe(true);
@@ -136,15 +141,23 @@ test("readDefinitionFileFromUrl with place holders relative path dependencies", 
   // Act
   const result = await readDefinitionFile(
     "https://raw.githubusercontent.com/${GROUP}/${PROJECT_NAME}/${BRANCH}/test/resources/build-config.yaml",
-    { GROUP: "groupx", PROJECT_NAME: "projectx", BRANCH: "branchx" }
+    {
+      urlPlaceHolders: {
+        GROUP: "groupx",
+        PROJECT_NAME: "projectx",
+        BRANCH: "branchx"
+      }
+    }
   );
 
   // Assert
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/groupx/projectx/branchx/test/resources/build-config.yaml"
+    "https://raw.githubusercontent.com/groupx/projectx/branchx/test/resources/build-config.yaml",
+    undefined
   );
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/groupx/projectx/branchx/test/resources/./project-dependencies.yaml"
+    "https://raw.githubusercontent.com/groupx/projectx/branchx/test/resources/./project-dependencies.yaml",
+    undefined
   );
 
   expect(Array.isArray(result.dependencies)).toBe(true);
@@ -172,15 +185,24 @@ test("readDefinitionFileFromUrl url dependencies placeholders", async () => {
   // Act
   const result = await readDefinitionFile(
     "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
-    { GROUP: "groupy", PROJECT_NAME: "projecty", BRANCH: "branchy" }
+    {
+      urlPlaceHolders: {
+        GROUP: "groupy",
+        PROJECT_NAME: "projecty",
+        BRANCH: "branchy"
+      },
+      token: "tokenX"
+    }
   );
 
   // Assert
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
+    "tokenX"
   );
   expect(getUrlContentMock).toHaveBeenCalledWith(
-    "http://whateverurl.rh/groupy/projecty/branchy/dependencies.yaml"
+    "http://whateverurl.rh/groupy/projecty/branchy/dependencies.yaml",
+    "tokenX"
   );
 
   expect(Array.isArray(result.dependencies)).toBe(true);

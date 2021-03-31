@@ -6,8 +6,11 @@ const { parentChainFromNode } = require("./util/chain-util");
  * @param {string} file - The definition file. It can be a URL or a in the filesystem.
  * @param {string} project - The project name to look for.
  */
-async function getOrderedListForTree(file, urlPlaceHolders = {}) {
-  const tree = await getTree(file, urlPlaceHolders);
+async function getOrderedListForTree(
+  file,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
+  const tree = await getTree(file, options);
   return getOrderedList(tree);
 }
 
@@ -16,8 +19,12 @@ async function getOrderedListForTree(file, urlPlaceHolders = {}) {
  * @param {string} file - The definition file. It can be a URL or a in the filesystem.
  * @param {string} project - The project name to look for.
  */
-async function getOrderedListForProject(file, project, urlPlaceHolders = {}) {
-  const tree = await getTreeForProject(file, project, urlPlaceHolders);
+async function getOrderedListForProject(
+  file,
+  project,
+  options = { urlPlaceHolders: {}, token: undefined }
+) {
+  const tree = await getTreeForProject(file, project, options);
   return getOrderedList([tree]);
 }
 

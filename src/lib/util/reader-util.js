@@ -5,9 +5,11 @@
  */
 function treatUrl(url, placeHolders) {
   let result = url;
-  Object.entries(placeHolders).forEach(
-    ([key, value]) => (result = result.replace(`$\{${key}}`, value))
-  );
+  if (placeHolders) {
+    Object.entries(placeHolders).forEach(
+      ([key, value]) => (result = result.replace(`$\{${key}}`, value))
+    );
+  }
   return result;
 }
 
