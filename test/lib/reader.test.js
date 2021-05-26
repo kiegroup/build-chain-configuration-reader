@@ -3,6 +3,7 @@ jest.mock("../../src/lib/util/http");
 const { getUrlContent: getUrlContentMock } = require("../../src/lib/util/http");
 const path = require("path");
 const fs = require("fs");
+global.console = {error: jest.fn()}
 
 afterEach(() => {
   jest.clearAllMocks();
@@ -221,4 +222,46 @@ test("readDefinitionFile with external dependencies and extension", async () => 
   );
   // Assert
   expect(result.dependencies.length).toEqual(28);
+});
+
+test("readDefinitionFileFromUrl relative path dependencies. targetExpression", async () => {
+  // Arrange
+  getUrlContentMock.mockResolvedValueOnce(
+    fs.readFileSync(path.join(".", "test", "resources", "build-config.yaml"))
+  );
+  getUrlContentMock.mockResolvedValueOnce(
+    fs.readFileSync(
+      path.join(
+        ".",
+        "test",
+        "resources",
+        "project-dependencies-target-expression.yaml"
+      )
+    )
+  );
+
+  // Act
+  const result = await readDefinitionFile(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml"
+  );
+
+  // Assert
+  expect(getUrlContentMock).toHaveBeenCalledWith(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/build-config.yaml",
+    undefined
+  );
+  expect(getUrlContentMock).toHaveBeenCalledWith(
+    "https://raw.githubusercontent.com/kiegroup/build-chain-configuration-reader/main/test/resources/./project-dependencies.yaml",
+    undefined
+  );
+
+  expect(Array.isArray(result.dependencies)).toBe(true);
+  expect(result.dependencies.length).toEqual(25);
+  const optaplannerMapping = result.dependencies
+    .filter(node => node.project === "kiegroup/optaplanner")
+    .map(node => node.mapping)[0];
+  expect(optaplannerMapping.dependencies.default.target).toEqual(13);
+  expect(optaplannerMapping.dependant.default.target).toEqual("master-x");
+  expect(optaplannerMapping.dependant.projectx.target).toEqual(14);
+  expect(optaplannerMapping.dependant.projecty.target).toEqual(undefined);
 });

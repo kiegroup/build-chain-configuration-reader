@@ -85,8 +85,12 @@ test("parentChainFromNode optaplanner", async () => {
             target: "master"
           }
         },
-        source: "master",
-        target: "7.x",
+        dependant: {
+          default: {
+            source: "master",
+            target: "7.x"
+          }
+        },
         exclude: [
           "kiegroup/optaweb-employee-rostering",
           "kiegroup/optaweb-vehicle-routing"
@@ -128,8 +132,12 @@ test("parentChainFromNode kie-wb-distributions", async () => {
             target: "master"
           }
         },
-        source: "master",
-        target: "7.x",
+        dependant: {
+          default: {
+            source: "master",
+            target: "7.x"
+          }
+        },
         exclude: [
           "kiegroup/optaweb-employee-rostering",
           "kiegroup/optaweb-vehicle-routing"

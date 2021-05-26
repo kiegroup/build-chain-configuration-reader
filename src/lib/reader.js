@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 const { getUrlContent } = require("./util/http");
-const { treatUrl } = require("./util/reader-util");
+const { treatUrl, treatMapping } = require("./util/reader-util");
 const {
   validateDefinition,
   validateDependencies
@@ -79,6 +79,12 @@ async function loadYaml(
     containerPath,
     options
   );
+  if (definitionYaml.dependencies) {
+    definitionYaml.dependencies
+      .filter(dependency => dependency.mapping)
+      .map(dependency => dependency.mapping)
+      .forEach(mapping => treatMapping(mapping));
+  }
   return definitionYaml;
 }
 

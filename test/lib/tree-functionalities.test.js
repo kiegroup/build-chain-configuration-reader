@@ -145,13 +145,18 @@ test("fullDownstreamChain kie-wb-distributions", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
+            default: {
+              source: "7.x",
+              target: "master"
+            }
+          },
+        dependant: {
+            default: {
+              source: "master",
+              target: "7.x"
+            }
           }
-        },
-        source: "master",
-        target: "7.x",
+,
         exclude: [
           "kiegroup/optaweb-employee-rostering",
           "kiegroup/optaweb-vehicle-routing"
@@ -222,13 +227,18 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
+            default: {
+              source: "7.x",
+              target: "master"
+            }
+          },
+        dependant: {
+            default: {
+              source: "master",
+              target: "7.x"
+            }
           }
-        },
-        source: "master",
-        target: "7.x",
+,
         exclude: [
           "kiegroup/optaweb-employee-rostering",
           "kiegroup/optaweb-vehicle-routing"
@@ -239,13 +249,18 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
       project: "kiegroup/optaweb-employee-rostering",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
+            default: {
+              source: "7.x",
+              target: "master"
+            }
+          },
+        dependant: {
+            default: {
+              source: "master",
+              target: "7.x"
+            }
           }
-        },
-        source: "master",
-        target: "7.x",
+,
         exclude: ["kiegroup/optaweb-vehicle-routing", "kiegroup/optaplanner"]
       }
     }
