@@ -305,6 +305,10 @@ it will produce
 
 ## Development
 
+### Installation
+
+Just execute `pnpm install`
+
 ### Previous setup
 
 You will need to run `export NPM_TOKEN=whatever_token` before being able to commit changes.
