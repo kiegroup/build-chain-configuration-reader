@@ -28,7 +28,8 @@ function treatMappingDependencies(mappingDependencies) {
         mapping.target = eval(mapping.targetExpression);
       } catch (ex) {
         console.error(
-          `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``, ex
+          `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``,
+          ex
         );
         mapping.target = undefined;
       }

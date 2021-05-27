@@ -1,5 +1,5 @@
 const { treatUrl, treatMapping } = require("../../../src/lib/util/reader-util");
-global.console = {error: jest.fn()}
+global.console = { error: jest.fn() };
 
 test("treatUrl", () => {
   // Arrange
@@ -281,5 +281,5 @@ test("treatMapping with error expression on dependencies", () => {
 
   // Assert
   expect(mapping).toStrictEqual(expecteResult);
-  expect(console.error).toBeCalled()
+  expect(console.error).toBeCalled();
 });

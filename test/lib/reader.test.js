@@ -3,7 +3,7 @@ jest.mock("../../src/lib/util/http");
 const { getUrlContent: getUrlContentMock } = require("../../src/lib/util/http");
 const path = require("path");
 const fs = require("fs");
-global.console = {error: jest.fn()}
+global.console = { error: jest.fn() };
 
 afterEach(() => {
   jest.clearAllMocks();
