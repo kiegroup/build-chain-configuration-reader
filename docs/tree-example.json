@@ -574,16 +574,20 @@
                     ],
                     "mapping": {
                       "dependencies": {
-                        "default": {
-                          "source": "7.x",
-                          "target": "master"
-                        }
+                        "default": [
+                          {
+                            "source": "7.x",
+                            "target": "master"
+                          }
+                        ]
                       },
                       "dependant": {
-                        "default": {
-                          "source": "master",
-                          "target": "7.x"
-                        }
+                        "default": [
+                          {
+                            "source": "master",
+                            "target": "7.x"
+                          }
+                        ]
                       },
                       "exclude": [
                         "kiegroup/optaweb-employee-rostering",
@@ -608,16 +612,20 @@
                         ],
                         "mapping": {
                           "dependencies": {
-                            "default": {
-                              "source": "7.x",
-                              "target": "master"
-                            }
+                            "default": [
+                              {
+                                "source": "7.x",
+                                "target": "master"
+                              }
+                            ]
                           },
                           "dependant": {
-                            "default": {
-                              "source": "master",
-                              "target": "7.x"
-                            }
+                            "default": [
+                              {
+                                "source": "master",
+                                "target": "7.x"
+                              }
+                            ]
                           },
                           "exclude": [
                             "kiegroup/optaweb-vehicle-routing",
@@ -676,16 +684,20 @@
                         ],
                         "mapping": {
                           "dependencies": {
-                            "default": {
-                              "source": "7.x",
-                              "target": "master"
-                            }
+                            "default": [
+                              {
+                                "source": "7.x",
+                                "target": "master"
+                              }
+                            ]
                           },
                           "dependant": {
-                            "default": {
-                              "source": "master",
-                              "target": "7.x"
-                            }
+                            "default": [
+                              {
+                                "source": "master",
+                                "target": "7.x"
+                              }
+                            ]
                           },
                           "exclude": [
                             "kiegroup/optaweb-employee-rostering",

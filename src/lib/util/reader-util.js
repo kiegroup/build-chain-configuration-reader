@@ -21,19 +21,21 @@ function treatMapping(mapping) {
 }
 
 function treatMappingDependencies(mappingDependencies) {
-  Object.values(mappingDependencies || [])
-    .filter(mapping => mapping.targetExpression)
-    .forEach(mapping => {
-      try {
-        mapping.target = eval(mapping.targetExpression);
-      } catch (ex) {
-        console.error(
-          `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``,
-          ex
-        );
-        mapping.target = undefined;
-      }
-    });
+  Object.values(mappingDependencies || []).forEach(mappingElement =>
+    mappingElement
+      .filter(mapping => mapping.targetExpression)
+      .forEach(mapping => {
+        try {
+          mapping.target = eval(mapping.targetExpression);
+        } catch (ex) {
+          console.error(
+            `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``,
+            ex
+          );
+          mapping.target = undefined;
+        }
+      })
+  );
 }
 
 module.exports = { treatUrl, treatMapping };

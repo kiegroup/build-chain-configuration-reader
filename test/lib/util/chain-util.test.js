@@ -80,16 +80,20 @@ test("parentChainFromNode optaplanner", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
-          }
+          default: [
+            {
+              source: "7.x",
+              target: "master"
+            }
+          ]
         },
         dependant: {
-          default: {
-            source: "master",
-            target: "7.x"
-          }
+          default: [
+            {
+              source: "master",
+              target: "7.x"
+            }
+          ]
         },
         exclude: [
           "kiegroup/optaweb-employee-rostering",
@@ -127,16 +131,20 @@ test("parentChainFromNode kie-wb-distributions", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
-          }
+          default: [
+            {
+              source: "7.x",
+              target: "master"
+            }
+          ]
         },
         dependant: {
-          default: {
-            source: "master",
-            target: "7.x"
-          }
+          default: [
+            {
+              source: "master",
+              target: "7.x"
+            }
+          ]
         },
         exclude: [
           "kiegroup/optaweb-employee-rostering",

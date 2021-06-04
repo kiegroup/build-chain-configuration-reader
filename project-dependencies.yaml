@@ -39,18 +39,20 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          targetExpression: "5+8"
+          - source: 7.x
+            targetExpression: "5+8"
       dependant:
         default:
-          source: master
-          targetExpression: "`${mapping.source}-x`"
+          - source: master
+            targetExpression: "`${mapping.source}-x`"
+          - source: main
+            targetExpression: "`${mapping.source}-xy`"
         projectx:
-          source: ^((?!master).)*$
-          targetExpression: "5+9"
+          - source: ^((?!master).)*$
+            targetExpression: "5+9"
         projecty:
-          source: 7.x
-          targetExpression: "throw new Error('error')"
+          - source: 7.x
+            targetExpression: "throw new Error('error')"
       exclude:
         - kiegroup/optaweb-employee-rostering
         - kiegroup/optaweb-vehicle-routing
@@ -131,12 +133,12 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          target: master
+          - source: 7.x
+            target: master
       dependant:
         default:
-          source: master
-          target: 7.x
+          - source: master
+            target: 7.x
       exclude:
         - kiegroup/optaweb-vehicle-routing
         - kiegroup/optaplanner
@@ -147,12 +149,12 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          target: master
+          - source: 7.x
+            target: master
       dependant:
         default:
-          source: master
-          target: 7.x
+          - source: master
+            target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering
         - kiegroup/optaplanner

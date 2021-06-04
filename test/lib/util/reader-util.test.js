@@ -27,16 +27,20 @@ test("treatMapping no expression", () => {
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: "master"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: "master"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
 
@@ -51,31 +55,39 @@ test("treatMapping with simple expression on dependencies", () => {
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "7.x",
+          targetExpression: "2+2"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: 4,
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: 4,
+          targetExpression: "2+2"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
 
@@ -90,31 +102,39 @@ test("treatMapping with string expression on dependencies", () => {
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        targetExpression: "`${mapping.source}.y`"
-      }
+      default: [
+        {
+          source: "7.x",
+          targetExpression: "`${mapping.source}.y`"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: "7.x.y",
-        targetExpression: "`${mapping.source}.y`"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: "7.x.y",
+          targetExpression: "`${mapping.source}.y`"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
 
@@ -130,31 +150,39 @@ test("treatMapping with string expression on dependencies", () => {
   process.env.SOURCE_BRANCH = "1.x.y";
   const mapping = {
     dependencies: {
-      default: {
-        targetExpression:
-          "process.env.SOURCE_BRANCH.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
-      }
+      default: [
+        {
+          targetExpression:
+            "process.env.SOURCE_BRANCH.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        target: "9.x.y",
-        targetExpression:
-          "process.env.SOURCE_BRANCH.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
-      }
+      default: [
+        {
+          target: "9.x.y",
+          targetExpression:
+            "process.env.SOURCE_BRANCH.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
 
@@ -169,31 +197,39 @@ test("treatMapping with simple expression on dependant", () => {
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: "master"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: "master"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "master",
+          targetExpression: "2+2"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: "master"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: "master"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: 4,
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "master",
+          target: 4,
+          targetExpression: "2+2"
+        }
+      ]
     }
   };
 
@@ -208,32 +244,40 @@ test("treatMapping with simple expression on dependant and dependencies", () => 
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        targetExpression: "2+3"
-      }
+      default: [
+        {
+          source: "7.x",
+          targetExpression: "2+3"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "master",
+          targetExpression: "2+2"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: 5,
-        targetExpression: "2+3"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: 5,
+          targetExpression: "2+3"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: 4,
-        targetExpression: "2+2"
-      }
+      default: [
+        {
+          source: "master",
+          target: 4,
+          targetExpression: "2+2"
+        }
+      ]
     }
   };
 
@@ -248,31 +292,39 @@ test("treatMapping with error expression on dependencies", () => {
   // Arrange
   const mapping = {
     dependencies: {
-      default: {
-        source: "7.x",
-        targetExpression: "throw new Error('amazing error')"
-      }
+      default: [
+        {
+          source: "7.x",
+          targetExpression: "throw new Error('amazing error')"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
   const expecteResult = {
     dependencies: {
-      default: {
-        source: "7.x",
-        target: undefined,
-        targetExpression: "throw new Error('amazing error')"
-      }
+      default: [
+        {
+          source: "7.x",
+          target: undefined,
+          targetExpression: "throw new Error('amazing error')"
+        }
+      ]
     },
     dependant: {
-      default: {
-        source: "master",
-        target: "7.x"
-      }
+      default: [
+        {
+          source: "master",
+          target: "7.x"
+        }
+      ]
     }
   };
 

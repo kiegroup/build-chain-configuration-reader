@@ -145,16 +145,20 @@ test("fullDownstreamChain kie-wb-distributions", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
-          }
+          default: [
+            {
+              source: "7.x",
+              target: "master"
+            }
+          ]
         },
         dependant: {
-          default: {
-            source: "master",
-            target: "7.x"
-          }
+          default: [
+            {
+              source: "master",
+              target: "7.x"
+            }
+          ]
         },
         exclude: [
           "kiegroup/optaweb-employee-rostering",
@@ -226,16 +230,15 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
-          }
+          default: [{ source: "7.x", target: "master" }]
         },
         dependant: {
-          default: {
-            source: "master",
-            target: "7.x"
-          }
+          default: [
+            {
+              source: "master",
+              target: "7.x"
+            }
+          ]
         },
         exclude: [
           "kiegroup/optaweb-employee-rostering",
@@ -247,16 +250,20 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
       project: "kiegroup/optaweb-employee-rostering",
       mapping: {
         dependencies: {
-          default: {
-            source: "7.x",
-            target: "master"
-          }
+          default: [
+            {
+              source: "7.x",
+              target: "master"
+            }
+          ]
         },
         dependant: {
-          default: {
-            source: "master",
-            target: "7.x"
-          }
+          default: [
+            {
+              source: "master",
+              target: "7.x"
+            }
+          ]
         },
         exclude: ["kiegroup/optaweb-vehicle-routing", "kiegroup/optaplanner"]
       }
