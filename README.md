@@ -383,7 +383,7 @@ it will produce
 
 ### Installation
 
-Just execute `pnpm install`
+Just execute `npm install`
 
 ### Previous setup
 
