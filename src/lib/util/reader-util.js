@@ -13,4 +13,29 @@ function treatUrl(url, placeHolders) {
   return result;
 }
 
-module.exports = { treatUrl };
+function treatMapping(mapping) {
+  if (mapping) {
+    treatMappingDependencies(mapping.dependencies);
+    treatMappingDependencies(mapping.dependant);
+  }
+}
+
+function treatMappingDependencies(mappingDependencies) {
+  Object.values(mappingDependencies || []).forEach(mappingElement =>
+    mappingElement
+      .filter(mapping => mapping.targetExpression)
+      .forEach(mapping => {
+        try {
+          mapping.target = eval(mapping.targetExpression);
+        } catch (ex) {
+          console.error(
+            `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``,
+            ex
+          );
+          mapping.target = undefined;
+        }
+      })
+  );
+}
+
+module.exports = { treatUrl, treatMapping };

@@ -1,5 +1,12 @@
 # Changelog
 
+# V2.2.0
+
+- mapping changes
+  - dependant section included
+  - eval expression allowed on mapping
+  - multiple mapping definition per project
+
 # V2.1.0
 
 - allow to pass token to file reading

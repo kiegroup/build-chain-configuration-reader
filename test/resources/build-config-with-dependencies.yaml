@@ -1,4 +1,4 @@
-version: "2.0"
+version: "2.1"
 
 dependencies:
   - project: kiegroup/lienzo-core
@@ -42,10 +42,12 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          target: master
-      source: master
-      target: 7.x
+          - source: 7.x
+            target: master
+      dependant:
+        default:
+          - source: master
+            target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering
         - kiegroup/optaweb-vehicle-routing
@@ -124,10 +126,12 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          target: master
-      source: master
-      target: 7.x
+          - source: 7.x
+            target: master
+      dependant:
+        default:
+          - source: master
+            target: 7.x
       exclude:
         - kiegroup/optaweb-vehicle-routing
         - kiegroup/optaplanner
@@ -138,10 +142,12 @@ dependencies:
     mapping:
       dependencies:
         default:
-          source: 7.x
-          target: master
-      source: master
-      target: 7.x
+          - source: 7.x
+            target: master
+      dependant:
+        default:
+          - source: master
+            target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering
         - kiegroup/optaplanner
