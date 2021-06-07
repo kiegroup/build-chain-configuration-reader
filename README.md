@@ -8,7 +8,7 @@ The definition file is basically composed by project dependencies information, d
 So the basic structure would be
 
 ```
-version: "1.0"
+version: "2.1"
 dependencies: [url | relative file path | embedded dependencies in the same file]
 
 default: [default build information]
@@ -26,12 +26,12 @@ dependencies:
         mapping:
           dependencies:
             default:
-              source: SOURCE_BRANCH_X
-              target: TARGET_BRANCH_X
+              - source: SOURCE_BRANCH_X
+                target: TARGET_BRANCH_X
           dependant:
             default:
-              source: SOURCE_BRANCH_Y
-              target: TARGET_BRANCH_Y
+              - source: SOURCE_BRANCH_Y
+                target: TARGET_BRANCH_Y
           exclude:
             - PROJECT_A
             - PROJECT_B
@@ -71,12 +71,12 @@ Additional it could be the case where not all the projects use the same target b
   mapping:
     dependencies:
       default:
-        source: master
-        target: main
+        - source: master
+          target: main
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
 - project: kiegroup/droolsjbpm-build-bootstrap
 - project: kiegroup/drools
   dependencies:
@@ -116,12 +116,12 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
   mapping:
     dependencies:
       default:
-        source: 7.x
-        target: master
+        - source: 7.x
+          target: master
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
       - kiegroup/optaweb-vehicle-routing
@@ -138,12 +138,12 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
   mapping:
     dependencies:
       default:
-        source: 7.x
-        target: master
+        - source: 7.x
+          target: master
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
     exclude:
       - kiegroup/optaweb-vehicle-routing
       - kiegroup/optaplanner
@@ -154,12 +154,12 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
   mapping:
     dependencies:
       default:
-        source: 7.x
-        target: master
+        - source: 7.x
+          target: master
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
       - kiegroup/optaplanner
@@ -184,21 +184,21 @@ Let's suppose we have a mapping like
   mapping:
     dependencies:
       default:
-        source: 7.x
-        targetExpression: "`${mapping.source}.y`"
+        - source: 7.x
+          targetExpression: "`${mapping.source}.y`"
       projectX:
-        source: ^((?!master).)*$
-        targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
+        - source: ^((?!master).)*$
+          targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        source: master
-        target: main
+        - source: master
+          target: main
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
       projectx:
-        source: ^((?!master).)*$
-        targetExpression: "2+3"
+        - source: ^((?!master).)*$
+          targetExpression: "2+3"
 ```
 
 it will produce
@@ -209,24 +209,24 @@ it will produce
   mapping:
     dependencies:
       default:
-        source: 7.x
-        target: 7.x.y
-        targetExpression: "`${mapping.source}.y`"
+        - source:source: 7.x
+          target: 7.x.y
+          targetExpression: "`${mapping.source}.y`"
       projectX:
-        source: ^((?!master).)*$
-        target: # it depends on process.env.GITHUB_HEAD_REF value. if '1.x.y' -> '9.x.y'. if '3.x' -> '11.x..'. In case of failure it will produce undefined. So you have to be very carefull with what you define there.
-        targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
+        - source: ^((?!master).)*$
+          target: # it depends on process.env.GITHUB_HEAD_REF value. if '1.x.y' -> '9.x.y'. if '3.x' -> '11.x..'. In case of failure it will produce undefined. So you have to be very carefull with what you define there.
+          targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        source: master
-        target: main
+        - source: master
+          target: main
     dependant:
       default:
-        source: master
-        target: 7.x
+        - source: master
+          target: 7.x
       projectx:
-        source: ^((?!master).)*$
-        target: 5
-        targetExpression: "2+3"
+        - source: ^((?!master).)*$
+          target: 5
+          targetExpression: "2+3"
 ```
 
 #### URL format
