@@ -577,14 +577,14 @@
                         "default": [
                           {
                             "source": "7.x",
-                            "target": "master"
+                            "target": "main"
                           }
                         ]
                       },
                       "dependant": {
                         "default": [
                           {
-                            "source": "master",
+                            "source": "main",
                             "target": "7.x"
                           }
                         ]
@@ -615,14 +615,14 @@
                             "default": [
                               {
                                 "source": "7.x",
-                                "target": "master"
+                                "target": "main"
                               }
                             ]
                           },
                           "dependant": {
                             "default": [
                               {
-                                "source": "master",
+                                "source": "main",
                                 "target": "7.x"
                               }
                             ]
@@ -687,14 +687,14 @@
                             "default": [
                               {
                                 "source": "7.x",
-                                "target": "master"
+                                "target": "main"
                               }
                             ]
                           },
                           "dependant": {
                             "default": [
                               {
-                                "source": "master",
+                                "source": "main",
                                 "target": "7.x"
                               }
                             ]
