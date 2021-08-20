@@ -261,7 +261,7 @@ test("readDefinitionFileFromUrl relative path dependencies. targetExpression", a
     .filter(node => node.project === "kiegroup/optaplanner")
     .map(node => node.mapping)[0];
   expect(optaplannerMapping.dependencies.default[0].target).toEqual(13);
-  expect(optaplannerMapping.dependant.default[0].target).toEqual("master-x");
+  expect(optaplannerMapping.dependant.default[0].target).toEqual("main-x");
   expect(optaplannerMapping.dependant.projectx[0].target).toEqual(14);
   expect(optaplannerMapping.dependant.projecty[0].target).toEqual(undefined);
 });

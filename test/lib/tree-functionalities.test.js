@@ -148,14 +148,14 @@ test("fullDownstreamChain kie-wb-distributions", async () => {
           default: [
             {
               source: "7.x",
-              target: "master"
+              target: "main"
             }
           ]
         },
         dependant: {
           default: [
             {
-              source: "master",
+              source: "main",
               target: "7.x"
             }
           ]
@@ -230,12 +230,12 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
       project: "kiegroup/optaplanner",
       mapping: {
         dependencies: {
-          default: [{ source: "7.x", target: "master" }]
+          default: [{ source: "7.x", target: "main" }]
         },
         dependant: {
           default: [
             {
-              source: "master",
+              source: "main",
               target: "7.x"
             }
           ]
@@ -253,14 +253,14 @@ test("fullDownstreamChain optaweb-employee-rostering", async () => {
           default: [
             {
               source: "7.x",
-              target: "master"
+              target: "main"
             }
           ]
         },
         dependant: {
           default: [
             {
-              source: "master",
+              source: "main",
               target: "7.x"
             }
           ]

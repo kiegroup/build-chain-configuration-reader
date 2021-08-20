@@ -43,12 +43,12 @@ dependencies:
             targetExpression: "5+8"
       dependant:
         default:
-          - source: master
+          - source: main
             targetExpression: "`${mapping.source}-x`"
           - source: main
             targetExpression: "`${mapping.source}-xy`"
         projectx:
-          - source: ^((?!master).)*$
+          - source: ^((?!main).)*$
             targetExpression: "5+9"
         projecty:
           - source: 7.x
@@ -134,10 +134,10 @@ dependencies:
       dependencies:
         default:
           - source: 7.x
-            target: master
+            target: main
       dependant:
         default:
-          - source: master
+          - source: main
             target: 7.x
       exclude:
         - kiegroup/optaweb-vehicle-routing
@@ -150,10 +150,10 @@ dependencies:
       dependencies:
         default:
           - source: 7.x
-            target: master
+            target: main
       dependant:
         default:
-          - source: master
+          - source: main
             target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering

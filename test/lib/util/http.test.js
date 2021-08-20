@@ -7,7 +7,7 @@ afterEach(() => {
 test("getUrlContent HTTPS OK", async () => {
   // Act
   const result = await getUrlContent(
-    "https://raw.githubusercontent.com/kiegroup/github-action-build-chain/master/package.json"
+    "https://raw.githubusercontent.com/kiegroup/github-action-build-chain/main/package.json"
   );
   // Assert
   expect(result).not.toBeUndefined();

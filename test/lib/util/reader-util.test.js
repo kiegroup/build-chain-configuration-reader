@@ -81,14 +81,14 @@ test("treatMapping no expression", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -138,7 +138,7 @@ test("treatMapping with simple expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -157,7 +157,7 @@ test("treatMapping with simple expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -185,7 +185,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -204,7 +204,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -233,7 +233,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -252,7 +252,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -273,14 +273,14 @@ test("treatMapping with simple expression on dependant", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           targetExpression: "2+2"
         }
       ]
@@ -291,14 +291,14 @@ test("treatMapping with simple expression on dependant", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: 4,
           targetExpression: "2+2"
         }
@@ -327,7 +327,7 @@ test("treatMapping with simple expression on dependant and dependencies", () => 
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           targetExpression: "2+2"
         }
       ]
@@ -346,7 +346,7 @@ test("treatMapping with simple expression on dependant and dependencies", () => 
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: 4,
           targetExpression: "2+2"
         }
@@ -375,7 +375,7 @@ test("treatMapping with error expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -394,7 +394,7 @@ test("treatMapping with error expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]

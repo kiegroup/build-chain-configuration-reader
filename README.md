@@ -61,7 +61,7 @@ and stablish their dependencies with each other
 
 ### Mapping
 
-Additional it could be the case where not all the projects use the same target branch, then the mapping should be also specified for those projects. Let's suppose all the projects from the previous example use `main` as target branch but `kiegroup/lienzo-tests` uses `master`.
+Additional it could be the case where not all the projects use the same target branch, then the mapping should be also specified for those projects. Let's suppose all the projects from the previous example use `main` as target branch but `kiegroup/lienzo-tests` uses `main`.
 
 ```
 - project: kiegroup/lienzo-core
@@ -71,11 +71,11 @@ Additional it could be the case where not all the projects use the same target b
   mapping:
     dependencies:
       default:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
 - project: kiegroup/droolsjbpm-build-bootstrap
 - project: kiegroup/drools
@@ -83,7 +83,7 @@ Additional it could be the case where not all the projects use the same target b
     - project: kiegroup/lienzo-tests
 ```
 
-Each project should define its mapping. So in this case `kiegroup/lienzo-tests` defines it will map all dependencies from `master` to `main`, and `kiegroup/lienzo-tests` will be mapped from `main` to `master`.
+Each project should define its mapping. So in this case `kiegroup/lienzo-tests` defines it will map all dependencies from `main` to `main`, and `kiegroup/lienzo-tests` will be mapped from `main` to `main`.
 
 **Example:**
 
@@ -117,10 +117,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
@@ -139,10 +139,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-vehicle-routing
@@ -155,10 +155,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
@@ -189,17 +189,17 @@ Let's suppose we have a mapping like
         - source: 7.x
           targetExpression: "`${mapping.source}.y`"
       projectX:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
       projectx:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           targetExpression: "2+3"
 ```
 
@@ -216,18 +216,18 @@ it will produce
           target: 7.x.y
           targetExpression: "`${mapping.source}.y`"
       projectX:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           target: # it depends on process.env.GITHUB_HEAD_REF value. if '1.x.y' -> '9.x.y'. if '3.x' -> '11.x..'. In case of failure it will produce undefined. So you have to be very carefull with what you define there.
           targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
       projectx:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           target: 5
           targetExpression: "2+3"
 ```
