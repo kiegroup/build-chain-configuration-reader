@@ -169,12 +169,14 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
 
 It is possible to define `targetExpression` instead of target (you can define both, but `target` will be overwritten at runtime). `targetExpression` allows you to define a Javascript expression which is going to be evaluated at runtime by [eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval), output will be set to target. Just consider the variables you use on the expression should be available during eval execution.
 
-**Available variables** 
-* `mapping`: will point to `mapping.dependencies.${project}` so you can for instance use `mapping.source` to get source value.
-* whatever process.env variable
-* in general whatever variable available in reader-util.js#treatMappingDependencies
+**Available variables**
+
+- `mapping`: will point to `mapping.dependencies.${project}` so you can for instance use `mapping.source` to get source value.
+- whatever process.env variable
+- in general whatever variable available in reader-util.js#treatMappingDependencies
 
 ##### Examples
+
 Let's suppose we have a mapping like
 
 ```
@@ -202,6 +204,7 @@ Let's suppose we have a mapping like
 ```
 
 it will produce
+
 ```
 - project: kiegroup/optaweb-vehicle-routing
   dependencies:
@@ -234,7 +237,13 @@ it will produce
 it can be expressed like a simple url (http(s)://whateverurl.domain/whateverfile.txt) or it can be expressed using place holders like `https://raw.githubusercontent.com/${GROUP}/${PROJECT}/${BRANCH}/dependencies.yaml` to get `dependencies.yaml` file from source group, project and branch tokens (no need to use all of them at the same time).
 
 **Place holders**
+
 The place holders must be wrapped between `${}` expression and you can use any place holder you want.
+
+**Javascript expressions**
+
+It is possible to define javascript expressions wrapped by `%{}`. So for instance a definition file string like
+`` https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml `` in case `GITHUB_BASE_REF` environment variable's value is `1.2.x`, the expression between `%{}` will be evaluated and final definition file will be `https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/8.2.x/.ci/pull-request-config.yml`.
 
 ### default section structure
 

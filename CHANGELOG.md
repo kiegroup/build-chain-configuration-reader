@@ -6,6 +6,7 @@
   - dependant section included
   - eval expression allowed on mapping
   - multiple mapping definition per project
+  - javascript expression in definition file URL
 
 # V2.1.0
 
