@@ -4,3 +4,4 @@ node_modules/
 locally_execution/**/*
 test/lib/artifacts/_temp/**/*
 pnpm-global/
+./project-dependencies.yaml
