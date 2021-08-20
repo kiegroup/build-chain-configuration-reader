@@ -52,6 +52,23 @@ test("executeUrlExpressions with 2 expressions", () => {
   );
 });
 
+test("executeUrlExpressions with expression and no matching version", () => {
+  // Arrange
+  process.env = Object.assign(process.env, {
+    GITHUB_BASE_REF: "main"
+  });
+  const string =
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml";
+
+  // Act
+  const result = executeUrlExpressions(string);
+
+  // Assert
+  expect(result).toBe(
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/pull-request-config.yml"
+  );
+});
+
 test("treatUrl", () => {
   // Arrange
   const string = "1${TWO}${THREE}4567${EIGHT}";
