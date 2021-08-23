@@ -1,5 +1,73 @@
-const { treatUrl, treatMapping } = require("../../../src/lib/util/reader-util");
-global.console = { error: jest.fn() };
+const {
+  treatUrl,
+  treatMapping,
+  executeUrlExpressions
+} = require("../../../src/lib/util/reader-util");
+const { logger } = require("../../../src/lib/common");
+jest.mock("../../../src/lib/common");
+
+test("executeUrlExpressions without expressions", () => {
+  // Arrange
+  const string =
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/pull-request-config.yaml";
+
+  // Act
+  const result = executeUrlExpressions(string);
+
+  // Assert
+  expect(result).toBe(string);
+});
+
+test("executeUrlExpressions with 1 expression", () => {
+  // Arrange
+  process.env = Object.assign(process.env, {
+    GITHUB_BASE_REF: "1.2.3"
+  });
+  const string =
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml";
+
+  // Act
+  const result = executeUrlExpressions(string);
+
+  // Assert
+  expect(result).toBe(
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/8.2.3/.ci/pull-request-config.yml"
+  );
+});
+
+test("executeUrlExpressions with 2 expressions", () => {
+  // Arrange
+  process.env = Object.assign(process.env, {
+    GITHUB_BASE_REF: "1.2.3"
+  });
+  const string =
+    "https://raw.githubusercontent.com/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1-1}.${+n2+2}.${+n3+3}`)}/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml";
+
+  // Act
+  const result = executeUrlExpressions(string);
+
+  // Assert
+  expect(result).toBe(
+    "https://raw.githubusercontent.com/0.4.6/droolsjbpm-build-bootstrap/8.2.3/.ci/pull-request-config.yml"
+  );
+});
+
+test("executeUrlExpressions with expression and no matching version", () => {
+  // Arrange
+  process.env = Object.assign(process.env, {
+    GITHUB_BASE_REF: "main"
+  });
+  const string =
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml";
+
+  // Act
+  const result = executeUrlExpressions(string);
+
+  // Assert
+  expect(result).toBe(
+    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/pull-request-config.yml"
+  );
+});
 
 test("treatUrl", () => {
   // Arrange
@@ -30,14 +98,14 @@ test("treatMapping no expression", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -49,6 +117,28 @@ test("treatMapping no expression", () => {
 
   // Assert
   expect(mapping).toBe(mapping);
+});
+
+test("treatUrl with expression", () => {
+  // Arrange
+  const string = "1${TWO}${THREE}45%{+20+50}67${EIGHT}";
+
+  // Act
+  const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+
+  // Assert
+  expect(result).toBe("1234570678");
+});
+
+test("treatUrl with expression", () => {
+  // Arrange
+  const string = "1${TWO}${THREE}45%{'text'}67${EIGHT}";
+
+  // Act
+  const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+
+  // Assert
+  expect(result).toBe("12345text678");
 });
 
 test("treatMapping with simple expression on dependencies", () => {
@@ -65,7 +155,7 @@ test("treatMapping with simple expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -84,7 +174,7 @@ test("treatMapping with simple expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -112,7 +202,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -131,7 +221,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -160,7 +250,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -179,7 +269,7 @@ test("treatMapping with string expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -200,14 +290,14 @@ test("treatMapping with simple expression on dependant", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           targetExpression: "2+2"
         }
       ]
@@ -218,14 +308,14 @@ test("treatMapping with simple expression on dependant", () => {
       default: [
         {
           source: "7.x",
-          target: "master"
+          target: "main"
         }
       ]
     },
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: 4,
           targetExpression: "2+2"
         }
@@ -254,7 +344,7 @@ test("treatMapping with simple expression on dependant and dependencies", () => 
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           targetExpression: "2+2"
         }
       ]
@@ -273,7 +363,7 @@ test("treatMapping with simple expression on dependant and dependencies", () => 
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: 4,
           targetExpression: "2+2"
         }
@@ -302,7 +392,7 @@ test("treatMapping with error expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -321,7 +411,7 @@ test("treatMapping with error expression on dependencies", () => {
     dependant: {
       default: [
         {
-          source: "master",
+          source: "main",
           target: "7.x"
         }
       ]
@@ -333,5 +423,5 @@ test("treatMapping with error expression on dependencies", () => {
 
   // Assert
   expect(mapping).toStrictEqual(expecteResult);
-  expect(console.error).toBeCalled();
+  expect(logger.error).toBeCalled();
 });

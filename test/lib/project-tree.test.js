@@ -312,14 +312,14 @@ test("dependencyListToTree", async () => {
     dependencies: {
       default: {
         source: "7.x",
-        target: "master"
+        target: "main"
       },
       "group/7": {
         source: "7.x",
         target: "8.x"
       }
     },
-    source: "master",
+    source: "main",
     target: "7.x",
     exclude: ["group/12"]
   };

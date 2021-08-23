@@ -1,3 +1,33 @@
+const { logger } = require("../common");
+
+/**
+ * Treats the url containing a expression between `%{` and `}` (without quotes)
+ * @param {String} url with expressions
+ */
+function executeUrlExpressions(url) {
+  let result = url;
+  const expression = /%{([^%]+)}/g;
+  let match;
+  while ((match = expression.exec(url))) {
+    logger.info(`Expression found in URL ${result}.`);
+    logger.info(`Expression: ${match[1]}.`);
+
+    try {
+      const expressionEvalResult = eval(match[1]);
+      logger.info(`Expression Result: ${expressionEvalResult}.`);
+      result = result.replace(`%{${match[1]}}`, expressionEvalResult);
+      logger.emptyLine();
+    } catch (ex) {
+      logger.error(
+        `Error evaluating expression \`${match[1]}\` for url: \`${result}\``,
+        ex
+      );
+      throw ex;
+    }
+  }
+  return result;
+}
+
 /**
  * it treats the url in case it contains
  * @param {String} url a http(s)://whatever.domain/${GROUP}/${PROJECT_NAME}/${BRANCH}/whateverfile.txt format, where place olders are optional and can be placed anywhere on the string
@@ -10,7 +40,10 @@ function treatUrl(url, placeHolders) {
       ([key, value]) => (result = result.replace(`$\{${key}}`, value))
     );
   }
-  return result;
+
+  const finalResult = executeUrlExpressions(result);
+  logger.info(`Final url is ${finalResult}`);
+  return finalResult;
 }
 
 function treatMapping(mapping) {
@@ -28,7 +61,7 @@ function treatMappingDependencies(mappingDependencies) {
         try {
           mapping.target = eval(mapping.targetExpression);
         } catch (ex) {
-          console.error(
+          logger.error(
             `Error evaluating expression \`${mapping.targetExpression}\` for source: \`${mapping.source}\``,
             ex
           );
@@ -38,4 +71,4 @@ function treatMappingDependencies(mappingDependencies) {
   );
 }
 
-module.exports = { treatUrl, treatMapping };
+module.exports = { treatUrl, treatMapping, executeUrlExpressions };

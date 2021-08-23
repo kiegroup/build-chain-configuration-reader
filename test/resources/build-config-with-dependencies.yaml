@@ -43,10 +43,10 @@ dependencies:
       dependencies:
         default:
           - source: 7.x
-            target: master
+            target: main
       dependant:
         default:
-          - source: master
+          - source: main
             target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering
@@ -127,10 +127,10 @@ dependencies:
       dependencies:
         default:
           - source: 7.x
-            target: master
+            target: main
       dependant:
         default:
-          - source: master
+          - source: main
             target: 7.x
       exclude:
         - kiegroup/optaweb-vehicle-routing
@@ -143,10 +143,10 @@ dependencies:
       dependencies:
         default:
           - source: 7.x
-            target: master
+            target: main
       dependant:
         default:
-          - source: master
+          - source: main
             target: 7.x
       exclude:
         - kiegroup/optaweb-employee-rostering

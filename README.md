@@ -61,7 +61,7 @@ and stablish their dependencies with each other
 
 ### Mapping
 
-Additional it could be the case where not all the projects use the same target branch, then the mapping should be also specified for those projects. Let's suppose all the projects from the previous example use `main` as target branch but `kiegroup/lienzo-tests` uses `master`.
+Additional it could be the case where not all the projects use the same target branch, then the mapping should be also specified for those projects. Let's suppose all the projects from the previous example use `main` as target branch but `kiegroup/lienzo-tests` uses `main`.
 
 ```
 - project: kiegroup/lienzo-core
@@ -71,11 +71,11 @@ Additional it could be the case where not all the projects use the same target b
   mapping:
     dependencies:
       default:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
 - project: kiegroup/droolsjbpm-build-bootstrap
 - project: kiegroup/drools
@@ -83,7 +83,7 @@ Additional it could be the case where not all the projects use the same target b
     - project: kiegroup/lienzo-tests
 ```
 
-Each project should define its mapping. So in this case `kiegroup/lienzo-tests` defines it will map all dependencies from `master` to `main`, and `kiegroup/lienzo-tests` will be mapped from `main` to `master`.
+Each project should define its mapping. So in this case `kiegroup/lienzo-tests` defines it will map all dependencies from `main` to `main`, and `kiegroup/lienzo-tests` will be mapped from `main` to `main`.
 
 **Example:**
 
@@ -117,10 +117,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
@@ -139,10 +139,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-vehicle-routing
@@ -155,10 +155,10 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
     dependencies:
       default:
         - source: 7.x
-          target: master
+          target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
     exclude:
       - kiegroup/optaweb-employee-rostering
@@ -169,12 +169,14 @@ Each project should define its mapping. So in this case `kiegroup/lienzo-tests` 
 
 It is possible to define `targetExpression` instead of target (you can define both, but `target` will be overwritten at runtime). `targetExpression` allows you to define a Javascript expression which is going to be evaluated at runtime by [eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval), output will be set to target. Just consider the variables you use on the expression should be available during eval execution.
 
-**Available variables** 
-* `mapping`: will point to `mapping.dependencies.${project}` so you can for instance use `mapping.source` to get source value.
-* whatever process.env variable
-* in general whatever variable available in reader-util.js#treatMappingDependencies
+**Available variables**
+
+- `mapping`: will point to `mapping.dependencies.${project}` so you can for instance use `mapping.source` to get source value.
+- whatever process.env variable
+- in general whatever variable available in reader-util.js#treatMappingDependencies
 
 ##### Examples
+
 Let's suppose we have a mapping like
 
 ```
@@ -187,21 +189,22 @@ Let's suppose we have a mapping like
         - source: 7.x
           targetExpression: "`${mapping.source}.y`"
       projectX:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
       projectx:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           targetExpression: "2+3"
 ```
 
 it will produce
+
 ```
 - project: kiegroup/optaweb-vehicle-routing
   dependencies:
@@ -213,18 +216,18 @@ it will produce
           target: 7.x.y
           targetExpression: "`${mapping.source}.y`"
       projectX:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           target: # it depends on process.env.GITHUB_HEAD_REF value. if '1.x.y' -> '9.x.y'. if '3.x' -> '11.x..'. In case of failure it will produce undefined. So you have to be very carefull with what you define there.
           targetExpression: "process.env.GITHUB_HEAD_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+8}.${n2}.${n3}`)"
       projecty:
-        - source: master
+        - source: main
           target: main
     dependant:
       default:
-        - source: master
+        - source: main
           target: 7.x
       projectx:
-        - source: ^((?!master).)*$
+        - source: ^((?!main).)*$
           target: 5
           targetExpression: "2+3"
 ```
@@ -234,7 +237,13 @@ it will produce
 it can be expressed like a simple url (http(s)://whateverurl.domain/whateverfile.txt) or it can be expressed using place holders like `https://raw.githubusercontent.com/${GROUP}/${PROJECT}/${BRANCH}/dependencies.yaml` to get `dependencies.yaml` file from source group, project and branch tokens (no need to use all of them at the same time).
 
 **Place holders**
+
 The place holders must be wrapped between `${}` expression and you can use any place holder you want.
+
+**Javascript expressions**
+
+It is possible to define javascript expressions wrapped by `%{}`. So for instance a definition file string like
+`` https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1+7}.${n2}.${n3}`)}/.ci/pull-request-config.yml `` in case `GITHUB_BASE_REF` environment variable's value is `1.2.x`, the expression between `%{}` will be evaluated and final definition file will be `https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/8.2.x/.ci/pull-request-config.yml`.
 
 ### default section structure
 

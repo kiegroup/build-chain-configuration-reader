@@ -83,14 +83,14 @@ test("parentChainFromNode optaplanner", async () => {
           default: [
             {
               source: "7.x",
-              target: "master"
+              target: "main"
             }
           ]
         },
         dependant: {
           default: [
             {
-              source: "master",
+              source: "main",
               target: "7.x"
             }
           ]
@@ -134,14 +134,14 @@ test("parentChainFromNode kie-wb-distributions", async () => {
           default: [
             {
               source: "7.x",
-              target: "master"
+              target: "main"
             }
           ]
         },
         dependant: {
           default: [
             {
-              source: "master",
+              source: "main",
               target: "7.x"
             }
           ]
