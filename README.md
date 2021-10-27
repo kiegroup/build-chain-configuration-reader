@@ -238,7 +238,7 @@ it can be expressed like a simple url (http(s)://whateverurl.domain/whateverfile
 
 **Place holders**
 
-The place holders must be wrapped between `${}` expression and you can use any place holder you want.
+The place holders must be wrapped between `${}` expression and you can use any place holder you want. They can contain default values separated by `:` like `${BRANCH:main}`.
 
 **Javascript expressions**
 
