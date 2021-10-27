@@ -69,26 +69,61 @@ test("executeUrlExpressions with expression and no matching version", () => {
   );
 });
 
-test("treatUrl", () => {
-  // Arrange
-  const string = "1${TWO}${THREE}4567${EIGHT}";
+describe("treatUrl", () => {
+  test("ok", () => {
+    // Arrange
+    const string = "1${TWO}${THREE}4567${EIGHT}";
 
-  // Act
-  const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+    // Act
+    const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
 
-  // Assert
-  expect(result).toBe("12345678");
-});
+    // Assert
+    expect(result).toBe("12345678");
+  });
 
-test("treatUrl missing placeholders", () => {
-  // Arrange
-  const string = "1${TWO}${THREE}4567${EIGHT}";
+  test("missing placeholders", () => {
+    // Arrange
+    const string = "1${TWO}${THREE}4567${EIGHT}";
 
-  // Act
-  const result = treatUrl(string, { TWO: 2, EIGHT: 8 });
+    // Act
+    const result = treatUrl(string, { TWO: 2, EIGHT: 8 });
 
-  // Assert
-  expect(result).toBe("12${THREE}45678");
+    // Assert
+    expect(result).toBe("12${THREE}45678");
+  });
+
+  test("with expression", () => {
+    // Arrange
+    const string = "1${TWO}${THREE}45%{+20+50}67${EIGHT}";
+
+    // Act
+    const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+
+    // Assert
+    expect(result).toBe("1234570678");
+  });
+
+  test("with single default value", () => {
+    // Arrange
+    const string = "1${TWO:main}${THREE}4567${EIGHT}";
+
+    // Act
+    const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+
+    // Assert
+    expect(result).toBe("12345678");
+  });
+
+  test("with multiple default value", () => {
+    // Arrange
+    const string = "1${TWO:DOS}${THREE}4567${EIGHT:OCHO}";
+
+    // Act
+    const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
+
+    // Assert
+    expect(result).toBe("12345678");
+  });
 });
 
 test("treatMapping no expression", () => {
@@ -117,28 +152,6 @@ test("treatMapping no expression", () => {
 
   // Assert
   expect(mapping).toBe(mapping);
-});
-
-test("treatUrl with expression", () => {
-  // Arrange
-  const string = "1${TWO}${THREE}45%{+20+50}67${EIGHT}";
-
-  // Act
-  const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
-
-  // Assert
-  expect(result).toBe("1234570678");
-});
-
-test("treatUrl with expression", () => {
-  // Arrange
-  const string = "1${TWO}${THREE}45%{'text'}67${EIGHT}";
-
-  // Act
-  const result = treatUrl(string, { TWO: 2, THREE: 3, EIGHT: 8 });
-
-  // Assert
-  expect(result).toBe("12345text678");
 });
 
 test("treatMapping with simple expression on dependencies", () => {

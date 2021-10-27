@@ -7,6 +7,7 @@
   - eval expression allowed on mapping
   - multiple mapping definition per project
   - javascript expression in definition file URL
+  - placeholders replacement with default values
 
 # V2.1.0
 
