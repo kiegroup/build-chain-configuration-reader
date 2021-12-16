@@ -20,7 +20,7 @@ async function readDefinitionFile(
 ) {
   return file.startsWith("http")
     ? readDefinitionFileFromUrl(file, options)
-    : readDefinitionFileFromFile(file, options.urlPlaceHolders);
+    : readDefinitionFileFromFile(file, options);
 }
 
 /**
@@ -51,6 +51,7 @@ async function readDefinitionFileFromUrl(
   options = { urlPlaceHolders: {}, token: undefined }
 ) {
   const treatedUrl = treatUrl(url, options.urlPlaceHolders);
+
   return loadYaml(
     readYaml(await getUrlContent(treatedUrl, options.token)),
     "./",
@@ -101,8 +102,11 @@ async function loadDependencies(
   containerPath,
   options = { urlPlaceHolders: {}, token: undefined }
 ) {
-  let dependenciesFinalPath = dependencies;
   if (dependencies) {
+    let dependenciesFinalPath =
+      !Array.isArray(dependencies) && dependencies.startsWith("http")
+        ? treatUrl(dependencies, options.urlPlaceHolders)
+        : dependencies;
     if (
       containerPath.startsWith("http") &&
       !Array.isArray(dependencies) &&
