@@ -3,11 +3,12 @@
 # V2.2.0
 
 - mapping changes
-  - dependant section included
-  - eval expression allowed on mapping
-  - multiple mapping definition per project
-  - javascript expression in definition file URL
-  - placeholders replacement with default values
+- dependant section included
+- eval expression allowed on mapping
+- multiple mapping definition per project
+- javascript expression in definition file URL
+- placeholders replacement with default values
+- [ISSUE 103] be able to access definition file from private repositories
 
 # V2.1.0
 
