@@ -6,6 +6,7 @@ const {
 const { readDefinitionFile } = require("./src/lib/reader");
 const { parentChainFromNode } = require("./src/lib/util/chain-util");
 const { treatUrl } = require("./src/lib/util/reader-util");
+const { getBaseBranch } = require("./src/lib/util/mapping-util");
 
 module.exports = {
   getTree,
@@ -14,5 +15,6 @@ module.exports = {
   getOrderedListForProject,
   readDefinitionFile,
   parentChainFromNode,
-  treatUrl
+  treatUrl,
+  getBaseBranch
 };

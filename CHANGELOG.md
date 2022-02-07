@@ -10,6 +10,7 @@
 - placeholders replacement with default values
 - [ISSUE 103] be able to access definition file from private repositories
 - [ISSUE 168] dependencies.exclude on project-dependencies tests added
+- getBaseBranch mechanism
 
 # V2.1.0
 
