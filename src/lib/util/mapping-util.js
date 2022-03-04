@@ -7,6 +7,23 @@ function getBaseBranch(
   currentProjectMapping,
   expectedBaseBranch
 ) {
+  const result = getBaseMappingInfo(
+    projectTriggeringTheJob,
+    projectTriggeringTheJobMapping,
+    currentProject,
+    currentProjectMapping,
+    expectedBaseBranch
+  );
+  return result ? result.target : expectedBaseBranch;
+}
+
+function getBaseMappingInfo(
+  projectTriggeringTheJob,
+  projectTriggeringTheJobMapping,
+  currentProject,
+  currentProjectMapping,
+  expectedBaseBranch
+) {
   // If the current project it the project triggering the job there's no mapping
 
   if (currentProject !== projectTriggeringTheJob) {
@@ -30,7 +47,7 @@ function getBaseBranch(
           expectedBaseBranch
         );
       if (mapping) {
-        return mapping.target;
+        return mapping;
       }
       // If the current project has a mapping and the source matched with the targetBranch then this mapping is taken
     }
@@ -53,11 +70,11 @@ function getBaseBranch(
           expectedBaseBranch
         );
       if (mapping) {
-        return mapping.target;
+        return mapping;
       }
     }
   }
-  return expectedBaseBranch;
+  return undefined;
 }
 
 function getMappingInfo(currentProject, mapping, sourceBranch) {
@@ -89,5 +106,6 @@ function getMappingInfo(currentProject, mapping, sourceBranch) {
 }
 
 module.exports = {
-  getBaseBranch
+  getBaseBranch,
+  getBaseMappingInfo
 };
