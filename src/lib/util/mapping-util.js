@@ -14,7 +14,6 @@ function getBaseBranch(
     currentProjectMapping,
     expectedBaseBranch
   );
-
   return result ? result.target : expectedBaseBranch;
 }
 
