@@ -1,6 +1,0 @@
-version: "2.1"
-extends: ./project-dependencies-extension.yaml
-dependencies:
-  - project: kiegroup/projectz
-    dependencies:
-      - project: kiegroup/projectx
