@@ -4,7 +4,7 @@
   "description": "A library to read build-chain tool configuration files",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "prepare": "husky install",
     "test:report": "npm test -- --coverage --testResultsProcessor=jest-sonar-reporter",
     "lint": "eslint . --ext .ts",
