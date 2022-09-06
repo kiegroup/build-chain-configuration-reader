@@ -76,7 +76,6 @@ function replaceExpressions(url: string): string {
   const expressionRegex = /%{([^%]+)}/g;
   const matches = [...url.matchAll(expressionRegex)];
   matches.forEach(match => {
-    // TODO: add logging
     result = result.replace(`%{${match[1]}}`, safeExecute(match[1]) as string);
   });
   return result;
