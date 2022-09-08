@@ -1,15 +1,17 @@
-export type Dependency = {
+export type Mapping = {
   source: string;
-  target?: string;
+  target: string;
   targetExpression?: string;
 };
 
-export type Mapping = {
-  exclude?: string[];
-  dependencies?: {
-    [key: string]: Dependency[];
-  };
-  dependant?: {
-    [key: string]: Dependency[];
-  };
+export type Dependencies = { default: Mapping[] } & {
+  [key: string]: Mapping[];
+};
+
+export type Dependant = Dependencies;
+
+export type Mappings = {
+  exclude: string[];
+  dependencies: Dependencies
+  dependant: Dependant
 };
