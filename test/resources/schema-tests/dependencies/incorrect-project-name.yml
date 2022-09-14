@@ -1,0 +1,9 @@
+version: 2.1
+dependencies:
+  - project: kiegroup
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

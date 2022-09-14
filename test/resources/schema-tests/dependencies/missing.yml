@@ -1,0 +1,7 @@
+version: 2.1
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

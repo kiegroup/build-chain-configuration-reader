@@ -1,0 +1,11 @@
+version: 2.1
+dependencies:
+  - project: kiegroup/appformer
+    mapping:
+      exclude: ["abc/def"]
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo
