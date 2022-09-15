@@ -1,0 +1,7 @@
+dependencies: "depend"
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

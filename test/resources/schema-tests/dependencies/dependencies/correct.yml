@@ -1,0 +1,12 @@
+version: 2.1
+dependencies:
+  - project: abc/def
+    dependencies:
+      - project: kie/project
+      - project: owner/project
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

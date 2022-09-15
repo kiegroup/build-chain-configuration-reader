@@ -1,0 +1,16 @@
+version: 2.1
+dependencies:
+  - project: kiegroup/appformer
+    dependencies: kie/project
+  - project: owner/project
+    dependencies:
+      project: kie/project
+  - project: abc/def
+    dependencies:
+      - project: kie
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo
