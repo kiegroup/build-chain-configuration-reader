@@ -1,4 +1,4 @@
-import { loadDefinitionFile } from "@bc-cr/util/yaml";
+import { validateDefinitionFile } from "@bc-cr/util/yaml";
 import { readdirSync, readFileSync } from "fs";
 import path from "path";
 const resourcePath = path.resolve(__dirname, "..", "resources", "schema-tests");
@@ -10,13 +10,13 @@ describe("version validation", () => {
     ["incorrect version", path.join(versionPath, "incorrect.yml")],
   ])("%p", async (_title: string, testFile: string) => {
     await expect(
-      loadDefinitionFile(readFileSync(testFile, "utf8"))
+      validateDefinitionFile(readFileSync(testFile, "utf8"))
     ).rejects.toThrowError();
   });
 
   test("correct version", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(versionPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({ version: "2.1" });
@@ -37,7 +37,7 @@ describe("dependencies validation", () => {
     ],
   ])("%p", async (_title: string, testFile: string) => {
     await expect(
-      loadDefinitionFile(readFileSync(testFile, "utf8"))
+      validateDefinitionFile(readFileSync(testFile, "utf8"))
     ).rejects.toThrowError();
   });
 
@@ -71,7 +71,7 @@ describe("dependencies validation", () => {
       expected: Record<string, unknown>
     ) => {
       await expect(
-        loadDefinitionFile(readFileSync(testFile, "utf8"))
+        validateDefinitionFile(readFileSync(testFile, "utf8"))
       ).resolves.toMatchObject(expected);
     }
   );
@@ -81,19 +81,23 @@ describe("default validation", () => {
   const defaultPath = path.join(resourcePath, "default");
   test("incorrect default: not an object", async () => {
     await expect(
-      loadDefinitionFile(readFileSync(path.join(defaultPath, "incorrect.yml"), "utf8"))
+      validateDefinitionFile(
+        readFileSync(path.join(defaultPath, "incorrect.yml"), "utf8")
+      )
     ).rejects.toThrowError();
   });
 
   test("correct default", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(defaultPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({
       default: {
         "build-command": {
           current: ["echo"],
+          upstream: [],
+          downstream: [],
         },
       },
     });
@@ -109,7 +113,7 @@ describe("dependencies.dependencies validation", () => {
 
   test("incorrect dependencies.dependencies", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(dependenciesPath, "incorrect.yml"), "utf8")
       )
     ).rejects.toThrowError();
@@ -117,7 +121,7 @@ describe("dependencies.dependencies validation", () => {
 
   test("correct dependencies.dependencies", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(dependenciesPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({
@@ -158,7 +162,7 @@ describe("dependencies.mapping validation", () => {
     ["incorrect exclude", path.join(mappingPath, "incorrect-exclude.yml")],
   ])("%p", async (_title: string, testFile: string) => {
     await expect(
-      loadDefinitionFile(readFileSync(testFile, "utf8"))
+      validateDefinitionFile(readFileSync(testFile, "utf8"))
     ).rejects.toThrowError();
   });
 
@@ -173,7 +177,7 @@ describe("dependencies.mapping validation", () => {
     "%p",
     async (_title: string, testFile: string, expectedExclude: string[]) => {
       await expect(
-        loadDefinitionFile(readFileSync(testFile, "utf8"))
+        validateDefinitionFile(readFileSync(testFile, "utf8"))
       ).resolves.toMatchObject({
         dependencies: [
           {
@@ -215,13 +219,13 @@ describe("build", () => {
     ],
   ])("%p", async (_title: string, testFile: string) => {
     await expect(
-      loadDefinitionFile(readFileSync(testFile, "utf8"))
+      validateDefinitionFile(readFileSync(testFile, "utf8"))
     ).rejects.toThrowError();
   });
 
   test("correct", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(buildPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({
@@ -244,7 +248,7 @@ describe("build.build-command", () => {
 
   test("missing build-command and missing all of the keys in build-command", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(buildCommandPath, "missing.yml"), "utf8")
       )
     ).rejects.toThrowError();
@@ -252,7 +256,7 @@ describe("build.build-command", () => {
 
   test("correct build-command", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(buildCommandPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({
@@ -305,51 +309,74 @@ describe("build.archive-artifacts", () => {
     ],
   ])("%p", async (_title: string, testFile: string) => {
     await expect(
-      loadDefinitionFile(readFileSync(testFile, "utf8"))
+      validateDefinitionFile(readFileSync(testFile, "utf8"))
     ).rejects.toThrowError();
   });
 
   test("correct archive-artifacts", async () => {
     await expect(
-      loadDefinitionFile(
+      validateDefinitionFile(
         readFileSync(path.join(archiveArtifactsPath, "correct.yml"), "utf8")
       )
     ).resolves.toMatchObject({
       build: [
         {
           project: "owner/project",
-          "build-command": { current: ["echo"] },
+          "build-command": {
+            current: ["echo"],
+            upstream: [],
+            downstream: [],
+          },
           "archive-artifacts": {
             name: "archive",
-            path: ["hello", "hello2"],
             dependencies: "none",
+            paths: [
+              { path: "hello", on: "success" },
+              { path: "hello2", on: "success" },
+            ],
+            "if-no-files-found": "warn",
           },
         },
         {
           project: "owner/project",
-          "build-command": { current: ["echo"] },
+          "build-command": {
+            current: ["echo"],
+            upstream: [],
+            downstream: [],
+          },
           "archive-artifacts": {
             name: "archive",
-            path: ["hello"],
             dependencies: "all",
+            paths: [{ path: "hello", on: "success" }],
+            "if-no-files-found": "warn",
           },
         },
         {
           project: "owner/project",
-          "build-command": { current: ["echo"] },
+          "build-command": {
+            current: ["echo"],
+            upstream: [],
+            downstream: [],
+          },
           "archive-artifacts": {
             name: "archive",
-            path: ["hello"],
             dependencies: "none",
+            paths: [{ path: "hello", on: "success" }],
+            "if-no-files-found": "warn",
           },
         },
         {
           project: "owner/project",
-          "build-command": { current: ["echo"] },
+          "build-command": {
+            current: ["echo"],
+            upstream: [],
+            downstream: [],
+          },
           "archive-artifacts": {
             name: "archive",
-            path: ["hello"],
             dependencies: ["ownerA/projectA", "ownerB/projectB"],
+            paths: [{ path: "hello", on: "success" }],
+            "if-no-files-found": "warn",
           },
         },
       ],
@@ -364,7 +391,7 @@ describe("works for definition file examples from older versions", () => {
     await Promise.all(
       files.map(file =>
         expect(
-          loadDefinitionFile(
+          validateDefinitionFile(
             readFileSync(path.join(backportPath, file), "utf8")
           )
         ).resolves.not.toThrowError()
