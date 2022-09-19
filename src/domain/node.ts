@@ -1,5 +1,5 @@
 import { ArchiveArtifacts } from "@bc-cr/domain/archive-artifacts";
-import { Commands } from "@bc-cr/domain/commands";
+import { CommandLevel } from "@bc-cr/domain/build";
 import { Mapping } from "@bc-cr/domain/mapping";
 
 export interface Node {
@@ -7,9 +7,9 @@ export interface Node {
   parents?: Node[];
   children?: Node[];
   dependencies?: Node[];
-  before?: Commands;
-  commands?: Commands;
-  after?: Commands;
+  before?: CommandLevel;
+  commands?: CommandLevel;
+  after?: CommandLevel;
   mapping?: Mapping;
   clone?: string[];
   archiveArtifacts?: ArchiveArtifacts;

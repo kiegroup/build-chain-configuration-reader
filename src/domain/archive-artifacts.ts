@@ -1,25 +1,9 @@
-export enum ArchiveOn {
-  SUCCESS = "success",
-  FAILURE = "failure",
-}
-
-export enum IfNoFilesFound {
-  WARN = "warn",
-  ERROR = "error",
-  IGNORE = "ignore",
-}
-
-export enum ArchiveDependencies {
-  ALL = "all",
-  NONE = "none",
-}
-
-export type ArchiveArtifacts = {
-  "if-no-files-found"?: IfNoFilesFound;
-  dependencies?: string[] | ArchiveDependencies;
-  name: string;
+export interface ArchiveArtifacts {
+  name?: string;
+  "if-no-files-found": "warn" | "error" | "ignore";
+  dependencies: string[] | "all" | "none";
   paths: {
-    path?: string;
-    on?: ArchiveOn;
+    path: string;
+    on: "success" | "failure";
   }[];
-};
+}
