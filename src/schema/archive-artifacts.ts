@@ -1,28 +1,39 @@
+import { ArchiveArtifacts } from "@bc-cr/domain/archive-artifacts";
 import { ProjectNameSchema } from "@bc-cr/schema/project-name";
+import { JSONSchemaType } from "ajv";
 
-export const ArchiveArtifactSchema = {
-  type: "object", 
+export const ArchiveArtifactSchema: JSONSchemaType<ArchiveArtifacts> = {
+  type: "object",
   properties: {
-    name: {type: "string"},
-    path: {
+    name: { type: "string", nullable: true },
+    paths: {
       type: "array",
-      items: {type: "string"}
+      items: {
+        type: "object",
+        properties: {
+          path: { type: "string" },
+          on: { type: "string", enum: ["success", "failure"] },
+        },
+        required: ["on", "path"]
+      },
     },
     "if-no-files-found": {
+      type: "string",
       enum: ["warn", "ignore", "error"],
-      default: "warn"
+      default: "warn",
     },
     dependencies: {
       oneOf: [
         {
-          enum: ["all", "none"]
+          type: "string",
+          enum: ["all", "none"],
         },
         {
           type: "array",
-          items: ProjectNameSchema
-        }
-      ]
-    }
+          items: ProjectNameSchema,
+        },
+      ],
+    },
   },
-  required: ["path", "if-no-files-found", "dependencies"]
+  required: ["paths", "if-no-files-found", "dependencies"],
 };

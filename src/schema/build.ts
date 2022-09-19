@@ -1,53 +1,45 @@
+import { Build, BuildCommand, Command, CommandLevel } from "@bc-cr/domain/build";
 import { ArchiveArtifactSchema } from "@bc-cr/schema/archive-artifacts";
 import { ProjectNameSchema } from "@bc-cr/schema/project-name";
+import { JSONSchemaType } from "ajv";
 
-const CommandSchema = {
+const CommandSchema: JSONSchemaType<Command> = {
   type: "array",
   items: {
     type: "string",
   },
 };
 
-const CommandLevelSchema = {
+const CommandLevelSchema: JSONSchemaType<CommandLevel> = {
   type: "object",
   properties: {
     current: CommandSchema,
     upstream: CommandSchema,
     downstream: CommandSchema,
   },
-  anyOf: [
-    { required: ["current"] },
-    { required: ["upstream"] },
-    { required: ["downstream"] },
-  ],
+  required: ["current", "upstream", "downstream"],
   additionalProperties: false,
 };
 
-export const BuildCommandSchema = {
+export const BuildCommandSchema: JSONSchemaType<BuildCommand> = {
   type: "object",
   properties: {
-    before: CommandLevelSchema,
-    after: CommandLevelSchema,
+    before: {...CommandLevelSchema, nullable: true},
+    after: {...CommandLevelSchema, nullable: true},
     current: CommandSchema,
     upstream: CommandSchema,
     downstream: CommandSchema,
   },
-  anyOf: [
-    { required: ["before"] },
-    { required: ["after"] },
-    { required: ["current"] },
-    { required: ["upstream"] },
-    { required: ["downstream"] },
-  ],
+  required: ["current", "upstream", "downstream"],
   additionalProperties: false,
 };
 
-export const BuildSchema = {
+export const BuildSchema: JSONSchemaType<Build> = {
   type: "object",
   properties: {
     project: ProjectNameSchema,
-    "build-command": BuildCommandSchema,
-    "archive-artifacts": ArchiveArtifactSchema
+    "build-command": {...BuildCommandSchema, nullable:  true},
+    "archive-artifacts": {...ArchiveArtifactSchema, nullable: true}
   },
   required: ["project"],
   anyOf: [
