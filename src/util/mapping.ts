@@ -1,28 +1,23 @@
-import {
-  Dependant,
-  Dependencies,
-  Mapping,
-  Mappings,
-} from "@bc-cr/domain/mapping";
+import { Depend, SourceToTarget, Mapping } from "@bc-cr/domain/mapping";
 
 /**
- * Given a target branch (i.e. base branch in a PR), it returns the branch name 
+ * Given a target branch (i.e. base branch in a PR), it returns the branch name
  * that is mapped for the given starting project, current project and target branch
  * The target branch acts as the source in the Mapping domain object. If there is source
  * which is the same as the target branch, then it returns the target of that source.
  * If no mapping is found it returns the target branch itself.
- * @param startingProject 
- * @param startingProjectMappings 
- * @param currentProject 
- * @param currentProjectMappings 
+ * @param startingProject
+ * @param startingProjectMappings
+ * @param currentProject
+ * @param currentProjectMappings
  * @param targetBranch
  * @returns
  */
 export function getMappedTarget(
   startingProject: string,
-  startingProjectMappings: Mappings,
+  startingProjectMappings: Mapping,
   currentProject: string,
-  currentProjectMappings: Mappings,
+  currentProjectMappings: Mapping,
   targetBranch: string
 ): string | undefined {
   return (
@@ -43,7 +38,7 @@ export function getMappedTarget(
  * 2. starting project's dependencies[default]
  * 3. current project's dependant[starting project]
  * 4. current project's dependant[default]
- * 
+ *
  * returns undefined if starting and current project are the same or no mapping was found or
  * a project was excluded in the other project's mapping
  * @param startingProject
@@ -55,20 +50,20 @@ export function getMappedTarget(
  */
 export function getMapping(
   startingProject: string,
-  startingProjectMappings: Mappings,
+  startingProjectMappings: Mapping,
   currentProject: string,
-  currentProjectMappings: Mappings,
+  currentProjectMappings: Mapping,
   targetBranch: string
-): Mapping | undefined {
+): SourceToTarget | undefined {
   if (startingProject === currentProject) {
     return;
   }
   // get mapping from starting project's mapping
-  const mappingFromStartingProject = getMappingFromProjectOrDefault(
+  const mappingFromStartingProject = getSourceToTargetFromProjectOrDefault(
     targetBranch,
-    startingProjectMappings.dependencies,
     currentProject,
-    startingProjectMappings.exclude
+    startingProjectMappings.exclude,
+    startingProjectMappings.dependencies
   );
 
   if (mappingFromStartingProject) {
@@ -76,55 +71,55 @@ export function getMapping(
   }
 
   // if no mapping from starting project's mapping is found, try current project's mapping
-  const mappingFromCurrentProject = getMappingFromProjectOrDefault(
+  const mappingFromCurrentProject = getSourceToTargetFromProjectOrDefault(
     targetBranch,
-    currentProjectMappings.dependant,
     startingProject,
-    currentProjectMappings.exclude
+    currentProjectMappings.exclude,
+    currentProjectMappings.dependant
   );
 
   return mappingFromCurrentProject;
 }
 
 /**
- * Checks whether given project is excluded or not. If not excluded, finds the mapping either in the default field
- * or in the project's field
+ * Checks whether given project is excluded or not. If not excluded, finds the source to target map 
+ * either in the default field or in the project's field
  * @param targetBranch
  * @param depend
  * @param project
  * @param exclude
  * @returns
  */
-function getMappingFromProjectOrDefault(
+function getSourceToTargetFromProjectOrDefault(
   targetBranch: string,
-  depend: Dependencies | Dependant,
   project: string,
-  exclude: string[]
+  exclude: string[],
+  depend?: Depend
 ) {
-  if (!exclude.includes(project)) {
+  if (!exclude.includes(project) && depend) {
     return (
-      findMapping(targetBranch, depend[project]) ??
-      findMapping(targetBranch, depend.default)
+      findSourceToTarget(targetBranch, depend[project]) ??
+      findSourceToTarget(targetBranch, depend.default)
     );
   }
 }
 
 /**
- * Finds the mapping for the given branch.
+ * Finds the source to target map for the given branch.
  * Checks if there is a source which exactly matches branch. If not found
  * then checks if the branch matches a source when taken as a regex
  * @param branch
- * @param mappings
+ * @param sourceToTarget
  * @returns
  */
-function findMapping(
+function findSourceToTarget(
   branch: string,
-  mappings?: Mapping[]
-): Mapping | undefined {
+  sourceToTarget?: SourceToTarget[]
+): SourceToTarget | undefined {
   return (
-    mappings?.find(mapping => mapping.source === branch) ??
-    mappings?.find(
-      mapping => !!branch.match(new RegExp(`^${mapping.source}$`))
+    sourceToTarget?.find(stt => stt.source === branch) ??
+    sourceToTarget?.find(
+      stt => !!branch.match(new RegExp(`^${stt.source}$`))
     )
   );
 }
