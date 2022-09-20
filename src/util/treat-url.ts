@@ -1,3 +1,5 @@
+import { safeEval } from "@bc-cr/util/safe-eval";
+
 /**
  * Replaces any placeholders with correct values and executes any expression and replaces the expression with the execution result
  * @param {String} url a url which can contain placeholders as well as expressions. 
@@ -56,16 +58,6 @@ function replacePlaceholders(
 }
 
 /**
- * Replacement of eval since eval is unsafe.
- * Refer: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#never_use_eval!
- * @param expression
- * @returns
- */
-function safeExecute(expression: string): unknown {
-  return Function(`"use strict";return (${expression})`)();
-}
-
-/**
  * Treats the url containing a expression between `%{` and `}` (without quotes)
  * Any string contained in `%{` and `}` is executed as javascript code. The result it produces, replaces the expression in the url
  * @param url with expressions
@@ -76,7 +68,7 @@ function replaceExpressions(url: string): string {
   const expressionRegex = /%{([^%]+)}/g;
   const matches = [...url.matchAll(expressionRegex)];
   matches.forEach(match => {
-    result = result.replace(`%{${match[1]}}`, safeExecute(match[1]) as string);
+    result = result.replace(`%{${match[1]}}`, safeEval(match[1]) as string);
   });
   return result;
 }
