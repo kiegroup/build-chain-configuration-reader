@@ -1,17 +1,16 @@
-export type Mapping = {
-  source: string;
-  target: string;
-  targetExpression?: string;
-};
+export interface SourceToTarget {
+  source: string,
+  target?: string,
+  targetExpression?: string
+}
 
-export type Dependencies = { default: Mapping[] } & {
-  [key: string]: Mapping[];
-};
+export interface Depend {
+  default: SourceToTarget[],
+  [project: string]: SourceToTarget[]
+}
 
-export type Dependant = Dependencies;
-
-export type Mappings = {
-  exclude: string[];
-  dependencies: Dependencies
-  dependant: Dependant
-};
+export interface Mapping {
+  dependencies?: Depend,
+  dependant?: Depend,
+  exclude: string[]
+}

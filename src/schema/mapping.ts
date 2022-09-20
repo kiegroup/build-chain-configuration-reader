@@ -1,11 +1,13 @@
+import { Depend, Mapping, SourceToTarget } from "@bc-cr/domain/mapping";
 import { ProjectNameSchema } from "@bc-cr/schema/project-name";
+import { JSONSchemaType } from "ajv";
 
-const SourceToTargetSchema = {
+const SourceToTargetSchema: JSONSchemaType<SourceToTarget> = {
   type: "object",
   properties: {
     source: { type: "string" },
-    target: { type: "string" },
-    targetExpression: { type: "string" },
+    target: { type: "string", nullable: true },
+    targetExpression: { type: "string", nullable: true },
   },
   required: ["source"],
   oneOf: [
@@ -19,7 +21,7 @@ const SourceToTargetSchema = {
   additionalProperties: false
 };
 
-const DependSchema = {
+const DependSchema: JSONSchemaType<Depend> = {
   type: "object",
   properties: {
     default: {
@@ -37,11 +39,11 @@ const DependSchema = {
   additionalProperties: false
 };
 
-export const MappingSchema = {
+export const MappingSchema: JSONSchemaType<Mapping> = {
   type: "object",
   properties: {
-    dependencies: DependSchema,
-    dependant: DependSchema,
+    dependencies: {...DependSchema, nullable: true},
+    dependant: {...DependSchema, nullable: true},
     exclude: {
       type: "array",
       items: ProjectNameSchema,
