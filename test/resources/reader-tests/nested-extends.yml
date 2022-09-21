@@ -1,0 +1,3 @@
+version: "2.1"
+dependencies: ./content.yml
+extends: ./dependencies-as-url.yml

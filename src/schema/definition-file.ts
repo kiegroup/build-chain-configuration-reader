@@ -1,8 +1,6 @@
 import { DefinitionFile } from "@bc-cr/domain/definition-file";
 import { BuildCommandSchema, BuildSchema } from "@bc-cr/schema/build";
 import { DependenciesSchema } from "@bc-cr/schema/dependencies";
-import { MappingSchema } from "@bc-cr/schema/mapping";
-import { ProjectNameSchema } from "@bc-cr/schema/project-name";
 import { JSONSchemaType } from "ajv";
 
 export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
@@ -13,19 +11,7 @@ export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
       type: ["string", "array"],
       oneOf: [
         { type: "string" },
-        {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              project: ProjectNameSchema,
-              dependencies: {...DependenciesSchema, nullable: true},
-              mapping: {...MappingSchema, nullable: true},
-            },
-            required: ["project"],
-            additionalProperties: false,
-          },
-        },
+        DependenciesSchema,
       ],
     },
     extends: {
