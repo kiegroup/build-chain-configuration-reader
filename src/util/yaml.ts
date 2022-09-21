@@ -4,8 +4,8 @@ import { DefintionFileSchema } from "@bc-cr/schema/definition-file";
 
 /**
  * Reads yaml and validates it against the schema
- * @param content 
- * @returns 
+ * @param content
+ * @returns
  */
 export async function validateDefinitionFile(content: string) {
   // parse yaml and perform some transformation on the raw json produced
@@ -22,26 +22,30 @@ export async function validateDefinitionFile(content: string) {
 
 /**
  * A reviver function to transform json keys
- * @param key 
- * @param value 
- * @returns 
+ * @param key
+ * @param value
+ * @returns
  */
 function reviver(key: unknown, value: unknown) {
   let result;
 
-  if ((result = convertToArray(key, value))) {
+  result = convertToArray(key, value);
+  if (result) {
     return result;
   }
 
-  if ((result = parseMapping(key, value))) {
+  result = parseMapping(key, value);
+  if (result) {
     return result;
   }
 
-  if ((result = parseBuild(key, value))) {
+  result = parseBuild(key, value);
+  if (result) {
     return result;
   }
 
-  if ((result = parseArchiveArtifacts(key, value))) {
+  result = parseArchiveArtifacts(key, value);
+  if (result  ) {
     return result;
   }
 
@@ -50,9 +54,9 @@ function reviver(key: unknown, value: unknown) {
 
 /**
  * Converts a string to an array of string
- * @param key 
- * @param value 
- * @returns 
+ * @param key
+ * @param value
+ * @returns
  */
 function convertToArray(key: unknown, value: unknown) {
   // for all the below keys, if the value is a string, split it at "\n" and convert to array
@@ -66,10 +70,10 @@ function convertToArray(key: unknown, value: unknown) {
 
 /**
  * If the given key is not present in the value then initialize it with init
- * @param key 
- * @param value 
- * @param init 
- * @returns 
+ * @param key
+ * @param value
+ * @param init
+ * @returns
  */
 function initializeUndefined(
   key: string,
@@ -84,9 +88,9 @@ function initializeUndefined(
 
 /**
  * Parse the mapping section of definition file
- * @param key 
- * @param value 
- * @returns 
+ * @param key
+ * @param value
+ * @returns
  */
 function parseMapping(key: unknown, value: unknown) {
   if (key === "mapping") {
@@ -109,9 +113,9 @@ function parseMapping(key: unknown, value: unknown) {
 
 /**
  * Parse the build-command section of the definition file
- * @param key 
- * @param value 
- * @returns 
+ * @param key
+ * @param value
+ * @returns
  */
 function parseBuild(key: unknown, value: unknown) {
   // for any of the keys below, if they don't contain "upstream", "current" or "downstream" keys then initialize them to an empty array
@@ -126,9 +130,9 @@ function parseBuild(key: unknown, value: unknown) {
 
 /**
  * Parse the archive artifacts section of the definition file
- * @param key 
- * @param value 
- * @returns 
+ * @param key
+ * @param value
+ * @returns
  */
 function parseArchiveArtifacts(key: unknown, value: unknown) {
   if (key === "archive-artifacts") {
@@ -136,20 +140,31 @@ function parseArchiveArtifacts(key: unknown, value: unknown) {
     // if dependencies is not defined in archive-artifacts then use none by default
     initializeUndefined("dependencies", val, "none");
 
-    // transform array of path to array of path and on (on determines when the artifact is to be uploaded)
+    // transform array of paths
     if (val["path"] && Array.isArray(val["path"])) {
-      val["paths"] = val.path.map(p => {
-        if (typeof p === "string") {
-          const index = p.lastIndexOf("@");
-          return {
-            path: index === -1 ? p : p.slice(0, index),
-            on: index === -1 ? "success" : p.slice(index),
-          };
-        }
-      });
+      val["paths"] = transformPath(val.path);
       delete val["path"];
     }
 
     return val;
   }
+}
+
+/**
+ * Transform array of path to an array of objects containing the following fields:
+ * path: the path of the artifact
+ * on: whether is it to be uploaded on success or failure
+ * @param path 
+ * @returns 
+ */
+function transformPath(path: string[]) {
+  return path.map(p => {
+    if (typeof p === "string") {
+      const index = p.lastIndexOf("@");
+      return {
+        path: index === -1 ? p : p.slice(0, index),
+        on: index === -1 ? "success" : p.slice(index),
+      };
+    }
+  });
 }

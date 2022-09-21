@@ -71,14 +71,12 @@ export function getMapping(
   }
 
   // if no mapping from starting project's mapping is found, try current project's mapping
-  const mappingFromCurrentProject = getSourceToTargetFromProjectOrDefault(
+  return getSourceToTargetFromProjectOrDefault(
     targetBranch,
     startingProject,
     currentProjectMappings.exclude,
     currentProjectMappings.dependant
   );
-
-  return mappingFromCurrentProject;
 }
 
 /**
