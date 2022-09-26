@@ -58,29 +58,26 @@ export function getMapping(
   if (startingProject === currentProject) {
     return;
   }
+
   // get mapping from starting project's mapping
-  const mappingFromStartingProject = getSourceToTargetFromProjectOrDefault(
-    targetBranch,
-    currentProject,
-    startingProjectMappings.exclude,
-    startingProjectMappings.dependencies
-  );
-
-  if (mappingFromStartingProject) {
-    return mappingFromStartingProject;
-  }
-
-  // if no mapping from starting project's mapping is found, try current project's mapping
-  return getSourceToTargetFromProjectOrDefault(
-    targetBranch,
-    startingProject,
-    currentProjectMappings.exclude,
-    currentProjectMappings.dependant
-  );
+  return (
+    getSourceToTargetFromProjectOrDefault(
+      targetBranch,
+      currentProject,
+      startingProjectMappings.exclude,
+      startingProjectMappings.dependencies
+    ) ||
+    getSourceToTargetFromProjectOrDefault(
+      targetBranch,
+      startingProject,
+      currentProjectMappings.exclude,
+      currentProjectMappings.dependant
+    )
+  ); // if no mapping from starting project's mapping is found, try current project's mapping
 }
 
 /**
- * Checks whether given project is excluded or not. If not excluded, finds the source to target map 
+ * Checks whether given project is excluded or not. If not excluded, finds the source to target map
  * either in the default field or in the project's field
  * @param targetBranch
  * @param depend
@@ -116,8 +113,6 @@ function findSourceToTarget(
 ): SourceToTarget | undefined {
   return (
     sourceToTarget?.find(stt => stt.source === branch) ??
-    sourceToTarget?.find(
-      stt => !!branch.match(new RegExp(`^${stt.source}$`))
-    )
+    sourceToTarget?.find(stt => !!branch.match(new RegExp(`^${stt.source}$`)))
   );
 }

@@ -27,29 +27,13 @@ export async function validateDefinitionFile(content: string) {
  * @returns
  */
 function reviver(key: unknown, value: unknown) {
-  let result;
-
-  result = convertToArray(key, value);
-  if (result) {
-    return result;
-  }
-
-  result = parseMapping(key, value);
-  if (result) {
-    return result;
-  }
-
-  result = parseBuild(key, value);
-  if (result) {
-    return result;
-  }
-
-  result = parseArchiveArtifacts(key, value);
-  if (result  ) {
-    return result;
-  }
-
-  return value;
+  return (
+    convertToArray(key, value) ||
+    parseMapping(key, value) ||
+    parseBuild(key, value) ||
+    parseArchiveArtifacts(key, value) ||
+    value
+  );
 }
 
 /**
@@ -154,8 +138,8 @@ function parseArchiveArtifacts(key: unknown, value: unknown) {
  * Transform array of path to an array of objects containing the following fields:
  * path: the path of the artifact
  * on: whether is it to be uploaded on success or failure
- * @param path 
- * @returns 
+ * @param path
+ * @returns
  */
 function transformPath(path: string[]) {
   return path.map(p => {
