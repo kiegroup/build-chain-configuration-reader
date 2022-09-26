@@ -160,14 +160,13 @@ function targetExpressionToTarget(dependencies: Dependency[]) {
  */
 function executeTargetExpression(depend: Depend) {
   for (const [key, value] of Object.entries(depend)) {
-    depend[key] = value.map(stt => {
-      if (stt.targetExpression) {
-        return {
-          source: stt.source,
-          target: safeEval(stt.targetExpression, stt) as string,
-        };
-      }
-      return stt;
-    });
+    depend[key] = value.map(stt =>
+      stt.targetExpression
+        ? {
+            source: stt.source,
+            target: safeEval(stt.targetExpression, stt) as string,
+          }
+        : stt
+    );
   }
 }
