@@ -3,8 +3,8 @@ on:
     branches:
       - main
       - typescript/main
-    pull_request:
-      types: [opened, reopened]
+  pull_request:
+    types: [opened, reopened]
 
 name: coverage report
 
