@@ -45,7 +45,9 @@ function reviver(key: unknown, value: unknown) {
 function convertToArray(key: unknown, value: unknown) {
   // for all the below keys, if the value is a string, split it at "\n" and convert to array
   if (
-    ["path", "current", "upstream", "downstream"].includes(key as string) &&
+    ["path", "current", "upstream", "downstream", "clone"].includes(
+      key as string
+    ) &&
     typeof value === "string"
   ) {
     return value.trim().split("\n");
