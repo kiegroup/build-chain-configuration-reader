@@ -14,14 +14,15 @@ export const DependenciesSchema: JSONSchemaType<Dependency[]> = {
         items: {
           type: "object",
           properties: {
-            project: {type: "string"}
+            project: { type: "string" },
           },
           required: ["project"],
-          additionalProperties: false
+          additionalProperties: false,
         },
-        nullable: true
+        nullable: true,
       },
-      mapping: {...MappingSchema, nullable: true}
+      mapping: { ...MappingSchema, nullable: true },
+      clone: { type: "array", items: { type: "string" }, nullable: true },
     },
     required: ["project"],
     additionalProperties: false,

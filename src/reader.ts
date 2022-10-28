@@ -6,32 +6,24 @@ import { validateDefinitionFile } from "@bc-cr/util/yaml";
 import { readFile } from "fs/promises";
 import axios from "axios";
 import path from "path";
+import { ReaderOpts } from "@bc-cr/domain/readerOptions";
 
 /**
  * Read the definition file from the given location, validate it and generate a DefinitionFile object
  * containing all the required information.
  * You do need to treat the url and pass it as location. This function does that for you
  * @param location
- * @param token
- * @param group
- * @param name
- * @param branch
+ * @param opts
  * @returns
  */
 export async function readDefinitionFile(
   location: string,
-  token?: string,
-  group?: string,
-  name?: string,
-  branch?: string
+  opts?: ReaderOpts,
 ) {
   try {
     const definitionFileContent = await getContent(
       location,
-      token,
-      group,
-      name,
-      branch
+      opts
     );
     const definitionFile = await validateDefinitionFile(definitionFileContent);
     const baseDir = isURL(location) ? undefined : path.dirname(location);
@@ -39,10 +31,7 @@ export async function readDefinitionFile(
       definitionFile.dependencies = await getDependencies(
         definitionFile.dependencies,
         baseDir,
-        token,
-        group,
-        name,
-        branch
+        opts
       );
     }
     if (definitionFile.extends) {
@@ -51,10 +40,7 @@ export async function readDefinitionFile(
         ...(await getDependencies(
           definitionFile.extends,
           baseDir,
-          token,
-          group,
-          name,
-          branch
+          opts
         )),
       ];
       delete definitionFile["extends"];
@@ -73,26 +59,17 @@ export async function readDefinitionFile(
  * If A -> B -> C (if A gets dependency file from B and B gets dependency file from C) then we can
  * simplify this to A -> C
  * @param location
- * @param token
- * @param group
- * @param name
- * @param branch
+ * @param opts
  * @returns
  */
 async function getDependencies(
   location: string,
   baseDir?: string,
-  token?: string,
-  group?: string,
-  name?: string,
-  branch?: string
+  opts?: ReaderOpts,
 ) {
   const content = await getContent(
     isURL(location) ? location : path.resolve(baseDir ?? "", location),
-    token,
-    group,
-    name,
-    branch
+    opts
   );
   const dependencies = await validateDefinitionFile(content);
   if (typeof dependencies.dependencies === "string") {
@@ -116,16 +93,13 @@ async function getDependencies(
  */
 async function getContent(
   location: string,
-  token?: string,
-  group?: string,
-  name?: string,
-  branch?: string
+  opts?: ReaderOpts
 ): Promise<string> {
   if (isURL(location)) {
-    const url = treatUrl(location, group, name, branch);
+    const url = treatUrl(location, opts?.group, opts?.name, opts?.branch);
     const response = await axios.get(url, {
       responseType: "text",
-      ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+      ...(opts?.token ? { headers: { Authorization: `Bearer ${opts.token}` } } : {}),
     });
     return response.data;
   } else {

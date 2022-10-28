@@ -27,7 +27,7 @@ describe("get content", () => {
       .replyWithFile(200, path.join(resourcePath, "content.yml"));
     const definitionFile = await readDefinitionFile(
       "https://definitionfile.com/content.yml",
-      token
+      { token }
     );
     expect(definitionFile).toStrictEqual({
       version: "2.1",

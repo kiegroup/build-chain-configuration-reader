@@ -4,9 +4,8 @@ import { Mapping } from "@bc-cr/domain/mapping";
 
 export interface Node {
   project: string;
-  parents?: Node[];
-  children?: Node[];
-  dependencies?: Node[];
+  parents: Node[];
+  children: Node[];
   before?: CommandLevel;
   commands?: CommandLevel;
   after?: CommandLevel;
