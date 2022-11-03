@@ -1,5 +1,9 @@
 # Changelog
 
+# V2.3.0
+
+- extension mechanism for definition file
+
 # V2.2.0
 
 - mapping changes
