@@ -91,23 +91,23 @@ async function loadYaml(
   }
   definitionYaml.pre = extendPrePost(
     definitionYaml.pre,
-    extendedDefinitionFile?.pre
+    extendedDefinitionFile ? extendedDefinitionFile.pre : undefined
   );
   definitionYaml.post = extendPrePost(
     definitionYaml.post,
-    extendedDefinitionFile?.post
+    extendedDefinitionFile ? extendedDefinitionFile.post : undefined
   );
   definitionYaml.default = extendDefault(
     definitionYaml.default,
-    extendedDefinitionFile?.default
+    extendedDefinitionFile ? extendedDefinitionFile.default : undefined
   );
   definitionYaml.build = extendBuild(
     definitionYaml.build,
-    extendedDefinitionFile?.build
+    extendedDefinitionFile ? extendedDefinitionFile.build : undefined
   );
   definitionYaml.dependencies = await loadDependencies(
     definitionYaml.dependencies,
-    extendedDefinitionFile?.dependencies,
+    extendedDefinitionFile ? extendedDefinitionFile.dependencies : undefined,
     definitionFileFolder,
     containerPath,
     options
@@ -204,7 +204,7 @@ function extendDefault(current, extendWith) {
         : value;
     } else {
       // override extended definition file's value with the current one
-      copyCurrent[key] = current[key] ?? value;
+      copyCurrent[key] = current[key] ? current[key] : value;
     }
   });
   return copyCurrent;
