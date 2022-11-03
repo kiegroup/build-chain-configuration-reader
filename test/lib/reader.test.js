@@ -318,3 +318,210 @@ describe("readDefinitionFileFromUrl", () => {
     ]);
   });
 });
+
+describe("readDefinitionFile with extends", () => {
+  const resources = path.resolve(__dirname, "..", "resources");
+
+  test("base definition file is from file path and extends is from file path", async () => {
+    const result = await readDefinitionFile(
+      path.join(resources, "extend-from-file.yaml")
+    );
+    const expected = await readDefinitionFile(
+      path.join(resources, "build-config.yaml")
+    );
+    expect(result.version).toBe("2.2");
+    expect(result.extends).toBe(undefined);
+    expect(result.post).toBe(undefined);
+    expect(result.pre).toBe("hello\nworld\n");
+    expect(result.dependencies).toStrictEqual([
+      ...expected.dependencies,
+      {
+        project: "kiegroup/new-project",
+        dependencies: [{ project: "kiegroup/appformer" }]
+      }
+    ]);
+    expect(result.default).toStrictEqual({
+      "build-command": {
+        current: "echo overriden",
+        upstream:
+          "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        after: {
+          upstream: "rm -rf ./*",
+          downstream: "rm -rf ./*"
+        }
+      }
+    });
+
+    expect(result.build).toStrictEqual([
+      {
+        project: "kiegroup/appformer",
+        "build-command": {
+          upstream: "echo changed"
+        },
+        "archive-artifacts": {
+          path: "**/dashbuilder-runtime.war\n**/something\n"
+        }
+      },
+      {
+        project: "kiegroup/new-project",
+        "build-command": {
+          current: "echo new-project"
+        }
+      },
+      ...expected.build.filter(build => build.project !== "kiegroup/appformer")
+    ]);
+  });
+
+  test("base definition file is from url and extends is from file path", async () => {
+    getUrlContentMock.mockResolvedValueOnce(
+      fs.readFileSync(path.join(resources, "extend-from-file.yaml"))
+    );
+
+    getUrlContentMock.mockResolvedValueOnce(
+      fs.readFileSync(path.join(resources, "build-config.yaml"))
+    );
+
+    getUrlContentMock.mockResolvedValueOnce(
+      fs.readFileSync(path.join(resources, "project-dependencies.yaml"))
+    );
+
+    const result = await readDefinitionFile(
+      "https://whatever-url.com/definition-file.yaml"
+    );
+
+    expect(getUrlContentMock).toHaveBeenCalledTimes(3);
+    expect(getUrlContentMock).toHaveBeenNthCalledWith(
+      1,
+      "https://whatever-url.com/definition-file.yaml",
+      undefined
+    );
+    expect(getUrlContentMock).toHaveBeenNthCalledWith(
+      2,
+      "https://whatever-url.com/./build-config.yaml",
+      undefined
+    );
+    expect(getUrlContentMock).toHaveBeenNthCalledWith(
+      3,
+      "https://whatever-url.com/././project-dependencies.yaml",
+      undefined
+    );
+
+    const expected = await readDefinitionFile(
+      path.join(resources, "build-config.yaml")
+    );
+    expect(result.version).toBe("2.2");
+    expect(result.extends).toBe(undefined);
+    expect(result.post).toBe(undefined);
+    expect(result.pre).toBe("hello\nworld\n");
+    expect(result.dependencies).toStrictEqual([
+      ...expected.dependencies,
+      {
+        project: "kiegroup/new-project",
+        dependencies: [{ project: "kiegroup/appformer" }]
+      }
+    ]);
+    expect(result.default).toStrictEqual({
+      "build-command": {
+        current: "echo overriden",
+        upstream:
+          "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        after: {
+          upstream: "rm -rf ./*",
+          downstream: "rm -rf ./*"
+        }
+      }
+    });
+
+    expect(result.build).toStrictEqual([
+      {
+        project: "kiegroup/appformer",
+        "build-command": {
+          upstream: "echo changed"
+        },
+        "archive-artifacts": {
+          path: "**/dashbuilder-runtime.war\n**/something\n"
+        }
+      },
+      {
+        project: "kiegroup/new-project",
+        "build-command": {
+          current: "echo new-project"
+        }
+      },
+      ...expected.build.filter(build => build.project !== "kiegroup/appformer")
+    ]);
+  });
+
+  test("extends is from url", async () => {
+    // for getting the definition file from https://whatever.url.com/definition-file.yml
+    getUrlContentMock.mockResolvedValueOnce(
+      fs.readFileSync(path.join(resources, "build-config.yaml"))
+    );
+
+    // for getting the dependency file for the extended definition file from https://whatever.url.com/definition-file.yml/./project-dependencies.yml
+    getUrlContentMock.mockResolvedValueOnce(
+      fs.readFileSync(path.join(resources, "project-dependencies.yaml"))
+    );
+
+    const result = await readDefinitionFile(
+      path.join(resources, "extend-from-url.yaml")
+    );
+
+    expect(getUrlContentMock).toHaveBeenCalledTimes(2);
+    expect(getUrlContentMock).toHaveBeenNthCalledWith(
+      1,
+      "https://whatever-url.com/definition-file.yaml",
+      undefined
+    );
+    expect(getUrlContentMock).toHaveBeenNthCalledWith(
+      2,
+      "https://whatever-url.com/./project-dependencies.yaml",
+      undefined
+    );
+
+    const expected = await readDefinitionFile(
+      path.join(resources, "build-config.yaml")
+    );
+    expect(result.version).toBe("2.2");
+    expect(result.extends).toBe(undefined);
+    expect(result.pre).toBe("world\n");
+    expect(result.post).toBe("hello");
+    expect(result.dependencies).toStrictEqual([
+      ...expected.dependencies,
+      {
+        project: "kiegroup/new-project",
+        dependencies: [{ project: "kiegroup/appformer" }]
+      }
+    ]);
+    expect(result.default).toStrictEqual({
+      "build-command": {
+        current: "echo overriden",
+        upstream:
+          "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        after: {
+          upstream: "rm -rf ./*",
+          downstream: "rm -rf ./*"
+        }
+      }
+    });
+
+    expect(result.build).toStrictEqual([
+      {
+        project: "kiegroup/appformer",
+        "build-command": {
+          upstream: "echo changed"
+        },
+        "archive-artifacts": {
+          path: "**/dashbuilder-runtime.war\n**/something\n"
+        }
+      },
+      {
+        project: "kiegroup/new-project",
+        "build-command": {
+          current: "echo new-project"
+        }
+      },
+      ...expected.build.filter(build => build.project !== "kiegroup/appformer")
+    ]);
+  });
+});
