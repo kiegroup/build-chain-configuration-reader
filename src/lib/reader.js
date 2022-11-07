@@ -112,12 +112,12 @@ async function loadYaml(
     containerPath,
     options
   );
-  if (definitionYaml.dependencies) {
-    definitionYaml.dependencies
-      .filter(dependency => dependency.mapping)
-      .map(dependency => dependency.mapping)
-      .forEach(mapping => treatMapping(mapping));
-  }
+
+  definitionYaml.dependencies
+    .filter(dependency => dependency.mapping)
+    .map(dependency => dependency.mapping)
+    .forEach(mapping => treatMapping(mapping));
+
   return definitionYaml;
 }
 
@@ -135,14 +135,10 @@ async function loadDependencies(
   containerPath,
   options = { urlPlaceHolders: {}, token: undefined }
 ) {
-  if (!dependencies) {
-    return [];
-  }
-
-  let loadedDependencies = dependencies;
+  let loadedDependencies = dependencies ? dependencies : [];
 
   // if dependencies weren't embedded then load it from file or url
-  if (!Array.isArray(dependencies)) {
+  if (!Array.isArray(loadedDependencies)) {
     let dependenciesLocation = constructLocation(
       dependencies,
       containerPath,
