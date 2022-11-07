@@ -524,4 +524,102 @@ describe("readDefinitionFile with extends", () => {
       ...expected.build.filter(build => build.project !== "kiegroup/appformer")
     ]);
   });
+
+  test("extend when dependencies is from a file", async () => {
+    const result = await readDefinitionFile(
+      path.join(resources, "extend-with-dependency-from-file.yaml")
+    );
+    const expected = await readDefinitionFile(
+      path.join(resources, "build-config.yaml")
+    );
+    expect(result.version).toBe("2.2");
+    expect(result.extends).toBe(undefined);
+    expect(result.dependencies).toStrictEqual([
+      ...expected.dependencies,
+      {
+        project: "kiegroup/new-project",
+        dependencies: [{ project: "kiegroup/appformer" }]
+      }
+    ]);
+    expect(result.default).toStrictEqual({
+      "build-command": {
+        current: "echo overriden",
+        upstream:
+          "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        after: {
+          upstream: "rm -rf ./*",
+          downstream: "rm -rf ./*"
+        }
+      }
+    });
+
+    expect(result.build).toStrictEqual([
+      {
+        project: "kiegroup/appformer",
+        "build-command": {
+          upstream: "echo changed"
+        },
+        "archive-artifacts": {
+          path: "**/dashbuilder-runtime.war\n**/something\n"
+        }
+      },
+      {
+        project: "kiegroup/new-project",
+        "build-command": {
+          current: "echo new-project"
+        }
+      },
+      ...expected.build.filter(build => build.project !== "kiegroup/appformer")
+    ]);
+  });
+
+  test("multilevel extension", async () => {
+    const result = await readDefinitionFile(
+      path.join(resources, "extend-multilevel.yaml")
+    );
+    const expected = await readDefinitionFile(
+      path.join(resources, "build-config.yaml")
+    );
+    expect(result.version).toBe("2.2");
+    expect(result.extends).toBe(undefined);
+    expect(result.post).toBe(undefined);
+    expect(result.pre).toBe("hello\nworld\n");
+    expect(result.dependencies).toStrictEqual([
+      ...expected.dependencies,
+      {
+        project: "kiegroup/new-project",
+        dependencies: [{ project: "kiegroup/appformer" }]
+      }
+    ]);
+    expect(result.default).toStrictEqual({
+      "build-command": {
+        current: "echo overriden again",
+        upstream:
+          "mvn -e --builder smart -T1C clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true",
+        after: {
+          upstream: "rm -rf ./*",
+          downstream: "echo overriden"
+        }
+      }
+    });
+
+    expect(result.build).toStrictEqual([
+      {
+        project: "kiegroup/appformer",
+        "build-command": {
+          upstream: "echo changed again"
+        },
+        "archive-artifacts": {
+          path: "**/dashbuilder-runtime.war\n**/something\n"
+        }
+      },
+      {
+        project: "kiegroup/new-project",
+        "build-command": {
+          current: "echo updated"
+        }
+      },
+      ...expected.build.filter(build => build.project !== "kiegroup/appformer")
+    ]);
+  });
 });
