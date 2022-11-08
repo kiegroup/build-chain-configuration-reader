@@ -2,6 +2,9 @@ version: "2.1"
 
 dependencies: ./project-dependencies.yaml
 
+pre: |
+  world
+
 default:
   build-command:
     current: mvn -e -nsu -Dfull -Pwildfly clean install -Prun-code-coverage  -Dcontainer.profile=wildfly -Dcontainer=wildfly -Dintegration-tests=true -Dmaven.test.failure.ignore=true

@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 
 const { getUrlContent } = require("./util/http");
 const { treatUrl, treatMapping } = require("./util/reader-util");
@@ -74,18 +75,49 @@ async function loadYaml(
   options = { urlPlaceHolders: {}, token: undefined }
 ) {
   validateDefinition(definitionYaml);
+  let extendedDefinitionFile;
+  if (definitionYaml.extends) {
+    const extendedDefinitionFileLocation = constructLocation(
+      definitionYaml.extends,
+      containerPath,
+      definitionFileFolder,
+      options
+    );
+    extendedDefinitionFile = await readDefinitionFile(
+      extendedDefinitionFileLocation,
+      options
+    );
+    delete definitionYaml["extends"];
+  }
+  definitionYaml.pre = extendPrePost(
+    definitionYaml.pre,
+    extendedDefinitionFile ? extendedDefinitionFile.pre : undefined
+  );
+  definitionYaml.post = extendPrePost(
+    definitionYaml.post,
+    extendedDefinitionFile ? extendedDefinitionFile.post : undefined
+  );
+  definitionYaml.default = extendDefault(
+    definitionYaml.default,
+    extendedDefinitionFile ? extendedDefinitionFile.default : undefined
+  );
+  definitionYaml.build = extendBuild(
+    definitionYaml.build,
+    extendedDefinitionFile ? extendedDefinitionFile.build : undefined
+  );
   definitionYaml.dependencies = await loadDependencies(
     definitionYaml.dependencies,
+    extendedDefinitionFile ? extendedDefinitionFile.dependencies : undefined,
     definitionFileFolder,
     containerPath,
     options
   );
-  if (definitionYaml.dependencies) {
-    definitionYaml.dependencies
-      .filter(dependency => dependency.mapping)
-      .map(dependency => dependency.mapping)
-      .forEach(mapping => treatMapping(mapping));
-  }
+
+  definitionYaml.dependencies
+    .filter(dependency => dependency.mapping)
+    .map(dependency => dependency.mapping)
+    .forEach(mapping => treatMapping(mapping));
+
   return definitionYaml;
 }
 
@@ -98,59 +130,110 @@ async function loadYaml(
  */
 async function loadDependencies(
   dependencies,
+  extendedDependencies,
   definitionFileFolder,
   containerPath,
   options = { urlPlaceHolders: {}, token: undefined }
 ) {
-  if (dependencies) {
-    let dependenciesFinalPath =
-      !Array.isArray(dependencies) && dependencies.startsWith("http")
-        ? treatUrl(dependencies, options.urlPlaceHolders)
-        : dependencies;
-    if (
-      containerPath.startsWith("http") &&
-      !Array.isArray(dependencies) &&
-      !dependencies.startsWith("http")
-    ) {
-      const treatedUrl = treatUrl(containerPath, options.urlPlaceHolders);
-      dependenciesFinalPath = `${treatedUrl.substring(
-        0,
-        treatedUrl.lastIndexOf("/")
-      )}/${dependencies}`;
-      const dependenciesContent = await getUrlContent(
-        dependenciesFinalPath,
-        options.token
-      );
-      fs.writeFileSync(dependencies, dependenciesContent);
-    }
+  let loadedDependencies = dependencies ? dependencies : [];
 
-    if (!Array.isArray(dependencies)) {
-      const dependenciesFilePath = dependencies.startsWith("http")
-        ? treatUrl(dependencies, options.urlPlaceHolders)
-        : `${definitionFileFolder}/${dependencies}`;
-      const dependenciesFileContent = dependencies.startsWith("http")
-        ? await getUrlContent(dependenciesFilePath, options.token)
-        : fs.readFileSync(dependenciesFilePath, "utf8");
-      const dependenciesYaml = readYaml(dependenciesFileContent);
-      validateDependencies(dependenciesYaml);
-      // Once the dependencies are loaded, the `extends` proporty is concatenated to the current dependencies
-      return (
-        await loadDependencies(
-          dependenciesYaml.extends,
-          dependenciesFilePath.substring(
-            0,
-            dependenciesFilePath.lastIndexOf("/")
-          ),
-          dependenciesFinalPath,
-          options
-        )
-      ).concat(dependenciesYaml.dependencies);
-    } else {
-      // There's no extension for embedded dependencies
-      return dependencies;
+  // if dependencies weren't embedded then load it from file or url
+  if (!Array.isArray(loadedDependencies)) {
+    let dependenciesLocation = constructLocation(
+      dependencies,
+      containerPath,
+      definitionFileFolder,
+      options
+    );
+    const dependenciesYaml = await readDefinitionFile(
+      dependenciesLocation,
+      options
+    );
+    validateDependencies(dependenciesYaml);
+    loadedDependencies = dependenciesYaml.dependencies;
+  }
+
+  // extend loaded dependencies if needed
+  return extendedDependencies
+    ? extendedDependencies.concat(loadedDependencies)
+    : loadedDependencies;
+}
+
+function extendBuild(current, extendWith) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  const copyCurrent = [...current];
+
+  extendWith.map(parent => {
+    // only add if it doesn't exist in the current build. current build overrides parent
+    if (!current.find(current => current.project === parent.project)) {
+      copyCurrent.push(parent);
     }
+  });
+
+  return copyCurrent;
+}
+
+function extendDefault(current, extendWith) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  const copyCurrent = { ...current };
+  const currentKeys = Object.keys(current);
+
+  Object.entries(extendWith).forEach(([key, value]) => {
+    if (typeof value === "object") {
+      // if current as the key then merge the 2 objects otherwise use the object from extended
+      copyCurrent[key] = currentKeys.includes(key)
+        ? extendDefault(current[key], value)
+        : value;
+    } else {
+      // override extended definition file's value with the current one
+      copyCurrent[key] = current[key] ? current[key] : value;
+    }
+  });
+  return copyCurrent;
+}
+
+function extendPrePost(current, extendWith) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  return `${current}\n${extendWith}`;
+}
+
+function constructLocation(location, containerPath, parentDir, options) {
+  if (location.startsWith("http")) {
+    return treatUrl(location, options.urlPlaceHolders);
+  }
+  // if location is a file path and container path was a url
+  else if (containerPath.startsWith("http")) {
+    const treatedContainerUrl = treatUrl(
+      containerPath,
+      options.urlPlaceHolders
+    );
+    return `${treatedContainerUrl.substring(
+      0,
+      treatedContainerUrl.lastIndexOf("/")
+    )}/${location}`;
   } else {
-    return [];
+    return path.join(parentDir, location);
   }
 }
 
