@@ -38,10 +38,28 @@ export function parentChainFromNode(node: Node): Node[] {
   return result;
 }
 
-export function getOrderedListForProject(node: Node) {
+export async function getOrderedListForProject(
+  definitionFileLocation: string,
+  project: string,
+  opts?: ReaderOpts
+) {
+  const node = await getTreeForProject(definitionFileLocation, project, opts);
+  if (!node) {
+    throw new Error(`Project ${project} not found`);
+  }
   const upstream: Node[] = parentChainFromNode(node); // last element is the current node
   const downstream: Node[] = childChainFromNode(node); // first element is the current node
   return upstream.concat(downstream.slice(1)); // avoid duplication of current node
+}
+
+export async function getOrderedListForTree(
+  definitionFileLocation: string,
+  opts?: ReaderOpts
+) {
+  const tree = await getTree(definitionFileLocation, opts);
+  const result: Node[] = [];
+  flattenTreeTopToBottom(tree, result);
+  return result;
 }
 
 function lookForProject(tree: Node[], project: string): Node | undefined {
@@ -65,4 +83,31 @@ function childChainFromNode(node: Node): Node[] {
     },
     [node]
   );
+}
+
+function flattenTreeTopToBottom(currentLevel: Node[], result: Node[]) {
+  // base case
+  if (currentLevel.length === 0) {
+    return;
+  }
+  const nextLevel: Node[] = [];
+
+  currentLevel.forEach(node => {
+    const parentInResult = node.parents.every(parent =>
+      result.find(res => res.project === parent.project)
+    );
+
+    // ensure that you are not duplicating a node and are only adding it after all it's parents have been added
+    if (!result.find(res => res.project === node.project) && parentInResult) {
+      result.push(node);
+    }
+
+    // don't have to filter out duplicate nodes as they will automatically be filtered out in results
+    nextLevel.push(...node.children);
+
+    if (!parentInResult) {
+      nextLevel.push(node);
+    }
+  });
+  flattenTreeTopToBottom(nextLevel, result);
 }

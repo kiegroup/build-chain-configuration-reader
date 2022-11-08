@@ -1,6 +1,7 @@
 import { Node } from "@bc-cr/domain/node";
 import {
   getOrderedListForProject,
+  getOrderedListForTree,
   getTree,
   getTreeForProject,
   parentChainFromNode,
@@ -133,12 +134,46 @@ test.each([
 ])(
   "get ordered list for project - %p",
   async (_title: string, project: string, expected: string[]) => {
-    const node = await getTreeForProject(resources, project);
-    expect(node).not.toBe(undefined);
-    const list = getOrderedListForProject(node!);
+    const list = await getOrderedListForProject(resources, project);
     matchProject(list, expected);
   }
 );
+
+test("get ordered list for project - project not found", async () => {
+  await expect(
+    getOrderedListForProject(resources, "someproject")
+  ).rejects.toThrowError();
+});
+
+test("get ordered list for tree", async () => {
+  const list = await getOrderedListForTree(resources);
+  matchProject(list, [
+    "kiegroup/lienzo-core",
+    "kiegroup/droolsjbpm-build-bootstrap",
+    "kiegroup/kie-docs",
+    "kiegroup/lienzo-tests",
+    "kiegroup/kie-soup",
+    "kiegroup/appformer",
+    "kiegroup/kie-uberfire-extensions",
+    "kiegroup/droolsjbpm-knowledge",
+    "kiegroup/drools",
+    "kiegroup/jbpm",
+    "kiegroup/optaplanner",
+    "kiegroup/kie-jpmml-integration",
+    "kiegroup/droolsjbpm-integration",
+    "kiegroup/jbpm-work-items",
+    "kiegroup/optaweb-employee-rostering",
+    "kiegroup/optaweb-vehicle-routing",
+    "kiegroup/openshift-drools-hacep",
+    "kiegroup/kie-wb-playground",
+    "kiegroup/kie-wb-common",
+    "kiegroup/drools-wb",
+    "kiegroup/optaplanner-wb",
+    "kiegroup/jbpm-designer",
+    "kiegroup/jbpm-wb",
+    "kiegroup/kie-wb-distributions",
+  ]);
+});
 
 function matchProject(
   result: Node[] | undefined,
