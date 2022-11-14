@@ -1,0 +1,6 @@
+version: "2.2"
+
+dependencies:
+  - project: kiegroup/new-project
+    dependencies:
+      - project: kiegroup/appformer
