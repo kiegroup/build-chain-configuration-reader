@@ -1,4 +1,4 @@
-version: 2.2
+version: 1.1
 dependencies: "depend"
 default:
   build-command:
