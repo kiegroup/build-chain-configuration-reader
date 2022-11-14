@@ -26,7 +26,6 @@ describe("version validation", () => {
 describe("dependencies validation", () => {
   const dependenciesPath = path.join(resourcePath, "dependencies");
   test.each([
-    ["no dependencies", path.join(dependenciesPath, "missing.yml")],
     [
       "incorrect dependencies: not a string or an array",
       path.join(dependenciesPath, "incorrect-type.yml"),

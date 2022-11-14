@@ -6,13 +6,14 @@ import { JSONSchemaType } from "ajv";
 export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
   type: "object",
   properties: {
-    version: { type: ["string", "number"], enum: ["2.1", 2.1] },
+    version: { type: ["string", "number"], enum: ["2.1", 2.1, "2.2", 2.2] },
     dependencies: {
       type: ["string", "array"],
       oneOf: [
         { type: "string" },
         DependenciesSchema,
       ],
+      nullable: true
     },
     extends: {
       type: "string",
@@ -32,7 +33,21 @@ export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
       items: BuildSchema,
       nullable: true
     },
+    pre: {
+      type: "array",
+      items: {
+        type: "string"
+      },
+      nullable: true
+    },
+    post: {
+      type: "array",
+      items: {
+        type: "string"
+      },
+      nullable: true
+    }
   },
-  required: ["version", "dependencies"],
+  required: ["version"],
   additionalProperties: false,
 };

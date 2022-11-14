@@ -7,6 +7,8 @@ import { readFile } from "fs/promises";
 import axios from "axios";
 import path from "path";
 import { ReaderOpts } from "@bc-cr/domain/readerOptions";
+import { Build } from "@bc-cr/domain/build";
+import { DefinitionFile } from "@bc-cr/domain/definition-file";
 
 /**
  * Read the definition file from the given location, validate it and generate a DefinitionFile object
@@ -16,35 +18,44 @@ import { ReaderOpts } from "@bc-cr/domain/readerOptions";
  * @param opts
  * @returns
  */
-export async function readDefinitionFile(
-  location: string,
-  opts?: ReaderOpts,
-) {
+export async function readDefinitionFile(location: string, opts?: ReaderOpts) {
   try {
-    const definitionFileContent = await getContent(
+    const definitionFileContent = await getContent(location, opts);
+    const definitionFile = await validateDefinitionFile(definitionFileContent);
+
+    let extendedDefinitionFile: DefinitionFile | undefined = undefined;
+    if (definitionFile.extends) {
+      extendedDefinitionFile = await readDefinitionFile(
+        constructLocation(definitionFile.extends, location, opts),
+        opts
+      );
+      delete definitionFile["extends"];
+    }
+
+    definitionFile.pre = extendPrePost(
+      definitionFile.pre,
+      extendedDefinitionFile ? extendedDefinitionFile.pre : undefined
+    );
+    definitionFile.post = extendPrePost(
+      definitionFile.post,
+      extendedDefinitionFile ? extendedDefinitionFile.post : undefined
+    );
+    definitionFile.default = extendDefault(
+      definitionFile.default,
+      extendedDefinitionFile ? extendedDefinitionFile.default : undefined
+    );
+    definitionFile.build = extendBuild(
+      definitionFile.build,
+      extendedDefinitionFile ? extendedDefinitionFile.build : undefined
+    );
+
+    definitionFile.dependencies = await loadDependencies(
+      definitionFile.dependencies,
+      extendedDefinitionFile?.dependencies as Dependency[] | undefined,
       location,
       opts
     );
-    const definitionFile = await validateDefinitionFile(definitionFileContent);
-    const baseDir = isURL(location) ? undefined : path.dirname(location);
-    if (typeof definitionFile.dependencies === "string") {
-      definitionFile.dependencies = await getDependencies(
-        definitionFile.dependencies,
-        baseDir,
-        opts
-      );
-    }
-    if (definitionFile.extends) {
-      definitionFile.dependencies = [
-        ...definitionFile.dependencies,
-        ...(await getDependencies(
-          definitionFile.extends,
-          baseDir,
-          opts
-        )),
-      ];
-      delete definitionFile["extends"];
-    }
+
     targetExpressionToTarget(definitionFile.dependencies);
     return definitionFile;
   } catch (err) {
@@ -52,32 +63,104 @@ export async function readDefinitionFile(
   }
 }
 
-/**
- * Get's dependencies only from the given location
- * Throws an error if the file at the given location, also reads the dependency file from another location.
- * This is done because nested reading of dependency file is redundant. See below:
- * If A -> B -> C (if A gets dependency file from B and B gets dependency file from C) then we can
- * simplify this to A -> C
- * @param location
- * @param opts
- * @returns
- */
-async function getDependencies(
-  location: string,
-  baseDir?: string,
-  opts?: ReaderOpts,
+async function loadDependencies(
+  dependencies: string | Dependency[] | undefined,
+  extendedDependencies: Dependency[] | undefined,
+  parentLocation: string,
+  opts?: ReaderOpts
 ) {
-  const content = await getContent(
-    isURL(location) ? location : path.resolve(baseDir ?? "", location),
-    opts
-  );
-  const dependencies = await validateDefinitionFile(content);
-  if (typeof dependencies.dependencies === "string") {
-    throw new Error(
-      "Nested references to another dependencies file is redundant. Please directly use the location of the dependencies file that is needed"
-    );
+  let loadedDependencies: Dependency[] = [];
+
+  if (!dependencies) {
+    return extendedDependencies ?? [];
   }
-  return dependencies.dependencies;
+
+  // if dependencies weren't embedded then load it from file or url
+  if (!Array.isArray(dependencies)) {
+    const dependenciesLocation = constructLocation(
+      dependencies,
+      parentLocation,
+      opts
+    );
+    const dependenciesYaml = await readDefinitionFile(
+      dependenciesLocation,
+      opts
+    );
+    loadedDependencies = dependenciesYaml.dependencies as Dependency[];
+  } else {
+    loadedDependencies = dependencies;
+  }
+
+  // extend loaded dependencies if needed
+  return extendedDependencies
+    ? extendedDependencies.concat(loadedDependencies)
+    : loadedDependencies;
+}
+
+function extendBuild(current?: Build[], extendWith?: Build[]) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  const copyCurrent = [...current];
+
+  extendWith.map(parent => {
+    // only add if it doesn't exist in the current build. current build overrides parent
+    if (!current.find(current => current.project === parent.project)) {
+      copyCurrent.push(parent);
+    }
+  });
+
+  return copyCurrent;
+}
+
+function extendDefault<T extends object>(current?: T, extendWith?: T) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  const copyCurrent = { ...current };
+  const currentKeys = Object.keys(current);
+
+  Object.entries(extendWith).forEach(([key, value]) => {
+    const currentValue = current[key as keyof T];
+    
+    if (Array.isArray(value) && Array.isArray(currentValue)) {
+      copyCurrent[key as keyof T] = currentValue.length ? currentValue : value as T[keyof T];
+    }
+    else if (typeof value === "object") {
+      // if current as the key then merge the 2 objects otherwise use the object from extended
+      copyCurrent[key as keyof T] = currentKeys.includes(key)
+        ? extendDefault(current[key as keyof T] as Build, value)
+        : value;
+    } else {
+      // override extended definition file's value with the current one
+      copyCurrent[key as keyof T] = current[key as keyof T]
+        ? current[key as keyof T]
+        : value;
+    }
+  });
+  return copyCurrent;
+}
+
+function extendPrePost(current?: string[], extendWith?: string[]) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  return current.concat(extendWith);
 }
 
 /**
@@ -85,10 +168,7 @@ async function getDependencies(
  * If the file is url it will make a GET request to read it
  * If the file is file location it assumes that the location is with respect to
  * @param location
- * @param token
- * @param group
- * @param name
- * @param branch
+ * @param opts
  * @returns
  */
 async function getContent(
@@ -99,11 +179,36 @@ async function getContent(
     const url = treatUrl(location, opts?.group, opts?.name, opts?.branch);
     const response = await axios.get(url, {
       responseType: "text",
-      ...(opts?.token ? { headers: { Authorization: `Bearer ${opts.token}` } } : {}),
+      ...(opts?.token
+        ? { headers: { Authorization: `Bearer ${opts.token}` } }
+        : {}),
     });
     return response.data;
   } else {
     return readFile(location, "utf8");
+  }
+}
+
+function constructLocation(
+  currentLocation: string,
+  parentLocation: string,
+  opts?: ReaderOpts
+) {
+  if (isURL(currentLocation)) {
+    return treatUrl(currentLocation, opts?.group, opts?.name, opts?.branch);
+  }
+  // if current location is a file path and parent location was a url
+  else if (isURL(parentLocation)) {
+    const treatedParentUrl = treatUrl(
+      parentLocation,
+      opts?.group,
+      opts?.name,
+      opts?.branch
+    );
+    const lastSlash = treatedParentUrl.lastIndexOf("/");
+    return `${treatedParentUrl.slice(0, lastSlash)}/${currentLocation}`;
+  } else {
+    return path.join(path.dirname(parentLocation), currentLocation);
   }
 }
 
