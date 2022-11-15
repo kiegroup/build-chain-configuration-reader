@@ -106,16 +106,7 @@ function extendBuild(current?: Build[], extendWith?: Build[]) {
     return extendWith;
   }
 
-  const copyCurrent = [...current];
-
-  extendWith.map(parent => {
-    // only add if it doesn't exist in the current build. current build overrides parent
-    if (!current.find(current => current.project === parent.project)) {
-      copyCurrent.push(parent);
-    }
-  });
-
-  return copyCurrent;
+  return [...current, ...extendWith.filter(parent => !current.find(current => current.project === parent.project))];
 }
 
 function extendDefault<T extends object>(current?: T, extendWith?: T) {
