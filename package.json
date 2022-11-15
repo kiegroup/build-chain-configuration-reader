@@ -14,7 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/kiegroup/build-chain-configuration-reader.git"
   },
-  "author": "",
+  "author": "Enrique Mingorance Cano <emingora@redhat.com>",
+  "contributors": [
+    "Shubh Bapna <sbapna@redhat.com>"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/kiegroup/build-chain-configuration-reader/issues"
