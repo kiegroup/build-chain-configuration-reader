@@ -106,19 +106,11 @@ function extendBuild(current?: Build[], extendWith?: Build[]) {
     return extendWith;
   }
 
-  const copyCurrent = [...current];
-
-  extendWith.map(parent => {
-    // only add if it doesn't exist in the current build. current build overrides parent
-    if (!current.find(current => current.project === parent.project)) {
-      copyCurrent.push(parent);
-    }
-  });
-
-  return copyCurrent;
+  return [...current, ...extendWith.filter(parent => !current.find(current => current.project === parent.project))];
 }
 
 function extendDefault<T extends object>(current?: T, extendWith?: T) {
+
   if (!extendWith) {
     return current;
   }
@@ -127,28 +119,23 @@ function extendDefault<T extends object>(current?: T, extendWith?: T) {
     return extendWith;
   }
 
-  const copyCurrent = { ...current };
   const currentKeys = Object.keys(current);
 
-  Object.entries(extendWith).forEach(([key, value]) => {
+  return Object.entries(extendWith).reduce((acc, [key, value]) => {
     const currentValue = current[key as keyof T];
-    
     if (Array.isArray(value) && Array.isArray(currentValue)) {
-      copyCurrent[key as keyof T] = currentValue.length ? currentValue : value as T[keyof T];
-    }
-    else if (typeof value === "object") {
+      acc[key as keyof T] = currentValue.length ? currentValue : value as T[keyof T];
+    } else if (typeof value === "object") {
       // if current as the key then merge the 2 objects otherwise use the object from extended
-      copyCurrent[key as keyof T] = currentKeys.includes(key)
+      acc[key as keyof T] = currentKeys.includes(key)
         ? extendDefault(current[key as keyof T] as Build, value)
         : value;
     } else {
       // override extended definition file's value with the current one
-      copyCurrent[key as keyof T] = current[key as keyof T]
-        ? current[key as keyof T]
-        : value;
+      acc[key as keyof T] = current[key as keyof T] ?? value;
     }
-  });
-  return copyCurrent;
+    return acc;
+  }, { ...current });
 }
 
 function extendPrePost(current?: string[], extendWith?: string[]) {
@@ -242,9 +229,9 @@ function executeTargetExpression(depend: Depend) {
     depend[key] = value.map(stt =>
       stt.targetExpression
         ? {
-            source: stt.source,
-            target: safeEval(stt.targetExpression, stt) as string,
-          }
+          source: stt.source,
+          target: safeEval(stt.targetExpression, stt) as string,
+        }
         : stt
     );
   }
