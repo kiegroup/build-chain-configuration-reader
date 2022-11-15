@@ -1,0 +1,15 @@
+version: 2.1
+dependencies: http://some-dependency
+default:
+  build-command:
+    current: echo
+build:
+  - project: "owner/project"
+    build-command:
+      current: echo
+    archive-artifacts:
+      name: "archive"
+      path: hello
+      dependencies:
+        - ownerA
+      

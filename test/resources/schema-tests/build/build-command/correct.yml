@@ -1,0 +1,37 @@
+version: 2.1
+dependencies: http://some-dependency
+default:
+  build-command:
+    current: echo
+build:
+  - project: owner/project
+    build-command:
+      current: echo
+  - project: owner/project
+    build-command:
+      upstream: echo
+  - project: owner/project
+    build-command:
+      downstream: echo
+  - project: owner/project
+    build-command:
+      before:
+        current: echo
+  - project: owner/project
+    build-command:
+      after:
+        upstream: echo
+  - project: owner/project
+    build-command:
+      current: |
+        echo 1
+        echo 2
+      after:
+        upstream: echo
+        downstream: |
+          echo2
+      before:
+        upstream: echo
+        downstream: echo
+        current: echo
+      upstream: echo

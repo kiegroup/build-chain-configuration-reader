@@ -1,0 +1,21 @@
+version: 2.1
+dependencies:
+  - project: kiegroup/appformer
+    mapping:
+      dependencies:
+        ownerA/projectA:
+          - source: 7.x
+            target: main
+            targetExpression: expression
+      dependant:
+        ownerB/projectB:
+          - source: 7.x
+            target: main
+            targetExpression: expression
+      exclude: ["abc/def"]
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

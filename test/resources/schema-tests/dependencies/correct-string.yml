@@ -1,0 +1,8 @@
+version: 2.1
+dependencies: http://some-dependency
+default:
+  build-command:
+    current: echo
+    upstream: echo
+    after:
+      upstream: echo

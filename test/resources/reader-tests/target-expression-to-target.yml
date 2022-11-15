@@ -1,0 +1,51 @@
+version: "2.1"
+dependencies:
+  - project: owner1/project1
+    dependencies:
+      - project: owner2/project2
+    mapping:
+      dependencies:
+        default:
+          - source: 7.x
+            target: main
+          - source: 8.x
+            targetExpression: "`${args.source}.y`"
+        owner2/project2:
+          - source: 9.x
+            targetExpression: "process.env.DUMMY_VAR"
+  - project: owner2/project2
+    dependencies:
+      - project: owner3/project3
+    mapping:
+      dependant:
+        default:
+          - source: 7.x
+            target: main
+          - source: 8.x
+            targetExpression: "`${args.source}.y`"
+        owner3/project3:
+          - source: 9.x
+            targetExpression: "process.env.DUMMY_VAR"
+  - project: owner3/project3
+    dependencies:
+      - project: owner4/project4
+      - project: owner5/project5
+    mapping:
+      dependencies:
+        default:
+          - source: 7.x
+            target: main
+          - source: 8.x
+            targetExpression: "`${args.source}.y`"
+        owner3/project3:
+          - source: 9.x
+            targetExpression: "process.env.DUMMY_VAR"
+      dependant:
+        default:
+          - source: 7.x
+            target: main
+          - source: 8.x
+            targetExpression: "`${args.source}.y`"
+        owner3/project3:
+          - source: 9.x
+            targetExpression: "process.env.DUMMY_VAR"

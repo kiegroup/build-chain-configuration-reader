@@ -1,0 +1,29 @@
+version: "2.2"
+
+extends: https://whatever-url.com/definition-file.yaml
+
+post: hello
+
+dependencies:
+  - project: kiegroup/new-project
+    dependencies:
+      - project: kiegroup/appformer
+
+default:
+  build-command:
+    current: echo overriden
+    after:
+      downstream: rm -rf ./*
+
+build:
+  - project: kiegroup/appformer
+    build-command:
+      upstream: echo changed
+    archive-artifacts:
+      path: |
+        **/dashbuilder-runtime.war
+        **/something
+
+  - project: kiegroup/new-project
+    build-command:
+      current: echo new-project

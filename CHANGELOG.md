@@ -1,5 +1,10 @@
 # Changelog
 
+# V3.0.0
+
+- Refactoring to typescript
+- new domain model and schema TS files provided
+
 # V2.3.0
 
 - extension mechanism for definition file
