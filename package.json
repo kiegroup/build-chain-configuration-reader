@@ -1,9 +1,13 @@
 {
   "name": "@kie/build-chain-configuration-reader",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A library to read build-chain tool configuration files",
-  "main": "index.js",
+  "main": "build/index.js",
+  "files": [
+    "build"
+  ],
   "scripts": {
+    "build": "tsc",
     "test": "jest --passWithNoTests",
     "prepare": "husky install",
     "test:report": "npm test -- --coverage --testResultsProcessor=jest-sonar-reporter",
