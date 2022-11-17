@@ -17,6 +17,7 @@ import { Dependency } from "@bc-cr/domain/dependencies";
 import { Mapping } from "@bc-cr/domain/mapping";
 import { Node } from "@bc-cr/domain/node";
 import { ReaderOpts } from "@bc-cr/domain/readerOptions";
+import { Pre, Post } from "@bc-cr/domain/pre-post";
 
 export {
   getTree,
@@ -33,5 +34,7 @@ export {
   Dependency,
   Mapping,
   Node,
-  ReaderOpts
+  ReaderOpts,
+  Pre,
+  Post
 };
