@@ -1,5 +1,6 @@
 import { Build, BuildCommand } from "@bc-cr/domain/build";
 import { Dependency } from "@bc-cr/domain/dependencies";
+import { Post, Pre } from "@bc-cr/domain/pre-post";
 
 export interface DefinitionFile {
   version: "2.1" | 2.1 | "2.2" | 2.2;
@@ -9,6 +10,6 @@ export interface DefinitionFile {
     "build-command": BuildCommand;
   };
   build?: Build[];
-  pre?: string[];
-  post?: string[];
+  pre?: Pre;
+  post?: Post;
 }
