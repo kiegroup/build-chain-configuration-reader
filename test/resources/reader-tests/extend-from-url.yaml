@@ -2,7 +2,8 @@ version: "2.2"
 
 extends: https://whatever-url.com/definition-file.yaml
 
-post: hello
+post: 
+  success: hello
 
 dependencies:
   - project: kiegroup/new-project

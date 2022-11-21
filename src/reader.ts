@@ -9,6 +9,7 @@ import path from "path";
 import { ReaderOpts } from "@bc-cr/domain/readerOptions";
 import { Build } from "@bc-cr/domain/build";
 import { DefinitionFile } from "@bc-cr/domain/definition-file";
+import { Post, Pre } from "@bc-cr/domain/pre-post";
 
 /**
  * Read the definition file from the given location, validate it and generate a DefinitionFile object
@@ -32,11 +33,11 @@ export async function readDefinitionFile(location: string, opts?: ReaderOpts) {
       delete definitionFile["extends"];
     }
 
-    definitionFile.pre = extendPrePost(
+    definitionFile.pre = extendPre(
       definitionFile.pre,
       extendedDefinitionFile ? extendedDefinitionFile.pre : undefined
     );
-    definitionFile.post = extendPrePost(
+    definitionFile.post = extendPost(
       definitionFile.post,
       extendedDefinitionFile ? extendedDefinitionFile.post : undefined
     );
@@ -138,7 +139,7 @@ function extendDefault<T extends object>(current?: T, extendWith?: T) {
   }, { ...current });
 }
 
-function extendPrePost(current?: string[], extendWith?: string[]) {
+function extendPre(current?: Pre, extendWith?: Pre) {
   if (!extendWith) {
     return current;
   }
@@ -148,6 +149,22 @@ function extendPrePost(current?: string[], extendWith?: string[]) {
   }
 
   return current.concat(extendWith);
+}
+
+function extendPost(current?: Post, extendWith?: Post) {
+  if (!extendWith) {
+    return current;
+  }
+
+  if (!current) {
+    return extendWith;
+  }
+
+  return {
+    success: extendPre(current.success, extendWith.success),
+    always: extendPre(current.always, extendWith.always),
+    failure: extendPre(current.failure, extendWith.failure),
+  };
 }
 
 /**
