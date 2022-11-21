@@ -307,7 +307,7 @@ describe("definition file with extends", () => {
     expect(result.version).toBe("2.2");
     expect(result.extends).toBe(undefined);
     expect(result.pre).toStrictEqual(["world"]);
-    expect(result.post).toStrictEqual(["hello"]);
+    expect(result.post).toStrictEqual({success: ["hello"]});
     expect(result.dependencies).toEqual([
       ...expected.dependencies!,
       {

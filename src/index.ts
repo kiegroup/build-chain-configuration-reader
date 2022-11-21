@@ -10,8 +10,18 @@ import { readDefinitionFile } from "@bc-cr/reader";
 
 import { getMappedTarget, getMapping } from "@bc-cr/util/mapping";
 
-import { ArchiveArtifacts } from "@bc-cr/domain/archive-artifacts";
-import { Command, CommandLevel, BuildCommand, Build } from "@bc-cr/domain/build";
+import {
+  ArchiveArtifacts,
+  ArchiveDependencies,
+  ArchiveOn,
+  IfNoFile,
+} from "@bc-cr/domain/archive-artifacts";
+import {
+  Command,
+  CommandLevel,
+  BuildCommand,
+  Build,
+} from "@bc-cr/domain/build";
 import { DefinitionFile } from "@bc-cr/domain/definition-file";
 import { Dependency } from "@bc-cr/domain/dependencies";
 import { Mapping } from "@bc-cr/domain/mapping";
@@ -29,12 +39,18 @@ export {
   getMappedTarget,
   getMapping,
   ArchiveArtifacts,
-  Command, CommandLevel, BuildCommand, Build,
+  ArchiveDependencies,
+  ArchiveOn,
+  IfNoFile,
+  Command,
+  CommandLevel,
+  BuildCommand,
+  Build,
   DefinitionFile,
   Dependency,
   Mapping,
   Node,
   ReaderOpts,
   Pre,
-  Post
+  Post,
 };
