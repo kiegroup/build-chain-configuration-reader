@@ -41,9 +41,11 @@ export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
       nullable: true
     },
     post: {
-      type: "array",
-      items: {
-        type: "string"
+      type: "object",
+      properties: {
+        success: {type: "array", items: {type: "string"}, nullable: true},
+        always: {type: "array", items: {type: "string"}, nullable: true},
+        failure: {type: "array", items: {type: "string"}, nullable: true},
       },
       nullable: true
     }
