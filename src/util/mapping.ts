@@ -15,11 +15,11 @@ import { Depend, SourceToTarget, Mapping } from "@bc-cr/domain/mapping";
  */
 export function getMappedTarget(
   startingProject: string,
-  startingProjectMappings: Mapping,
+  startingProjectMappings: Mapping | undefined,
   currentProject: string,
-  currentProjectMappings: Mapping,
+  currentProjectMappings: Mapping | undefined,
   targetBranch: string
-): string | undefined {
+): string {
   return (
     getMapping(
       startingProject,
@@ -50,9 +50,9 @@ export function getMappedTarget(
  */
 export function getMapping(
   startingProject: string,
-  startingProjectMappings: Mapping,
+  startingProjectMappings: Mapping | undefined,
   currentProject: string,
-  currentProjectMappings: Mapping,
+  currentProjectMappings: Mapping | undefined,
   targetBranch: string
 ): SourceToTarget | undefined {
   if (startingProject === currentProject) {
@@ -64,14 +64,14 @@ export function getMapping(
     getSourceToTargetFromProjectOrDefault(
       targetBranch,
       currentProject,
-      startingProjectMappings.exclude,
-      startingProjectMappings.dependencies
+      startingProjectMappings?.exclude ?? [],
+      startingProjectMappings?.dependencies
     ) ||
     getSourceToTargetFromProjectOrDefault(
       targetBranch,
       startingProject,
-      currentProjectMappings.exclude,
-      currentProjectMappings.dependant
+      currentProjectMappings?.exclude ?? [],
+      currentProjectMappings?.dependant
     )
   ); // if no mapping from starting project's mapping is found, try current project's mapping
 }
