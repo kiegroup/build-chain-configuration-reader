@@ -22,7 +22,6 @@ export const DependenciesSchema: JSONSchemaType<Dependency[]> = {
         nullable: true,
       },
       mapping: { ...MappingSchema, nullable: true },
-      clone: { type: "array", items: { type: "string" }, nullable: true },
     },
     required: ["project"],
     additionalProperties: false,

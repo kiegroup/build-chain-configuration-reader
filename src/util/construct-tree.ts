@@ -48,13 +48,13 @@ function constructNode(
   build?: Build[]
 ) {
   const buildCommand = getBuildCommand(dependency.project, defaultBuild, build);
+  const clone = getClone(dependency.project, build);
   return {
     project: dependency.project,
     parents: [],
     children: [],
     archiveArtifacts: getArchiveArtifacts(dependency.project, build),
     mapping: dependency.mapping,
-    clone: dependency.clone,
     before: buildCommand?.before,
     after: buildCommand?.after,
     commands: {
@@ -62,6 +62,7 @@ function constructNode(
       downstream: buildCommand?.downstream ?? [],
       current: buildCommand?.current ?? [],
     },
+    ...(clone ? {clone} : {})
   };
 }
 
@@ -138,4 +139,8 @@ function getDefaultCommandLevel(
   });
 
   return commandLevelClone;
+}
+
+function getClone(project: string, build?: Build[]) {
+  return build?.find(b => b.project === project)?.clone;
 }

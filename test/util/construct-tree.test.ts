@@ -135,6 +135,7 @@ test("tree structure", async () => {
     project: "kiegroup/optaplanner",
     parents: [{ project: "kiegroup/drools" }, { project: "kiegroup/jbpm" }],
     children: [],
+    clone: ["opta1", "opta2"]
   };
 
   const jbpm = {
@@ -186,6 +187,6 @@ test("tree structure", async () => {
         },
       ],
     },
-    { project: "kiegroup/kie-docs", parents: [], children: [] },
+    { project: "kiegroup/kie-docs", parents: [], children: [], clone: ["docs"] },
   ]);
 });
