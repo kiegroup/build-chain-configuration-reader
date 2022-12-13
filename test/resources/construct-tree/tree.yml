@@ -75,7 +75,11 @@ build:
     build-command:
       current: mvn -e clean install -nsu -Prun-code-coverage,wildfly -Dfull  -Dintegration-tests=true -Dmaven.test.failure.ignore=true
       upstream: mvn -e clean install -DskipTests -Dgwt.compiler.skip=true -Dgwt.skipCompilation=true -Denforcer.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true -Drevapi.skip=true
-
+    clone:
+      - opta1
+      - opta2
+      
   - project: kiegroup/kie-docs
     build-command:
       current: mvn clean install
+    clone: docs

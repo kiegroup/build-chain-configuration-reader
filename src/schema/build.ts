@@ -39,7 +39,8 @@ export const BuildSchema: JSONSchemaType<Build> = {
   properties: {
     project: ProjectNameSchema,
     "build-command": {...BuildCommandSchema, nullable:  true},
-    "archive-artifacts": {...ArchiveArtifactSchema, nullable: true}
+    "archive-artifacts": {...ArchiveArtifactSchema, nullable: true},
+    clone: { type: "array", items: { type: "string" }, nullable: true },
   },
   required: ["project"],
   anyOf: [

@@ -1,5 +1,9 @@
 # Changelog
 
+# V3.0.5
+
+- Added clone field
+
 # V3.0.0
 
 - Refactoring to typescript
