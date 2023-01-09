@@ -52,14 +52,6 @@ export const BuildSchema: JSONSchemaType<Build> = {
   anyOf: [
     { required: ["build-command"] },
     { required: ["archive-artifacts"] },
-    {
-      required: ["skip"],
-      not: {
-        anyOf: [
-          { required: ["build-command"] },
-          { required: ["archive-artifacts"] },
-        ],
-      },
-    },
+    { required: ["skip"] },
   ],
 };

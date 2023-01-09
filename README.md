@@ -273,8 +273,6 @@ build:
       if-no-files-found (default:warn): warn|ignore|error
       dependencies (default:none): all|none|list of project names
     clone: List of Strings
-
-  - project: ANOTHER_PROJECT_NAME
     skip: true
 ```
 
