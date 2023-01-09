@@ -1,5 +1,9 @@
 # Changelog
 
+# V3.0.7
+
+- Fixed bug where children/parent fields of a node stored undefined node objects
+
 # V3.0.6
 
 - Added skip field
