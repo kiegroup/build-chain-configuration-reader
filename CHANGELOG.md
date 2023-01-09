@@ -1,5 +1,9 @@
 # Changelog
 
+# V3.0.6
+
+- Added skip field
+
 # V3.0.5
 
 - Added clone field
