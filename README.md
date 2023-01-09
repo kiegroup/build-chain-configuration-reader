@@ -260,7 +260,6 @@ build:
         current: String | List of Strings
         upstream: String | List of Strings
         downstream: String | List of Strings
-        merge: String[]
       current: String | List of Strings
       upstream: String | List of Strings
       downstream: String | List of Strings
@@ -268,14 +267,13 @@ build:
         current: String | List of Strings
         upstream: String | List of Strings
         downstream: String | List of Strings
-        merge: String[]
-      merge: String[]
-    skip: true
     archive-artifacts:
       name: String
       path*: String | List of Strings
       if-no-files-found (default:warn): warn|ignore|error
       dependencies (default:none): all|none|list of project names
+    clone: List of Strings
+    skip: true
 ```
 
 #### Tree node structure

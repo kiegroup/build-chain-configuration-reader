@@ -10,14 +10,17 @@ export function constructTree(
   // construct a map where key is the project name and value is the constructed node
   // we are using a map for faster lookup
   const map = dependencies.reduce((map: Record<string, Node>, dependency) => {
-    map[dependency.project] = constructNode(dependency, defaultBuild, build);
+    const node = constructNode(dependency, defaultBuild, build);
+    if (node) {
+      map[dependency.project] = node;
+    }
     return map;
   }, {});
 
   return dependencies.reduce((roots: Node[], dependency) => {
-    if (isRoot(dependency)) {
-      // is dependency does not have any parents then it is a root and
-      // store it in the roots array
+    // if dependency does not have any parents then it is a root and
+    // it is not skipped if the it is not undefined in the map
+    if (isRoot(dependency) && map[dependency.project]) {
       roots.push(map[dependency.project]);
     } else {
       dependency.dependencies?.forEach(parentDependency => {
@@ -46,24 +49,27 @@ function constructNode(
   dependency: Dependency,
   defaultBuild?: BuildCommand,
   build?: Build[]
-) {
+): Node | undefined {
   const buildCommand = getBuildCommand(dependency.project, defaultBuild, build);
-  const clone = getClone(dependency.project, build);
-  return {
-    project: dependency.project,
-    parents: [],
-    children: [],
-    archiveArtifacts: getArchiveArtifacts(dependency.project, build),
-    mapping: dependency.mapping,
-    before: buildCommand?.before,
-    after: buildCommand?.after,
-    commands: {
-      upstream: buildCommand?.upstream ?? [],
-      downstream: buildCommand?.downstream ?? [],
-      current: buildCommand?.current ?? [],
-    },
-    ...(clone ? {clone} : {})
-  };
+  const buildConfig = findBuildConfigForProject(dependency.project, build);
+  const clone = buildConfig?.clone;
+  return buildConfig?.skip
+    ? undefined
+    : {
+        project: dependency.project,
+        parents: [],
+        children: [],
+        archiveArtifacts: getArchiveArtifacts(dependency.project, build),
+        mapping: dependency.mapping,
+        before: buildCommand?.before,
+        after: buildCommand?.after,
+        commands: {
+          upstream: buildCommand?.upstream ?? [],
+          downstream: buildCommand?.downstream ?? [],
+          current: buildCommand?.current ?? [],
+        },
+        ...(clone ? { clone } : {}),
+      };
 }
 
 function isRoot(dependency: Dependency): boolean {
@@ -77,19 +83,19 @@ function getArchiveArtifacts(project: string, builds?: Build[]) {
 }
 
 /**
- * Given a project get the build commands for it. It uses the 
+ * Given a project get the build commands for it. It uses the
  * default build config to fill out any missing commands
- * @param project 
- * @param defaultBuild 
- * @param build 
- * @returns 
+ * @param project
+ * @param defaultBuild
+ * @param build
+ * @returns
  */
 function getBuildCommand(
   project: string,
   defaultBuild?: BuildCommand,
   build?: Build[]
 ): BuildCommand | undefined {
-  const projectBuild = build?.find(b => b.project === project);
+  const projectBuild = findBuildConfigForProject(project, build);
   const buildCommand = projectBuild?.["build-command"];
   if (!buildCommand) {
     return defaultBuild;
@@ -141,6 +147,6 @@ function getDefaultCommandLevel(
   return commandLevelClone;
 }
 
-function getClone(project: string, build?: Build[]) {
-  return build?.find(b => b.project === project)?.clone;
+function findBuildConfigForProject(project: string, build?: Build[]) {
+  return build?.find(b => b.project === project);
 }

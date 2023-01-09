@@ -190,3 +190,54 @@ test("tree structure", async () => {
     { project: "kiegroup/kie-docs", parents: [], children: [], clone: ["docs"] },
   ]);
 });
+
+test("skip project", async () => {
+  const definitionFile = await readDefinitionFile(
+    path.join(resource, "skip-project.yml")
+  );
+
+  const tree = constructTree(
+    definitionFile.dependencies as Dependency[],
+    definitionFile.default?.["build-command"],
+    definitionFile.build
+  );
+
+  expect(tree).toMatchObject([
+    {
+      project: "kiegroup/lienzo-core",
+      after: {
+        upstream: ["cmd 4"],
+        current: [],
+        downstream: [],
+      },
+      commands: {
+        upstream: ["cmd 6"],
+        current: ["cmd 1", "cmd 2"],
+        downstream: [],
+      },
+      before: {
+        downstream: ["cmd 9"],
+        current: ["cmd 12"],
+        upstream: [],
+      },
+    },
+    {
+      project: "kiegroup/drools",
+      after: {
+        upstream: ["cmd 4"],
+        current: [],
+        downstream: [],
+      },
+      commands: {
+        upstream: ["cmd 3"],
+        current: ["cmd 1", "cmd 2"],
+        downstream: [],
+      },
+      before: {
+        downstream: ["cmd 5"],
+        current: ["cmd 12"],
+        upstream: [],
+      },
+    },
+  ]);
+});

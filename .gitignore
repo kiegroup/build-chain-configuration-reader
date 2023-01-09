@@ -4,4 +4,4 @@ coverage/
 test-report.xml
 .idea/
 .vscode/
-build/
+./build/

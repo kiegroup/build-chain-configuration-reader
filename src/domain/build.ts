@@ -20,5 +20,6 @@ export interface Build {
   project: string;
   "build-command"?: BuildCommand;
   "archive-artifacts"?: ArchiveArtifacts;
+  skip?: boolean;
   clone?: string[];
 }
