@@ -31,12 +31,15 @@ export function constructTree(
           );
         }
 
-        // add current dependency as child of the parentDependency
-        map[parentDependency.project].children.push(map[dependency.project]);
+        // add only if it was not skipped
+        if (map[dependency.project]) {
+          // add current dependency as child of the parentDependency
+          map[parentDependency.project].children.push(map[dependency.project]);
 
-        // store a reference of the parent in the child as well
-        // using a string instead of Node to avoid circular dependency
-        map[dependency.project].parents.push(map[parentDependency.project]);
+          // store a reference of the parent in the child as well
+          // using a string instead of Node to avoid circular dependency
+          map[dependency.project].parents.push(map[parentDependency.project]);
+        }
       });
     }
     // roots array contains nodes which don't have any parents
