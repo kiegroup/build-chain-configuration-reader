@@ -1,0 +1,30 @@
+version: "2.1"
+
+dependencies:
+  - project: kiegroup/lienzo-core
+
+  - project: kiegroup/droolsjbpm-build-bootstrap
+
+  - project: kiegroup/drools
+
+default:
+  build-command:
+    current: |
+      cmd 1
+      cmd 2
+    upstream: cmd 3
+    after:
+      upstream: cmd 4
+    before:
+      downstream: cmd 5
+      current: cmd 12
+
+build:
+  - project: kiegroup/lienzo-core
+    build-command:
+      upstream: cmd 6
+      before: 
+        downstream: cmd 9
+
+  - project: kiegroup/droolsjbpm-build-bootstrap
+    skip: true
