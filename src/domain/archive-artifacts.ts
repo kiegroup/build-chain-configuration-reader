@@ -11,6 +11,7 @@ export interface ArchiveArtifacts {
 export enum ArchiveOn {
   SUCCESS = "success",
   FAILURE = "failure",
+  ALWAYS = "always"
 }
 
 export enum IfNoFile {
