@@ -12,7 +12,7 @@ export const ArchiveArtifactSchema: JSONSchemaType<ArchiveArtifacts> = {
         type: "object",
         properties: {
           path: { type: "string" },
-          on: { type: "string", enum: ["success", "failure"] },
+          on: { type: "string", enum: ["success", "failure", "always"] },
         },
         required: ["on", "path"]
       },

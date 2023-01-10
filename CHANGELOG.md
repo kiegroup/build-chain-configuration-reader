@@ -1,5 +1,9 @@
 # Changelog
 
+# V3.0.8
+
+- Add `@always` as valid `on` for archive artifact paths
+
 # V3.0.7
 
 - Fixed bug where children/parent fields of a node stored undefined node objects
