@@ -60,7 +60,7 @@ export async function readDefinitionFile(location: string, opts?: ReaderOpts) {
     targetExpressionToTarget(definitionFile.dependencies);
     return definitionFile;
   } catch (err) {
-    throw new Error(`Error getting ${location}. Error: ${JSON.stringify(err)}`);
+    throw new Error(`Error getting ${location} - ${err}`);
   }
 }
 

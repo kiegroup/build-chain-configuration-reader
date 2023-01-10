@@ -149,7 +149,7 @@ function transformPath(path: string[]) {
       const index = p.lastIndexOf("@");
       return {
         path: index === -1 ? p : p.slice(0, index),
-        on: index === -1 ? "success" : p.slice(index),
+        on: index === -1 ? "success" : p.slice(index + 1),
       };
     }
   });
