@@ -6,5 +6,9 @@
  * @returns
  */
 export function safeEval(expression: string, args?: unknown): unknown {
-  return Function("args", `"use strict";return (${expression})`)(args);
+  try {
+    return Function("args", `"use strict";return (${expression})`)(args);
+  } catch (err) {
+    return undefined;
+  }
 }
