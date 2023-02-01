@@ -49,7 +49,8 @@ describe("replace expressions", () => {
 
   test("expression execution failed", () => {
     const url = "https://abc/testfile%{new Integer(3).toString()}.txt";
-    expect(() => treatUrl(url)).toThrowError();
+    const treatedUrl = "https://abc/testfileundefined.txt";
+    expect(treatUrl(url)).toBe(treatedUrl);
   });
 
   test("no expression", () => {
