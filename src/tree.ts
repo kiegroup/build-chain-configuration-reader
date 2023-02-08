@@ -48,7 +48,8 @@ export async function getOrderedListForProject(
     throw new Error(`Project ${project} not found`);
   }
   const upstream: Node[] = parentChainFromNode(node); // last element is the current node
-  const downstream: Node[] = childChainFromNode(node); // first element is the current node
+  const downstream = [node];
+  childChainFromNode(node, downstream); // first element is the current node
   return upstream.concat(downstream.slice(1)); // avoid duplication of current node
 }
 
@@ -71,16 +72,15 @@ function lookForProject(tree: Node[], project: string): Node | undefined {
   );
 }
 
-function childChainFromNode(node: Node): Node[] {
-  const result = [node, ...node.children];
-  for (const parent of node.children) {
-    result.push(
-      ...childChainFromNode(parent).filter(
-        p => !result.find(e => p.project === e.project)
-      )
-    );
+function childChainFromNode(node: Node, result: Node[]) {
+  result.push(
+    ...node.children.filter(
+      p => !result.find(e => p.project === e.project)
+    )
+  );
+  for (const child of node.children) {
+    childChainFromNode(child, result);
   }
-  return result;
 }
 
 function flattenTreeTopToBottom(currentLevel: Node[], result: Node[]) {
