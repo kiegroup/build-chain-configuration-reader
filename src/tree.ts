@@ -72,17 +72,15 @@ function lookForProject(tree: Node[], project: string): Node | undefined {
 }
 
 function childChainFromNode(node: Node): Node[] {
-  return node.children.reduce(
-    (children: Node[], child: Node) => {
-      children.push(
-        ...childChainFromNode(child).filter(
-          c => !children.find(e => e.project === c.project)
-        )
-      );
-      return children;
-    },
-    [node]
-  );
+  const result = [node, ...node.children];
+  for (const parent of node.children) {
+    result.push(
+      ...childChainFromNode(parent).filter(
+        p => !result.find(e => p.project === e.project)
+      )
+    );
+  }
+  return result;
 }
 
 function flattenTreeTopToBottom(currentLevel: Node[], result: Node[]) {
