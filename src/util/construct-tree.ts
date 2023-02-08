@@ -23,22 +23,26 @@ export function constructTree(
     if (isRoot(dependency) && map[dependency.project]) {
       roots.push(map[dependency.project]);
     } else {
-      dependency.dependencies?.forEach(parentDependency => {
+      const parentDependencies = dependency.dependencies?.map(d => d.project) ?? [];
+      parentDependencies.forEach(parentDependency => {
         // make sure the parent project has been defined
-        if (!map[parentDependency.project]) {
+        if (!map[parentDependency]) {
           throw new Error(
-            `The project ${parentDependency.project} does not exist on project list. Please review your project definition file`
+            `The project ${parentDependency} does not exist on project list. Please review your project definition file`
           );
         }
 
         // add only if it was not skipped
-        if (map[dependency.project]) {
+        if (
+          map[dependency.project] &&
+          !reachableThroughOtherParents(dependencies, parentDependencies, parentDependency)
+        ) {
           // add current dependency as child of the parentDependency
-          map[parentDependency.project].children.push(map[dependency.project]);
+          map[parentDependency].children.push(map[dependency.project]);
 
           // store a reference of the parent in the child as well
           // using a string instead of Node to avoid circular dependency
-          map[dependency.project].parents.push(map[parentDependency.project]);
+          map[dependency.project].parents.push(map[parentDependency]);
         }
       });
     }
@@ -152,4 +156,17 @@ function getDefaultCommandLevel(
 
 function findBuildConfigForProject(project: string, build?: Build[]) {
   return build?.find(b => b.project === project);
+}
+
+function reachableThroughOtherParents(dependencies: Dependency[], allParents: string[], parentToBeAdded: string) {
+  for (const parent of allParents) {
+    const grandparents = dependencies.find(d => d.project === parent)?.dependencies?.map(d => d.project);
+    if (
+      grandparents?.includes(parentToBeAdded) || 
+      reachableThroughOtherParents(dependencies, grandparents ?? [], parentToBeAdded)
+    ) {
+      return true;
+    }
+  }
+  return false;
 }
