@@ -47,10 +47,7 @@ export async function getOrderedListForProject(
   if (!node) {
     throw new Error(`Project ${project} not found`);
   }
-  const upstream: Node[] = parentChainFromNode(node); // last element is the current node
-  const downstream = [node];
-  childChainFromNode(node, downstream); // first element is the current node
-  return upstream.concat(downstream.slice(1)); // avoid duplication of current node
+  return getOrderedList(node);
 }
 
 export async function getOrderedListForTree(
@@ -70,17 +67,6 @@ function lookForProject(tree: Node[], project: string): Node | undefined {
       .map(node => lookForProject(node.children, project))
       .find(node => !!node)
   );
-}
-
-function childChainFromNode(node: Node, result: Node[]) {
-  result.push(
-    ...node.children.filter(
-      p => !result.find(e => p.project === e.project)
-    )
-  );
-  for (const child of node.children) {
-    childChainFromNode(child, result);
-  }
 }
 
 function flattenTreeTopToBottom(currentLevel: Node[], result: Node[]) {
@@ -108,4 +94,65 @@ function flattenTreeTopToBottom(currentLevel: Node[], result: Node[]) {
     }
   });
   flattenTreeTopToBottom(nextLevel, result);
+}
+
+/**
+ * Gets a plain node list of projects ordered by precedence
+ * @param {string} node - The node to iterate
+ */
+async function getOrderedList(node: Node) {
+  const finalLeaves = getFinalLeavesFromTree([node]);
+  return finalLeaves
+    .map(leaf => parentChainFromNode(leaf))
+    .sort((a, b) => b.length - a.length)
+    .reduce((acc, chain) => {
+      acc.push(
+        ...chain.filter(c => !acc.map(e => e.project).includes(c.project))
+      );
+      return acc;
+    }, []);
+}
+
+/**
+ * It returns back the final leaves from a tree
+ * @param {Array} nodes the array of nodes
+ * @param {Array} latestLeavesFromTree
+ * @param {Array} alreadyVisitedNodes
+ */
+function getFinalLeavesFromTree(
+  nodes: Node[],
+  latestLeavesFromTree: Node[] = [],
+  alreadyVisitedNodes: string[] = []
+) {
+  if (nodes && nodes.length > 0) {
+    const alreadyVisitedPreviousNodes = [...alreadyVisitedNodes];
+    const notIncludedChildren = nodes
+      .filter(node => !alreadyVisitedPreviousNodes.includes(node.project))
+      .reduce((acc: Node[], e) => {
+        acc.push(
+          ...e.children.filter(
+            child => !acc.map(e => e.project).includes(child.project)
+          )
+        );
+        return acc;
+      }, []);
+    alreadyVisitedNodes.push(...nodes.map(e => e.project));
+    getFinalLeavesFromTree(
+      notIncludedChildren,
+      latestLeavesFromTree,
+      alreadyVisitedNodes
+    );
+
+    latestLeavesFromTree.push(
+      ...nodes.filter(
+        node =>
+          (!node.children || node.children.length === 0) &&
+          !latestLeavesFromTree.map(e => e.project).includes(node.project)
+      )
+    );
+
+    return latestLeavesFromTree;
+  } else {
+    return [];
+  }
 }
