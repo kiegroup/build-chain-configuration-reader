@@ -133,14 +133,14 @@ test("tree structure", async () => {
 
   const optaplanner = {
     project: "kiegroup/optaplanner",
-    parents: [{ project: "kiegroup/drools" }, { project: "kiegroup/jbpm" }],
+    parents: [{ project: "kiegroup/jbpm" }],
     children: [],
     clone: ["opta1", "opta2"]
   };
 
   const jbpm = {
     project: "kiegroup/jbpm",
-    parents: [{ project: "kiegroup/drools" }, { project: "kiegroup/kie-soup" }],
+    parents: [{ project: "kiegroup/drools" }],
     children: [optaplanner],
   };
 
@@ -148,15 +148,13 @@ test("tree structure", async () => {
     project: "kiegroup/drools",
     parents: [
       { project: "kiegroup/appformer" },
-      { project: "kiegroup/kie-soup" },
     ],
-    children: [jbpm, optaplanner],
+    children: [jbpm],
   };
 
   const appformer = {
     project: "kiegroup/appformer",
     parents: [
-      { project: "kiegroup/droolsjbpm-build-bootstrap" },
       { project: "kiegroup/lienzo-tests" },
       { project: "kiegroup/kie-soup" },
     ],
@@ -180,9 +178,8 @@ test("tree structure", async () => {
             {
               project: "kiegroup/kie-soup",
               parents: [{ project: "kiegroup/droolsjbpm-build-bootstrap" }],
-              children: [appformer, drools, jbpm],
+              children: [appformer],
             },
-            appformer,
           ],
         },
       ],
