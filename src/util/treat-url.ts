@@ -15,7 +15,7 @@ export function treatUrl(
   name?: string,
   branch?: string
 ): string {
-  return replaceExpressions(replacePlaceholders(url, group, name, branch));
+  return replacePlaceholders(replaceExpressions(url), group, name, branch);
 }
 
 /**

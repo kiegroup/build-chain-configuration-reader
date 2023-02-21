@@ -47,6 +47,15 @@ describe("replace expressions", () => {
     expect(treatUrl(url)).toBe(treatedUrl);
   });
 
+  test("expression executed successfully where expression contains placeholder looking like characters", () => {
+    process.env.GITHUB_BASE_REF = "8.13.x";
+    const url =
+      "https://raw.githubusercontent.com/kiegroup/kogito-pipelines/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1-7}.${n2}.${n3}`)}/.ci/pull-request-config.yaml";
+    const treatedUrl = "https://raw.githubusercontent.com/kiegroup/kogito-pipelines/1.13.x/.ci/pull-request-config.yaml";
+    expect(treatUrl(url)).toBe(treatedUrl);
+    delete process.env["GITHUB_BASE_REF"];
+  });
+
   test("expression execution failed", () => {
     const url = "https://abc/testfile%{new Integer(3).toString()}.txt";
     const treatedUrl = "https://abc/testfileundefined.txt";
@@ -65,5 +74,14 @@ describe("replace placeholder and expressions", () => {
       "https://abc/${TEST:test}/testfile%{new Number(3).toString()}.txt";
     const treatedUrl = "https://abc/test/testfile3.txt";
     expect(treatUrl(url)).toBe(treatedUrl);
+  });
+
+  test("success where expression contains placeholder looking like characters", () => {
+    process.env["GITHUB_BASE_REF"] = "8.13.x";
+    const url =
+      "https://raw.githubusercontent.com/${GROUP}/kogito-pipelines/%{process.env.GITHUB_BASE_REF.replace(/(\\d*)\\.(.*)\\.(.*)/g, (m, n1, n2, n3) => `${+n1-7}.${n2}.${n3}`)}/.ci/pull-request-config.yaml";
+    const treatedUrl = "https://raw.githubusercontent.com/kiegroup/kogito-pipelines/1.13.x/.ci/pull-request-config.yaml";
+    expect(treatUrl(url, "kiegroup")).toBe(treatedUrl);
+    delete process.env["GITHUB_BASE_REF"];
   });
 });
