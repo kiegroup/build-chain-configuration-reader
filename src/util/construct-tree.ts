@@ -59,8 +59,7 @@ function constructNode(
 ): Node | undefined {
   const buildConfig = findBuildConfigForProject(dependency.project, build);
   const clone = buildConfig?.clone;
-  const skip = buildConfig?.skip;
-  const buildCommand = !skip ? getBuildCommand(dependency.project, defaultBuild, build) : undefined;
+  const buildCommand = !buildConfig?.skip ? getBuildCommand(dependency.project, defaultBuild, build) : undefined;
   return {
     project: dependency.project,
     parents: [],
