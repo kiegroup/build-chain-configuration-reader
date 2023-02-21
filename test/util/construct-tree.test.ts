@@ -219,6 +219,14 @@ test("skip project", async () => {
       },
     },
     {
+      project: "kiegroup/droolsjbpm-build-bootstrap",
+      commands: {
+        upstream: [],
+        current: [],
+        downstream: [],
+      },
+    },
+    {
       project: "kiegroup/drools",
       after: {
         upstream: ["cmd 4"],

@@ -57,26 +57,25 @@ function constructNode(
   defaultBuild?: BuildCommand,
   build?: Build[]
 ): Node | undefined {
-  const buildCommand = getBuildCommand(dependency.project, defaultBuild, build);
   const buildConfig = findBuildConfigForProject(dependency.project, build);
   const clone = buildConfig?.clone;
-  return buildConfig?.skip
-    ? undefined
-    : {
-        project: dependency.project,
-        parents: [],
-        children: [],
-        archiveArtifacts: getArchiveArtifacts(dependency.project, build),
-        mapping: dependency.mapping,
-        before: buildCommand?.before,
-        after: buildCommand?.after,
-        commands: {
-          upstream: buildCommand?.upstream ?? [],
-          downstream: buildCommand?.downstream ?? [],
-          current: buildCommand?.current ?? [],
-        },
-        ...(clone ? { clone } : {}),
-      };
+  const skip = buildConfig?.skip;
+  const buildCommand = !skip ? getBuildCommand(dependency.project, defaultBuild, build) : undefined;
+  return {
+    project: dependency.project,
+    parents: [],
+    children: [],
+    archiveArtifacts: getArchiveArtifacts(dependency.project, build),
+    mapping: dependency.mapping,
+    before: buildCommand?.before,
+    after: buildCommand?.after,
+    commands: {
+      upstream: buildCommand?.upstream ?? [],
+      downstream: buildCommand?.downstream ?? [],
+      current: buildCommand?.current ?? [],
+    },
+    ...(clone ? { clone } : {}),
+  };
 }
 
 function isRoot(dependency: Dependency): boolean {
