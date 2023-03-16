@@ -28,6 +28,7 @@ import { Mapping } from "@bc-cr/domain/mapping";
 import { Node } from "@bc-cr/domain/node";
 import { ReaderOpts } from "@bc-cr/domain/readerOptions";
 import { Pre, Post } from "@bc-cr/domain/pre-post";
+import { getFullDownstreamProjects, getUpstreamProjects } from "@bc-cr/graph";
 
 export {
   getTree,
@@ -38,6 +39,8 @@ export {
   readDefinitionFile,
   getMappedTarget,
   getMapping,
+  getUpstreamProjects,
+  getFullDownstreamProjects,
   ArchiveArtifacts,
   ArchiveDependencies,
   ArchiveOn,
