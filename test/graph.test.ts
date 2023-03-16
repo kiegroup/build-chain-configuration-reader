@@ -1,6 +1,7 @@
 import { getFullDownstreamProjects, getUpstreamProjects } from "@bc-cr/graph";
 import { Node } from "@bc-cr/domain/node";
 import { getOrderedListForProject, getTreeForProject, parentChainFromNode } from "@bc-cr/tree";
+import path from "path";
 
 test.each([
   [
@@ -241,13 +242,14 @@ test.each([
     ]
   ]
 ])("getUpstreamProjects for %p", async (project: string, expected: string[]) => {
+  const definitionFile = path.join(__dirname, "resources", "graph", "definition-file.yaml");
   const result = await getUpstreamProjects(
-    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/compilation-config.yaml", 
+    definitionFile, 
     project
   );
   expect(result.map(r => r.project)).toStrictEqual(expected);
   await verifyUpstreamAgainstTreeImplementation(
-    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/compilation-config.yaml",
+    definitionFile,
     project,
     result
   );
@@ -706,14 +708,16 @@ test.each([
     ]
   ]
 ])("getFullDownstreamProjects for %p", async (project: string, expected: string[]) => {
+  const definitionFile = path.join(__dirname, "resources", "graph", "definition-file.yaml");
+
   const result = await getFullDownstreamProjects(
-    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/compilation-config.yaml", 
+    definitionFile, 
     project
   );
 
   expect(result.map(r => r.project)).toStrictEqual(expected);
   await verifyFullDowstreamAgainstTreeImplementation(
-    "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/compilation-config.yaml",
+    definitionFile,
     project,
     result
   );
