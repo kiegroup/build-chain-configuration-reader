@@ -18,7 +18,7 @@ export function constructGraph(
     current.dependencies?.forEach(parent => {
       // make sure the dependency was actually defined
       if (!g[parent.project]) {
-        throw new Error("parent does not exist");
+        throw new Error(`The project ${parent.project} does not exist on project list. Please review your project definition file`);
       }
       
       // each dependency of a project is added to the outgoing edges of the project
