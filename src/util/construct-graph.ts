@@ -9,25 +9,25 @@ export function constructGraph(
    * key = project name
    * value = array of project names which it depends on
    */ 
-  const initializedGraph = dependencies.reduce((ig: Graph, current) => {
-    initializeVertex(current, ig);
-    return ig;
+  const initializedGraph = dependencies.reduce((initialGraph: Graph, current: Dependency) => {
+    initializeVertex(current, initialGraph);
+    return initialGraph;
   }, {});
 
-  const graph = dependencies.reduce((g: Graph, current) => {
+  const graph = dependencies.reduce((graph: Graph, current: Dependency) => {
     current.dependencies?.forEach(parent => {
       // make sure the dependency was actually defined
-      if (!g[parent.project]) {
+      if (!graph[parent.project]) {
         throw new Error(`The project ${parent.project} does not exist on project list. Please review your project definition file`);
       }
       
       // each dependency of a project is added to the outgoing edges of the project
-      g[current.project].outgoing.add(parent.project);
+      graph[current.project].outgoing.add(parent.project);
 
       // for each dependency, the project is added to the incoming edges
-      g[parent.project].incoming.add(current.project);
+      graph[parent.project].incoming.add(current.project);
     });
-    return g;
+    return graph;
   }, initializedGraph);
 
   return graph;
@@ -40,9 +40,9 @@ export function constructGraph(
  */
 export function DFS(project: string, graph: Graph, outgoingOnly = false) {
   const result: Dependency[] = [];
-  const visited = Object.keys(graph).reduce((v: Record<string, Visited>, curr) => {
-    v[curr] = Visited.VISITED_NONE;
-    return v;
+  const visited = Object.keys(graph).reduce((visited: Record<string, Visited>, curr: string) => {
+    visited[curr] = Visited.VISITED_NONE;
+    return visited;
   }, {});
   if (outgoingOnly) {
     visitOutgoingEdges(project, graph, visited, result);
@@ -62,48 +62,44 @@ function visitOutgoingEdges(project: string, graph: Graph, visited: Record<strin
     throw new Error("Cycle detected");
   }
 
-  // if the node has already been visited
-  if (visited[project] !== Visited.VISITED_NONE) {
-    return;
+  // if the node has not already been visited
+  if (visited[project] === Visited.VISITED_NONE) {
+    // mark the node with a temporary mark
+    visited[project] = Visited.VISITING_OUTGOING;
+
+    for (const dependency of graph[project].outgoing) {
+      visitOutgoingEdges(dependency, graph, visited, result);
+    }
+
+    // mark the node with a permanent mark
+    visited[project] = Visited.VISITED_OUTGOING;
+    result.push(graph[project].dependency);
   }
-
-  // mark the node with a temporary mark
-  visited[project] = Visited.VISITING_OUTGOING;
-
-  for (const dependency of graph[project].outgoing) {
-    visitOutgoingEdges(dependency, graph, visited, result);
-  }
-
-  // mark the node with a permanent mark
-  visited[project] = Visited.VISITED_OUTGOING;
-  result.push(graph[project].dependency);
 }
 
 function visit(project: string, graph: Graph, visited: Record<string, Visited>, result: Dependency[]) {
   // DFS on outgoing edges first
   visitOutgoingEdges(project, graph, visited, result);
 
-  // if the node has already been visited
-  if (visited[project] === Visited.VISITED_ALL) {
-    return;
-  }
+  // if the node has not already been visited
+  if (visited[project] !== Visited.VISITED_ALL) {
+    // check whether node already has a temporary mark in which case we have a cycle that cant be resolved
+    if (visited[project] === Visited.VISITING_INCOMING) {
+      throw new Error("Cycle detected");
+    }
 
-  // check whether node already has a temporary mark in which case we have a cycle that cant be resolved
-  if (visited[project] === Visited.VISITING_INCOMING) {
-    throw new Error("Cycle detected");
-  }
+    // mark the node with a temporary mark
+    visited[project] = Visited.VISITING_INCOMING;
 
-  // mark the node with a temporary mark
-  visited[project] = Visited.VISITING_INCOMING;
+    for (const dependant of graph[project].incoming) {
+      // before visiting the incoming edge of the current dependant, visit all its outgoing edges (i.e dependencies)
+      visitOutgoingEdges(dependant, graph, visited, result);
+      visit(dependant, graph, visited, result);
+    }
 
-  for (const dependant of graph[project].incoming) {
-    // before visiting the incoming edge of the current dependant, visit all its outgoing edges (i.e dependencies)
-    visitOutgoingEdges(dependant, graph, visited, result);
-    visit(dependant, graph, visited, result);
-  }
-
-  // mark the node with a permanent mark. no need to add it to result since visitOutgoingEdges already does that
-  visited[project] = Visited.VISITED_ALL;
+    // mark the node with a permanent mark. no need to add it to result since visitOutgoingEdges already does that
+    visited[project] = Visited.VISITED_ALL;
+  }  
 }
 
 function initializeVertex(dependency: Dependency, graph: Graph) {
