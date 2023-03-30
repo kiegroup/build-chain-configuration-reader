@@ -407,6 +407,8 @@ You will need to run `export NPM_TOKEN=whatever_token` before being able to comm
 - getOrderedListForProject: it returns back a plain list ordered by precedence for a specifi project.
 - readDefinitionFile: It will return back the definition file plus dependencies as an object
 - parentChainFromNode: it generates an ordered array of node's parents from top to bottom
+- getUpstreamProjects: it gets the list of all the upstream project from a given a project (equivalent to getTreeForProject followed by parentChainFromNode)
+- getFullDownstreamProjects: it gets the list of all the upstream and downstream project from a given a project (equivalent to getOrderedListForProject)
 
 ### Restrictions
 
