@@ -94,7 +94,12 @@ async function loadDependencies(
 
   // extend loaded dependencies if needed
   return extendedDependencies
-    ? extendedDependencies.concat(loadedDependencies)
+    ? loadedDependencies.concat(
+      // pick current dependency over extended if project is defined in both
+      extendedDependencies.filter(ed => 
+        !loadedDependencies.find(ld => ed.project === ld.project)
+      )
+    )
     : loadedDependencies;
 }
 
