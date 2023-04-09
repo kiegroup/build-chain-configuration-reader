@@ -13,9 +13,14 @@ describe("get content", () => {
     );
     expect(definitionFile).toEqual({
       version: "2.1",
-      dependencies: Array(2).fill({
-        project: "owner1/project1",
-      }),
+      dependencies: [
+        {
+          project: "owner1/project1",
+        },
+        {
+          project: "owner1/project2",
+        }
+      ],
     });
   });
 
@@ -31,9 +36,14 @@ describe("get content", () => {
     );
     expect(definitionFile).toEqual({
       version: "2.1",
-      dependencies: Array(2).fill({
-        project: "owner1/project1",
-      }),
+      dependencies: [
+        {
+          project: "owner1/project1",
+        },
+        {
+          project: "owner1/project2",
+        }
+      ],
     });
   });
 
@@ -50,9 +60,14 @@ describe("get content", () => {
     );
     expect(definitionFile).toEqual({
       version: "2.1",
-      dependencies: Array(2).fill({
-        project: "owner1/project1",
-      }),
+      dependencies: [
+        {
+          project: "owner1/project1",
+        },
+        {
+          project: "owner1/project2",
+        }
+      ],
     });
   });
 
@@ -157,11 +172,11 @@ describe("definition file with extends", () => {
     expect(result.post).toBe(undefined);
     expect(result.pre).toStrictEqual(["hello", "world"]);
     expect(result.dependencies).toEqual([
-      ...expected.dependencies!,
       {
         project: "kiegroup/new-project",
         dependencies: [{ project: "kiegroup/appformer" }],
       },
+      ...expected.dependencies!,
     ]);
     expect(result.default).toEqual({
       "build-command": {
@@ -234,11 +249,11 @@ describe("definition file with extends", () => {
     expect(result.post).toBe(undefined);
     expect(result.pre).toStrictEqual(["hello", "world"]);
     expect(result.dependencies).toEqual([
-      ...expected.dependencies!,
       {
         project: "kiegroup/new-project",
         dependencies: [{ project: "kiegroup/appformer" }],
       },
+      ...expected.dependencies!,
     ]);
     expect(result.default).toEqual({
       "build-command": {
@@ -309,11 +324,11 @@ describe("definition file with extends", () => {
     expect(result.pre).toStrictEqual(["world"]);
     expect(result.post).toStrictEqual({success: ["hello"]});
     expect(result.dependencies).toEqual([
-      ...expected.dependencies!,
       {
         project: "kiegroup/new-project",
         dependencies: [{ project: "kiegroup/appformer" }],
       },
+      ...expected.dependencies!,
     ]);
     expect(result.default).toEqual({
       "build-command": {
@@ -375,11 +390,11 @@ describe("definition file with extends", () => {
     expect(result.version).toBe("2.2");
     expect(result.extends).toBe(undefined);
     expect(result.dependencies).toEqual([
-      ...expected.dependencies!,
       {
         project: "kiegroup/new-project",
         dependencies: [{ project: "kiegroup/appformer" }],
       },
+      ...expected.dependencies!,
     ]);
     expect(result.default).toEqual({
       "build-command": {
@@ -443,11 +458,11 @@ describe("definition file with extends", () => {
     expect(result.post).toBe(undefined);
     expect(result.pre).toStrictEqual(["hello", "world"]);
     expect(result.dependencies).toEqual([
-      ...expected.dependencies!,
       {
         project: "kiegroup/new-project",
         dependencies: [{ project: "kiegroup/appformer" }],
       },
+      ...expected.dependencies!,     
     ]);
     expect(result.default).toEqual({
       "build-command": {
@@ -498,6 +513,23 @@ describe("definition file with extends", () => {
       ...expected.build!.filter(
         build => build.project !== "kiegroup/appformer"
       ),
+    ]);
+  });
+});
+
+describe("dependencies with extends", () => {
+  test("override dependency with current value if defined in extends and current dependency file", async () => {
+    const result = await readDefinitionFile(
+      path.join(resourcePath, "extends-dependency-definition-file.yml")
+    );
+    expect(result.dependencies).toEqual([
+      {
+        project: "owner1/project1",
+        dependencies: [{ project: "owner1/project2" }],
+      },
+      {
+        project: "owner1/project2",
+      },
     ]);
   });
 });

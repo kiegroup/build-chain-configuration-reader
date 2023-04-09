@@ -1,0 +1,12 @@
+version: "2.1"
+
+dependencies: ./extends-dependency.yml
+
+default:
+  build-command:
+    current: mvn clean install -Dproductized=true -DskipTests=true ${{ env.BUILD_MVN_OPTS }}
+    upstream: mvn clean install -Dquickly -Dproductized=true -DskipTests=true ${{ env.BUILD_MVN_OPTS }} 
+    downstream: mvn clean install -Dquickly -Dproductized=true -DskipTests=true ${{ env.BUILD_MVN_OPTS }} 
+    after:
+      current: |
+        docker system prune -f 
