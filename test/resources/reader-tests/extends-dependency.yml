@@ -1,0 +1,8 @@
+version: "2.1"
+
+extends: ./content.yml
+
+dependencies:
+  - project: owner1/project1
+    dependencies:
+      - project: owner1/project2
