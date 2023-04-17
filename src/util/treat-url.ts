@@ -39,8 +39,8 @@ function replacePlaceholders(
   const matches = [...url.matchAll(placeholderRegex)];
   matches.forEach(match => {
     const key = match[1];
-    // if default value is not specified then try to use env variable
-    let value = match[3] ?? process.env[key] ?? "";
+    // if env variable is not defined then use default value 
+    let value = process.env[key] ?? match[3] ?? "";
     if (key === "GROUP" && group) {
       value = group;
     } else if (key === "PROJECT_NAME" && name) {
