@@ -40,7 +40,7 @@ jobs:
       - name: Update github-action-build-chain 
         uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.UPDATE_BUILD_CHAIN }}
+          token: ${{ secrets.UPDATE_BUILD_CHAIN_MY_TOKEN }}
           repository: kiegroup/github-action-build-chain
           event-type: update-build-chain-configuration-reader
           client-payload: '{"version": "${{ steps.package-version.outputs.current-version }}"}'
