@@ -3,6 +3,29 @@ import { Node } from "@bc-cr/domain/node";
 import { getOrderedListForProject, getTreeForProject, parentChainFromNode } from "@bc-cr/tree";
 import path from "path";
 
+const expectedDepths: Record<string, number> = {
+  "kiegroup/lienzo-core": 0,
+  "kiegroup/droolsjbpm-build-bootstrap": 0,
+  "kiegroup/lienzo-tests": 1,
+  "kiegroup/kie-soup": 1,
+  "kiegroup/appformer": 2,
+  "kiegroup/kie-uberfire-extensions": 3,
+  "kiegroup/droolsjbpm-knowledge": 2,
+  "kiegroup/drools": 3,
+  "kiegroup/jbpm": 4,
+  "kiegroup/optaplanner": 4,
+  "kiegroup/droolsjbpm-integration": 5,
+  "kiegroup/kie-wb-playground": 6,
+  "kiegroup/kie-wb-common": 7,
+  "kiegroup/drools-wb": 8,
+  "kiegroup/jbpm-work-items": 6,
+  "kiegroup/jbpm-wb": 9,
+  "kiegroup/optaplanner-wb": 9,
+  "kiegroup/kie-wb-distributions": 10,
+  "kiegroup/process-migration-service": 6,
+  "kiegroup/kie-jpmml-integration": 5
+};
+
 test.each([
   [
     "kiegroup/lienzo-core",
@@ -253,6 +276,7 @@ test.each([
     project,
     result
   );
+  result.forEach(r => expect(r.depth).toBe(expectedDepths[r.project]));
 });
 
 test.each([
@@ -721,6 +745,7 @@ test.each([
     project,
     result
   );
+  result.forEach(r => expect(r.depth).toBe(expectedDepths[r.project]));
 });
 
 async function verifyFullDowstreamAgainstTreeImplementation(definitionFile: string, project: string, result: Node[]) {

@@ -5,7 +5,8 @@ import { Node } from "@bc-cr/domain/node";
 export function constructNode(
   dependency: Dependency,
   defaultBuild?: BuildCommand,
-  build?: Build[]
+  build?: Build[],
+  depth = 0
 ): Node {
   const buildConfig = findBuildConfigForProject(dependency.project, build);
   const clone = buildConfig?.clone;
@@ -18,6 +19,7 @@ export function constructNode(
     mapping: dependency.mapping,
     before: buildCommand?.before,
     after: buildCommand?.after,
+    depth,
     commands: {
       upstream: buildCommand?.upstream ?? [],
       downstream: buildCommand?.downstream ?? [],

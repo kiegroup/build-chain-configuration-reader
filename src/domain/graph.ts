@@ -5,6 +5,7 @@ export type Graph = {
     incoming: Set<string>
     outgoing: Set<string>
     dependency: Dependency
+    depth: number
   }
 }
 

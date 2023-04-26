@@ -6,6 +6,7 @@ export interface Node {
   project: string;
   parents: Node[];
   children: Node[];
+  depth: number;
   before?: CommandLevel;
   commands?: CommandLevel;
   after?: CommandLevel;
