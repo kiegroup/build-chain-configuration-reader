@@ -9,6 +9,10 @@ export const DependenciesSchema: JSONSchemaType<Dependency[]> = {
     type: "object",
     properties: {
       project: ProjectNameSchema,
+      platform: {
+        type: "string",
+        nullable: true
+      },
       dependencies: {
         type: "array",
         items: {
@@ -27,3 +31,21 @@ export const DependenciesSchema: JSONSchemaType<Dependency[]> = {
     additionalProperties: false,
   },
 };
+
+export const DefinitionFileVersionToDependencySchema: {
+  "2.2": JSONSchemaType<Omit<Dependency, "platform">[]>,
+  "2.3": JSONSchemaType<Dependency[]>
+} = {
+  "2.3": DependenciesSchema,
+  "2.2": {
+    ...DependenciesSchema,
+    items: {
+      ...DependenciesSchema.items,
+      properties: {
+        ...DependenciesSchema.items.properties,
+        platform: false
+      }
+    }
+  } as JSONSchemaType<Omit<Dependency, "platform">[]>
+};
+
