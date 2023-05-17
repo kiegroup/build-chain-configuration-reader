@@ -6,4 +6,5 @@ export interface Dependency {
     project: string;
   }[];
   mapping?: Mapping;
+  platform?: string
 }
