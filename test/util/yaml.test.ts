@@ -1,6 +1,8 @@
+import { DEFAULT_GITHUB_API_URL, DEFAULT_GITHUB_SERVER_URL, DEFAULT_GITLAB_API_URL, DEFAULT_GITLAB_SERVER_URL } from "@bc-cr/domain/platform";
 import { validateDefinitionFile } from "@bc-cr/util/yaml";
 import { readdirSync, readFileSync } from "fs";
 import path from "path";
+import { stringify } from "yaml";
 const resourcePath = path.resolve(__dirname, "..", "resources", "schema-tests");
 
 describe("version validation", () => {
@@ -396,5 +398,134 @@ describe("works for definition file examples from older versions", () => {
         ).resolves.not.toThrowError()
       )
     );
+  });
+});
+
+describe("schema 2.3", () => {
+  test("success: dependency platform validated", async () => {
+    const data = {
+      version: 2.3,
+      dependencies: [
+        {
+          project: "owner1/project1",
+          platform: "github"
+        },
+        {
+          project: "owner2/project2",
+          platform: "gitlab"
+        },
+        {
+          project: "owner3/project3"
+        }
+      ]
+    };
+    await expect(
+      validateDefinitionFile(
+        stringify(data)
+      )
+    ).resolves.toMatchObject(data);
+  });
+
+  test("failure: dependency platform with incorrect version", async () => {
+    const data = {
+      version: 2.2,
+      dependencies: [
+        {
+          project: "owner1/project1",
+          platform: "github"
+        },
+        {
+          project: "owner3/project3"
+        }
+      ]
+    };
+    await expect(
+      validateDefinitionFile(
+        stringify(data)
+      )
+    ).rejects.toThrowError();
+  });
+
+  test.each([
+    ["incorrect version", 2.2, "github"],
+    ["incorrect platform type", 2.3, "gerrit"]
+  ])("failure: platforms validatiion with %p", async (_title, version, platformType) => {
+    const data = {
+      version,
+      dependencies: [
+        {
+          project: "owner3/project3"
+        }
+      ],
+      platforms: [
+        {
+          name: "Github enterprise",
+          id: "ghes",
+          type: platformType
+        }
+      ]
+    };
+    await expect(
+      validateDefinitionFile(
+        stringify(data)
+      )
+    ).rejects.toThrowError();
+  });
+
+  test("success: platforms validated", async () => {
+    const data = {
+      version: 2.3,
+      dependencies: [
+        {
+          project: "owner3/project3"
+        }
+      ],
+      platforms: [
+        {
+          id: "gh",
+          type: "github"
+        },
+        {
+          name: "private gitlab",
+          id: "gl",
+          type: "gitlab"
+        },
+        {
+          id: "ghes",
+          type: "github",
+          serverUrl: "https://ghes.com",
+          apiUrl: "https://api.ghes.com"
+        }
+      ]
+    };
+
+    await expect(
+      validateDefinitionFile(
+        stringify(data)
+      )
+    ).resolves.toStrictEqual({
+      ...data,
+      platforms: [
+        {
+          id: "gh",
+          type: "github",
+          serverUrl: DEFAULT_GITHUB_SERVER_URL,
+          apiUrl: DEFAULT_GITHUB_API_URL
+        },
+        {
+          name: "private gitlab",
+          id: "gl",
+          type: "gitlab",
+          serverUrl: DEFAULT_GITLAB_SERVER_URL,
+          apiUrl: DEFAULT_GITLAB_API_URL
+        },
+        {
+          id: "ghes",
+          type: "github",
+          serverUrl: "https://ghes.com",
+          apiUrl: "https://api.ghes.com"
+        }
+      ]
+    });
   });
 });
