@@ -1,8 +1,10 @@
 import {
   DEFAULT_GITHUB_API_URL,
   DEFAULT_GITHUB_SERVER_URL,
+  DEFAULT_GITHUB_TOKEN_ID,
   DEFAULT_GITLAB_API_URL,
   DEFAULT_GITLAB_SERVER_URL,
+  DEFAULT_GITLAB_TOKEN_ID,
   Platform,
   PlatformType,
 } from "@bc-cr/domain/platform";
@@ -28,8 +30,11 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
     apiUrl: {
       type: "string",
     },
+    tokenId: {
+      type: "string"
+    }
   },
-  required: ["apiUrl", "id", "type", "serverUrl"],
+  required: ["apiUrl", "id", "type", "serverUrl", "tokenId"],
   if: {
     properties: {
       type: {
@@ -45,6 +50,9 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
       serverUrl: {
         default: DEFAULT_GITHUB_SERVER_URL,
       },
+      tokenId: {
+        default: DEFAULT_GITHUB_TOKEN_ID
+      }
     },
   },
   else: {
@@ -55,6 +63,9 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
       serverUrl: {
         default: DEFAULT_GITLAB_SERVER_URL,
       },
+      tokenId: {
+        default: DEFAULT_GITLAB_TOKEN_ID
+      }
     },
   },
 };

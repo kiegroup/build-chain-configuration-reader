@@ -1,4 +1,4 @@
-import { DEFAULT_GITHUB_API_URL, DEFAULT_GITHUB_SERVER_URL, DEFAULT_GITLAB_API_URL, DEFAULT_GITLAB_SERVER_URL } from "@bc-cr/domain/platform";
+import { DEFAULT_GITHUB_API_URL, DEFAULT_GITHUB_SERVER_URL, DEFAULT_GITHUB_TOKEN_ID, DEFAULT_GITLAB_API_URL, DEFAULT_GITLAB_SERVER_URL, DEFAULT_GITLAB_TOKEN_ID } from "@bc-cr/domain/platform";
 import { validateDefinitionFile } from "@bc-cr/util/yaml";
 import { readdirSync, readFileSync } from "fs";
 import path from "path";
@@ -494,7 +494,8 @@ describe("schema 2.3", () => {
           id: "ghes",
           type: "github",
           serverUrl: "https://ghes.com",
-          apiUrl: "https://api.ghes.com"
+          apiUrl: "https://api.ghes.com",
+          tokenId: "GHES_TOKEN"
         }
       ]
     };
@@ -510,20 +511,23 @@ describe("schema 2.3", () => {
           id: "gh",
           type: "github",
           serverUrl: DEFAULT_GITHUB_SERVER_URL,
-          apiUrl: DEFAULT_GITHUB_API_URL
+          apiUrl: DEFAULT_GITHUB_API_URL,
+          tokenId: DEFAULT_GITHUB_TOKEN_ID
         },
         {
           name: "private gitlab",
           id: "gl",
           type: "gitlab",
           serverUrl: DEFAULT_GITLAB_SERVER_URL,
-          apiUrl: DEFAULT_GITLAB_API_URL
+          apiUrl: DEFAULT_GITLAB_API_URL,
+          tokenId: DEFAULT_GITLAB_TOKEN_ID
         },
         {
           id: "ghes",
           type: "github",
           serverUrl: "https://ghes.com",
-          apiUrl: "https://api.ghes.com"
+          apiUrl: "https://api.ghes.com",
+          tokenId: "GHES_TOKEN"
         }
       ]
     });
