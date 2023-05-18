@@ -18,6 +18,7 @@ build: [build information]
 
 ### Valid versions
 
+* 2.3
 * 2.2
 * 2.1
 
@@ -62,6 +63,18 @@ and stablish their dependencies with each other
 - project: kiegroup/drools
   dependencies:
     - project: kiegroup/lienzo-tests
+```
+
+#### version 2.3 additions
+
+For each dependency you can add a field called `platform` which contains the `id` of the git platform you want to use for that project. Example:
+
+```
+dependencies:
+  - project: PROJECT_NAME
+    dependencies:
+      - project: PROJECT_NAME
+        platform: PLATFORM_ID
 ```
 
 ### Mapping
@@ -387,6 +400,21 @@ it will produce
         current: |
            rm -rf ./*
            echo 'TEST1'
+```
+
+### Platforms (only in version 2.3)
+
+You can define multiple git platforms and define which platform to use for each project. By default if no platform is defined then community GitHub is used (i.e. non-enterprise). Useful when you have some projects on GitHub enterprise, GitLab, self-hosted GitLab etc.
+
+```
+platforms:
+  - name: [OPTIONAL] Human readable name of the platform (eg: GitHub enterprise)
+  - id: Unique identifier of the platform. Used to map a platform to a project. Used in dependencies section
+  - type: The type platform. "github" or "gitlab"
+  - tokenId: [OPTIONAL] env key value in which the token will be available for use. By default it is GITHUB_TOKEN for github and GITLAB_TOKEN for gitlab
+  - serverUrl: [OPTIONAL] url from which we can clone the projects from. By default it is https://github.com for github and https://gitlab.com for gitlab
+  - apiUrl: [OPTIONAL] url through which we can access the platform's APIs. By default it is https://api.github.com for github and https://gitlab.com/api/v4
+  - 
 ```
 
 ## Development
