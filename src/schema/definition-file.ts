@@ -1,12 +1,13 @@
 import { DefinitionFile } from "@bc-cr/domain/definition-file";
 import { BuildCommandSchema, BuildSchema } from "@bc-cr/schema/build";
-import { DependenciesSchema } from "@bc-cr/schema/dependencies";
+import { DefinitionFileVersionToDependencySchema, DependenciesSchema } from "@bc-cr/schema/dependencies";
+import { PlatformSchema } from "@bc-cr/schema/platform";
 import { JSONSchemaType } from "ajv";
 
 export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
   type: "object",
   properties: {
-    version: { type: ["string", "number"], enum: ["2.1", 2.1, "2.2", 2.2] },
+    version: { type: ["string", "number"], enum: ["2.1", 2.1, "2.2", 2.2, "2.3", 2.3] },
     dependencies: {
       type: ["string", "array"],
       oneOf: [
@@ -48,6 +49,33 @@ export const DefintionFileSchema: JSONSchemaType<DefinitionFile> = {
         failure: {type: "array", items: {type: "string"}, nullable: true},
       },
       nullable: true
+    },
+    platforms: {
+      type: "array",
+      items: PlatformSchema,
+      nullable: true
+    }
+  },
+  if: {
+    properties: {
+      version: {
+        not: {
+          enum: ["2.3", 2.3]
+        }
+      }
+    }
+  },
+  then: {
+    properties: {
+      dependencies: {
+        type: ["string", "array"],
+        oneOf: [
+          { type: "string" },
+          DefinitionFileVersionToDependencySchema["2.2"],
+        ],
+        nullable: true
+      },
+      platforms: false
     }
   },
   required: ["version"],
