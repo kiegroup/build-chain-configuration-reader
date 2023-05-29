@@ -29,6 +29,7 @@ import { Node } from "@bc-cr/domain/node";
 import { ReaderOpts } from "@bc-cr/domain/readerOptions";
 import { Pre, Post } from "@bc-cr/domain/pre-post";
 import { getFullDownstreamProjects, getUpstreamProjects } from "@bc-cr/graph";
+import { Platform, PlatformType } from "@bc-cr/domain/platform";
 
 export {
   getTree,
@@ -56,4 +57,6 @@ export {
   ReaderOpts,
   Pre,
   Post,
+  PlatformType,
+  Platform
 };
