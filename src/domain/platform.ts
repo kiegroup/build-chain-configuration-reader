@@ -13,7 +13,7 @@ export enum PlatformType {
 }
 
 export const DEFAULT_GITHUB_PLATFORM: Platform = {
-  id: "github-default",
+  id: "github-public",
   type: PlatformType.GITHUB,
   serverUrl: "https://github.com",
   apiUrl: "https://api.github.com",
@@ -21,7 +21,7 @@ export const DEFAULT_GITHUB_PLATFORM: Platform = {
 };
 
 export const DEFAULT_GITLAB_PLATFORM: Platform = {
-  id: "gitlab-default",
+  id: "gitlab-public",
   type: PlatformType.GITLAB,
   serverUrl: "https://gitlab.com",
   apiUrl: "https://gitlab.com/api/v4",
