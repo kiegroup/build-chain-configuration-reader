@@ -1,10 +1,6 @@
 import {
-  DEFAULT_GITHUB_API_URL,
-  DEFAULT_GITHUB_SERVER_URL,
-  DEFAULT_GITHUB_TOKEN_ID,
-  DEFAULT_GITLAB_API_URL,
-  DEFAULT_GITLAB_SERVER_URL,
-  DEFAULT_GITLAB_TOKEN_ID,
+  DEFAULT_GITHUB_PLATFORM,
+  DEFAULT_GITLAB_PLATFORM,
   Platform,
   PlatformType,
 } from "@bc-cr/domain/platform";
@@ -19,6 +15,10 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
     },
     id: {
       type: "string",
+      not: {
+        type: "string",
+        enum: [DEFAULT_GITHUB_PLATFORM.id, DEFAULT_GITLAB_PLATFORM.id]
+      }
     },
     serverUrl: {
       type: "string",
@@ -45,26 +45,26 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
   then: {
     properties: {
       apiUrl: {
-        default: DEFAULT_GITHUB_API_URL,
+        default: DEFAULT_GITHUB_PLATFORM.apiUrl,
       },
       serverUrl: {
-        default: DEFAULT_GITHUB_SERVER_URL,
+        default: DEFAULT_GITHUB_PLATFORM.serverUrl,
       },
       tokenId: {
-        default: DEFAULT_GITHUB_TOKEN_ID
+        default: DEFAULT_GITHUB_PLATFORM.tokenId
       }
     },
   },
   else: {
     properties: {
       apiUrl: {
-        default: DEFAULT_GITLAB_API_URL,
+        default: DEFAULT_GITLAB_PLATFORM.apiUrl,
       },
       serverUrl: {
-        default: DEFAULT_GITLAB_SERVER_URL,
+        default: DEFAULT_GITLAB_PLATFORM.serverUrl,
       },
       tokenId: {
-        default: DEFAULT_GITLAB_TOKEN_ID
+        default: DEFAULT_GITLAB_PLATFORM.tokenId
       }
     },
   },
