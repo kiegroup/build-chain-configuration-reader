@@ -12,9 +12,18 @@ export enum PlatformType {
   GITLAB = "gitlab"
 }
 
-export const DEFAULT_GITHUB_SERVER_URL = "https://github.com";
-export const DEFAULT_GITHUB_API_URL = "https://api.github.com";
-export const DEFAULT_GITHUB_TOKEN_ID = "GITHUB_TOKEN";
-export const DEFAULT_GITLAB_SERVER_URL = "https://gitlab.com";
-export const DEFAULT_GITLAB_API_URL = "https://gitlab.com/api/v4";
-export const DEFAULT_GITLAB_TOKEN_ID = "GITLAB_TOKEN";
+export const DEFAULT_GITHUB_PLATFORM: Platform = {
+  id: "github-public",
+  type: PlatformType.GITHUB,
+  serverUrl: "https://github.com",
+  apiUrl: "https://api.github.com",
+  tokenId: "GITHUB_TOKEN"
+};
+
+export const DEFAULT_GITLAB_PLATFORM: Platform = {
+  id: "gitlab-public",
+  type: PlatformType.GITLAB,
+  serverUrl: "https://gitlab.com",
+  apiUrl: "https://gitlab.com/api/v4",
+  tokenId: "GITLAB_TOKEN"
+};

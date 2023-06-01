@@ -1,6 +1,7 @@
 import { Build, BuildCommand, CommandLevel } from "@bc-cr/domain/build";
 import { Dependency } from "@bc-cr/domain/dependencies";
 import { Node } from "@bc-cr/domain/node";
+import { DEFAULT_GITHUB_PLATFORM } from "@bc-cr/domain/platform";
 
 export function constructNode(
   dependency: Dependency,
@@ -26,6 +27,7 @@ export function constructNode(
       current: buildCommand?.current ?? [],
     },
     ...(clone ? { clone } : {}),
+    platformId: dependency.platform ?? DEFAULT_GITHUB_PLATFORM.id
   };
 }
 

@@ -409,7 +409,7 @@ You can define multiple git platforms and define which platform to use for each 
 ```
 platforms:
   - name: [OPTIONAL] Human readable name of the platform (eg: GitHub enterprise)
-  - id: Unique identifier of the platform. Used to map a platform to a project. Used in dependencies section
+  - id: Unique identifier of the platform. Used to map a platform to a project. Used in dependencies section. The ids: github-public and gitlab-public are reserved and are configured to use the default values.
   - type: The type platform. "github" or "gitlab"
   - tokenId: [OPTIONAL] env key value in which the token will be available for use. By default it is GITHUB_TOKEN for github and GITLAB_TOKEN for gitlab
   - serverUrl: [OPTIONAL] url from which we can clone the projects from. By default it is https://github.com for github and https://gitlab.com for gitlab

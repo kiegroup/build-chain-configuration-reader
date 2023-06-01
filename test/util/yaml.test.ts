@@ -1,4 +1,4 @@
-import { DEFAULT_GITHUB_API_URL, DEFAULT_GITHUB_SERVER_URL, DEFAULT_GITHUB_TOKEN_ID, DEFAULT_GITLAB_API_URL, DEFAULT_GITLAB_SERVER_URL, DEFAULT_GITLAB_TOKEN_ID } from "@bc-cr/domain/platform";
+import { DEFAULT_GITHUB_PLATFORM, DEFAULT_GITLAB_PLATFORM } from "@bc-cr/domain/platform";
 import { validateDefinitionFile } from "@bc-cr/util/yaml";
 import { readdirSync, readFileSync } from "fs";
 import path from "path";
@@ -447,9 +447,10 @@ describe("schema 2.3", () => {
   });
 
   test.each([
-    ["incorrect version", 2.2, "github"],
-    ["incorrect platform type", 2.3, "gerrit"]
-  ])("failure: platforms validatiion with %p", async (_title, version, platformType) => {
+    ["incorrect version", 2.2, "github", "ghes"],
+    ["incorrect platform type", 2.3, "gerrit", "ghes"],
+    ["incorrect id. using reserved id", 2.3, "github", DEFAULT_GITHUB_PLATFORM.id]
+  ])("failure: platforms validation with %p", async (_title, version, platformType, platformId) => {
     const data = {
       version,
       dependencies: [
@@ -460,7 +461,7 @@ describe("schema 2.3", () => {
       platforms: [
         {
           name: "Github enterprise",
-          id: "ghes",
+          id: platformId,
           type: platformType
         }
       ]
@@ -508,19 +509,13 @@ describe("schema 2.3", () => {
       ...data,
       platforms: [
         {
+          ...DEFAULT_GITHUB_PLATFORM,
           id: "gh",
-          type: "github",
-          serverUrl: DEFAULT_GITHUB_SERVER_URL,
-          apiUrl: DEFAULT_GITHUB_API_URL,
-          tokenId: DEFAULT_GITHUB_TOKEN_ID
         },
         {
+          ...DEFAULT_GITLAB_PLATFORM,
           name: "private gitlab",
           id: "gl",
-          type: "gitlab",
-          serverUrl: DEFAULT_GITLAB_SERVER_URL,
-          apiUrl: DEFAULT_GITLAB_API_URL,
-          tokenId: DEFAULT_GITLAB_TOKEN_ID
         },
         {
           id: "ghes",
