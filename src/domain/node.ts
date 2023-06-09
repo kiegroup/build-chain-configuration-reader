@@ -13,5 +13,5 @@ export interface Node {
   mapping?: Mapping;
   clone?: string[];
   archiveArtifacts?: ArchiveArtifacts;
-  platformId: string
+  platformId?: string
 }
