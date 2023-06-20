@@ -9,7 +9,8 @@ export interface Platform {
 
 export enum PlatformType {
   GITHUB = "github",
-  GITLAB = "gitlab"
+  GITLAB = "gitlab",
+  GERRIT = "gerrit"
 }
 
 export const DEFAULT_GITHUB_PLATFORM: Platform = {
@@ -26,4 +27,12 @@ export const DEFAULT_GITLAB_PLATFORM: Platform = {
   serverUrl: "https://gitlab.com",
   apiUrl: "https://gitlab.com/api/v4",
   tokenId: "GITLAB_TOKEN"
+};
+
+export const DEFAULT_GERRIT_PLATFORM: Platform = {
+  id: "gerrit-public",
+  type: PlatformType.GERRIT,
+  serverUrl: "https://gerrit.googlesource.com",
+  apiUrl: "https://gerrit.googlesource.com",
+  tokenId: "GERRIT_TOKEN"
 };
