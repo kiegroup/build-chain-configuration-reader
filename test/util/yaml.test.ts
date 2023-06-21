@@ -448,7 +448,7 @@ describe("schema 2.3", () => {
 
   test.each([
     ["incorrect version", 2.2, "github", "ghes"],
-    ["incorrect platform type", 2.3, "gerrit", "ghes"],
+    ["incorrect platform type", 2.3, "random", "ghes"],
     ["incorrect id. using reserved id", 2.3, "github", DEFAULT_GITHUB_PLATFORM.id]
   ])("failure: platforms validation with %p", async (_title, version, platformType, platformId) => {
     const data = {

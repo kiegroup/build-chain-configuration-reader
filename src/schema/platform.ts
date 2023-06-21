@@ -1,4 +1,5 @@
 import {
+  DEFAULT_GERRIT_PLATFORM,
   DEFAULT_GITHUB_PLATFORM,
   DEFAULT_GITLAB_PLATFORM,
   Platform,
@@ -17,7 +18,7 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
       type: "string",
       not: {
         type: "string",
-        enum: [DEFAULT_GITHUB_PLATFORM.id, DEFAULT_GITLAB_PLATFORM.id]
+        enum: [DEFAULT_GITHUB_PLATFORM.id, DEFAULT_GITLAB_PLATFORM.id, DEFAULT_GERRIT_PLATFORM.id]
       }
     },
     serverUrl: {
@@ -25,7 +26,7 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
     },
     type: {
       type: "string",
-      enum: [PlatformType.GITHUB, PlatformType.GITLAB],
+      enum: [PlatformType.GITHUB, PlatformType.GITLAB, PlatformType.GERRIT],
     },
     apiUrl: {
       type: "string",
@@ -35,37 +36,72 @@ export const PlatformSchema: JSONSchemaType<Platform> = {
     }
   },
   required: ["apiUrl", "id", "type", "serverUrl", "tokenId"],
-  if: {
-    properties: {
-      type: {
-        enum: [PlatformType.GITHUB],
+  allOf: [
+    {
+      if: {
+        properties: {
+          type: {
+            enum: [PlatformType.GITHUB],
+          },
+        },
+      },
+      then: {
+        properties: {
+          apiUrl: {
+            default: DEFAULT_GITHUB_PLATFORM.apiUrl,
+          },
+          serverUrl: {
+            default: DEFAULT_GITHUB_PLATFORM.serverUrl,
+          },
+          tokenId: {
+            default: DEFAULT_GITHUB_PLATFORM.tokenId
+          }
+        },
       },
     },
-  },
-  then: {
-    properties: {
-      apiUrl: {
-        default: DEFAULT_GITHUB_PLATFORM.apiUrl,
+    {
+      if: {
+        properties: {
+          type: {
+            enum: [PlatformType.GITLAB],
+          },
+        },
       },
-      serverUrl: {
-        default: DEFAULT_GITHUB_PLATFORM.serverUrl,
+      then: {
+        properties: {
+          apiUrl: {
+            default: DEFAULT_GITLAB_PLATFORM.apiUrl,
+          },
+          serverUrl: {
+            default: DEFAULT_GITLAB_PLATFORM.serverUrl,
+          },
+          tokenId: {
+            default: DEFAULT_GITLAB_PLATFORM.tokenId
+          }
+        },
       },
-      tokenId: {
-        default: DEFAULT_GITHUB_PLATFORM.tokenId
-      }
-    },
-  },
-  else: {
-    properties: {
-      apiUrl: {
-        default: DEFAULT_GITLAB_PLATFORM.apiUrl,
+    }, 
+    {
+      if: {
+        properties: {
+          type: {
+            enum: [PlatformType.GERRIT],
+          },
+        },
       },
-      serverUrl: {
-        default: DEFAULT_GITLAB_PLATFORM.serverUrl,
+      then: {
+        properties: {
+          apiUrl: {
+            default: DEFAULT_GERRIT_PLATFORM.apiUrl,
+          },
+          serverUrl: {
+            default: DEFAULT_GERRIT_PLATFORM.serverUrl,
+          },
+          tokenId: {
+            default: DEFAULT_GERRIT_PLATFORM.tokenId
+          }
+        },
       },
-      tokenId: {
-        default: DEFAULT_GITLAB_PLATFORM.tokenId
-      }
-    },
-  },
+    }
+  ]
 };
