@@ -414,7 +414,6 @@ platforms:
   - tokenId: [OPTIONAL] env key value in which the token will be available for use. By default it is GITHUB_TOKEN for github and GITLAB_TOKEN for gitlab
   - serverUrl: [OPTIONAL] url from which we can clone the projects from. By default it is https://github.com for github and https://gitlab.com for gitlab
   - apiUrl: [OPTIONAL] url through which we can access the platform's APIs. By default it is https://api.github.com for github and https://gitlab.com/api/v4
-  - 
 ```
 
 ## Development
