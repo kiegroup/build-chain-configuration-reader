@@ -125,7 +125,8 @@ test.each([
       "kiegroup/kie-uberfire-extensions",
       "kiegroup/droolsjbpm-knowledge",
       "kiegroup/drools",
-      "kiegroup/optaplanner",
+      // not sure if this is really dependent on Appformer
+      //"kiegroup/optaplanner",
       "kiegroup/jbpm",
       "kiegroup/droolsjbpm-integration",
       "kiegroup/kie-wb-playground",
@@ -133,7 +134,8 @@ test.each([
       "kiegroup/drools-wb",
       "kiegroup/jbpm-work-items",
       "kiegroup/jbpm-wb",
-      "kiegroup/optaplanner-wb",
+      // not sure if this is really dependent on Appformer
+      //"kiegroup/optaplanner-wb",
       "kiegroup/kie-wb-distributions"
     ],
     "https://raw.githubusercontent.com/kiegroup/droolsjbpm-build-bootstrap/main/.ci/compilation-config.yaml"
