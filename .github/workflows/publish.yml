@@ -11,10 +11,10 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           registry-url: https://registry.npmjs.org/
       - run: npm install
       - run: npm run build
@@ -27,7 +27,7 @@ jobs:
           PACKAGE_VERSION=$(npm version | grep @kie/build-chain-configuration-reader | sed -re "s/'.*': '(.*)',?/\1/g" | tr -d '[:space:]')
           echo "current-version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
       - name: Update github-action-build-chain 
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v4
         with:
           token: ${{ secrets.UPDATE_BUILD_CHAIN }}
           repository: kiegroup/github-action-build-chain
