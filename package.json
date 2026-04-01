@@ -8,7 +8,8 @@
     "build/src"
   ],
   "scripts": {
-    "build": "tsc && tsc-alias",
+    "build": "tsc && tsc-alias && npm run copy-test-resources",
+    "copy-test-resources": "mkdir -p build/test/resources && cp -r test/resources/* build/test/resources/",
     "test": "jest --passWithNoTests",
     "prepare": "husky install",
     "test:report": "npm test -- --coverage --testResultsProcessor=jest-sonar-reporter",
