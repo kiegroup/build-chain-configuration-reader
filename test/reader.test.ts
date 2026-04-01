@@ -234,9 +234,9 @@ describe("definition file with extends", () => {
     nock("https://whatever-url.com")
       .get("/definition-file.yaml")
       .replyWithFile(200, path.join(resourcePath, "extend-from-file.yaml"))
-      .get("/../schema-tests/backport/build-config.yaml")
+      .get("/schema-tests/backport/build-config.yaml")
       .replyWithFile(200, buildConfigFile)
-      .get("/../schema-tests/backport/./project-dependencies.yaml")
+      .get("/schema-tests/backport/project-dependencies.yaml")
       .replyWithFile(200, projectDependenciesFile);
 
     const result = await readDefinitionFile(
@@ -311,7 +311,7 @@ describe("definition file with extends", () => {
     nock("https://whatever-url.com")
       .get("/definition-file.yaml")
       .replyWithFile(200, buildConfigFile)
-      .get("/./project-dependencies.yaml")
+      .get("/project-dependencies.yaml")
       .replyWithFile(200, projectDependenciesFile);
 
     const result = await readDefinitionFile(
