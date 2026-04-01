@@ -31,9 +31,9 @@
   "devDependencies": {
     "@types/jest": "28.1.8",
     "@types/node": "17.0.45",
-    "@typescript-eslint/eslint-plugin": "5.43.0",
-    "@typescript-eslint/parser": "5.43.0",
-    "eslint": "8.27.0",
+    "@typescript-eslint/eslint-plugin": "8.58.0",
+    "@typescript-eslint/parser": "8.58.0",
+    "eslint": "9.39.4",
     "husky": "8.0.2",
     "jest": "28.1.3",
     "jest-sonar-reporter": "2.0.0",
@@ -47,21 +47,5 @@
     "ajv": "8.18.0",
     "axios": "1.13.6",
     "yaml": "2.8.3"
-  },
-  "overrides": {
-    "@babel/traverse": "7.29.0",
-    "@babel/helpers": "7.29.2",
-    "braces": "3.0.3",
-    "micromatch": "4.0.8",
-    "minimatch": "3.1.5",
-    "semver": "7.7.4",
-    "word-wrap": "1.2.5",
-    "brace-expansion": "2.0.3",
-    "cross-spawn": "7.0.6",
-    "picomatch": "4.0.4",
-    "lodash": "4.17.23",
-    "flatted": "3.4.2",
-    "js-yaml": "4.1.1",
-    "diff": "5.2.2"
   }
 }
