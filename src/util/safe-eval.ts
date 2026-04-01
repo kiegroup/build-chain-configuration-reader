@@ -8,7 +8,7 @@
 export function safeEval(expression: string, args?: unknown): unknown {
   try {
     return Function("args", `"use strict";return (${expression})`)(args);
-  } catch (err) {
+  } catch {
     return undefined;
   }
 }
