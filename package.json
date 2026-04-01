@@ -49,18 +49,19 @@
     "yaml": "2.8.3"
   },
   "overrides": {
-    "@babel/traverse": "^7.23.2",
-    "@babel/helpers": "^7.26.10",
-    "braces": "^3.0.3",
-    "micromatch": "^4.0.8",
-    "minimatch": "^3.1.4",
-    "semver": "^7.5.2",
-    "word-wrap": "^1.2.4",
-    "brace-expansion": "^2.0.1",
-    "cross-spawn": "^7.0.5",
-    "picomatch": "^4.0.2",
-    "lodash": "^4.17.21",
-    "flatted": "^3.4.2",
-    "js-yaml": "^4.1.1"
+    "@babel/traverse": "7.29.0",
+    "@babel/helpers": "7.29.2",
+    "braces": "3.0.3",
+    "micromatch": "4.0.8",
+    "minimatch": "3.1.5",
+    "semver": "7.7.4",
+    "word-wrap": "1.2.5",
+    "brace-expansion": "2.0.3",
+    "cross-spawn": "7.0.6",
+    "picomatch": "4.0.4",
+    "lodash": "4.17.23",
+    "flatted": "3.4.2",
+    "js-yaml": "4.1.1",
+    "diff": "5.2.2"
   }
 }
